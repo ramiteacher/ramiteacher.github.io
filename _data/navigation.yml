@@ -1,13 +1,13 @@
 # main links
 main:
   - title: "Home"
-    url: https://ramiteacher.github.io/head/
+    url: https://ramiteacher.github.io/
 
   - title: "About"
     url: /about/
 
   - title: "GitHub"
-    url: https://ramiteacher.github.io/head/
+    url: https://ramiteacher.github.io/
 
   # - title: "Projects"
   #   url: /projects/
