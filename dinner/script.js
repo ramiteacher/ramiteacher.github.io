@@ -39,7 +39,7 @@ const colors = [
 
 // 효과음 로드
 const tickSound = new Audio();
-tickSound.src = "https://assets.mixkit.co/active_storage/sfx/2865/2865-preview.mp3";
+tickSound.src = "sa.mp3";
 const resultSound = new Audio();
 resultSound.src = "https://assets.mixkit.co/active_storage/sfx/2017/2017-preview.mp3";
 
