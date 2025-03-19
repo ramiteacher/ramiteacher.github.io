@@ -1,14 +1,78 @@
 ---
 layout: home
-author_profile: true
-sidebar:
-    nav: "categories"
+author_profile: false
+sidebar: false
 ---
 
-<!-- 기존 HTML 내용 중 적절한 위치에 아래 코드 추가 -->
+<style>
+  /* 로고 관련 스타일 */
+  .site-title {
+    text-align: center !important;
+    width: 100% !important;
+    font-size: 2.5em !important;
+    margin: 40px auto !important;
+  }
+  
+  .masthead {
+    text-align: center !important;
+  }
+  
+  /* 버튼 스타일 */
+  .navigation-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 50px auto;
+    flex-wrap: wrap;
+    max-width: 800px;
+  }
+  
+  .nav-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 180px;
+    padding: 25px 15px;
+    background-color: #ffffff;
+    color: #333 !important;
+    text-decoration: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .nav-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  }
+  
+  .button-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+  }
+  
+  .button-text {
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+  
+  /* 게시물 숨기기 */
+  .archive {
+    display: none;
+  }
+</style>
 
 <div class="navigation-buttons">
-  <a href="/dinner/" class="nav-button">저녁 메뉴</a>
-  <a href="/conch/" class="nav-button">조개소라</a>
-  <a href="/lotto/" class="nav-button">로또 번호</a>
+  <a href="/dinner/" class="nav-button">
+    <div class="button-icon">🍽️</div>
+    <div class="button-text">음식 메뉴 룰렛</div>
+  </a>
+  <a href="/conch/" class="nav-button">
+    <div class="button-icon">🐚</div>
+    <div class="button-text">마법의 소라고동</div>
+  </a>
+  <a href="/lotto/" class="nav-button">
+    <div class="button-icon">🎱</div>
+    <div class="button-text">행운의 로또 번호</div>
+  </a>
 </div>
