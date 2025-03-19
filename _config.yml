@@ -19,12 +19,12 @@ minimal_mistakes_skin: "plum" # "default" "air", "aqua", ...
 
 # Site Settings
 locale: "ko-KR" #"en-US"
-title: "라미선생님 창의력 기르기" # 상단 헤더에 보이는 블로그 명
+title: "라미선생님" # 상단 헤더에 보이는 블로그 명
 title_separator: "&#124;"
 subtitle: # site tagline that appears below site title in masthead
-name: "라미선생님 창의력 기르기" # 블로그 닉네임 설정
+name: "라미선생님" # 블로그 닉네임 설정
 description: "천재는 즐기는자를 이길 수 없대" # 블로그 설명
-url: "https://ramiteacher.github.io/head/" # 블로그 URL
+url: "https://ramiteacher.github.io" # 블로그 URL
 baseurl: # the subpath of your site, e.g. "/blog"
 repository: "head/ramiteacher.github.io" # GitHub Repo 이름
 teaser: #

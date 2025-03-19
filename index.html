@@ -1,84 +1,91 @@
 ---
-layout: default
-author_profile: false
-sidebar: false
 ---
-
-<style>
-  body {
-    text-align: center;
-  }
-  
-  .page__content {
-    margin: 0 auto;
-    max-width: 900px;
-  }
-  
-  .main-title {
-    font-size: 3em;
-    margin: 40px 0;
-    text-align: center;
-    font-weight: bold;
-  }
-  
-  /* 버튼 스타일 */
-  .navigation-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin: 50px auto;
-    flex-wrap: wrap;
-    max-width: 800px;
-  }
-  
-  .nav-button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 180px;
-    padding: 25px 15px;
-    background-color: #ffffff;
-    color: #333 !important;
-    text-decoration: none;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-  }
-  
-  .nav-button:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-  }
-  
-  .button-icon {
-    font-size: 3rem;
-    margin-bottom: 15px;
-  }
-  
-  .button-text {
-    font-weight: 600;
-    font-size: 1.2rem;
-  }
-  
-  /* 불필요한 요소 숨기기 */
-  .archive, .sidebar, .page__meta, .page__share {
-    display: none !important;
-  }
-</style>
-
-<h1 class="main-title">RAMI TEACHER</h1>
-
-<div class="navigation-buttons">
-  <a href="/dinner/" class="nav-button">
-    <div class="button-icon">🍽️</div>
-    <div class="button-text">음식 메뉴 룰렛</div>
-  </a>
-  <a href="/conch/" class="nav-button">
-    <div class="button-icon">🐚</div>
-    <div class="button-text">마법의 소라고동</div>
-  </a>
-  <a href="/lotto/" class="nav-button">
-    <div class="button-icon">🎱</div>
-    <div class="button-text">행운의 로또 번호</div>
-  </a>
-</div>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAMI TEACHER</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .main-title {
+      font-size: 3em;
+      margin: 40px 0;
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .navigation-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 50px auto;
+      flex-wrap: wrap;
+    }
+    
+    .nav-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 180px;
+      padding: 25px 15px;
+      background-color: #ffffff;
+      color: #333;
+      text-decoration: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .nav-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+    
+    .button-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+    
+    .button-text {
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="main-title">RAMI TEACHER</h1>
+    
+    <div class="navigation-buttons">
+      <a href="/dinner/" class="nav-button">
+        <div class="button-icon">🍽️</div>
+        <div class="button-text">음식 메뉴 룰렛</div>
+      </a>
+      <a href="/conch/" class="nav-button">
+        <div class="button-icon">🐚</div>
+        <div class="button-text">마법의 소라고동</div>
+      </a>
+      <a href="/lotto/" class="nav-button">
+        <div class="button-icon">🎱</div>
+        <div class="button-text">행운의 로또 번호</div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
