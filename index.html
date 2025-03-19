@@ -1,20 +1,24 @@
 ---
-layout: home
+layout: default
 author_profile: false
 sidebar: false
 ---
 
 <style>
-  /* 로고 관련 스타일 */
-  .site-title {
-    text-align: center !important;
-    width: 100% !important;
-    font-size: 2.5em !important;
-    margin: 40px auto !important;
+  body {
+    text-align: center;
   }
   
-  .masthead {
-    text-align: center !important;
+  .page__content {
+    margin: 0 auto;
+    max-width: 900px;
+  }
+  
+  .main-title {
+    font-size: 3em;
+    margin: 40px 0;
+    text-align: center;
+    font-weight: bold;
   }
   
   /* 버튼 스타일 */
@@ -56,11 +60,13 @@ sidebar: false
     font-size: 1.2rem;
   }
   
-  /* 게시물 숨기기 */
-  .archive {
-    display: none;
+  /* 불필요한 요소 숨기기 */
+  .archive, .sidebar, .page__meta, .page__share {
+    display: none !important;
   }
 </style>
+
+<h1 class="main-title">RAMI TEACHER</h1>
 
 <div class="navigation-buttons">
   <a href="/dinner/" class="nav-button">
