@@ -1,0 +1,399 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #FF7E67; /* 밝은 주황/붉은색 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  /* 알록달록한 배경 패턴으로 변경 */
+  background-image: radial-gradient(#FF9E80 10%, transparent 10%), 
+                    radial-gradient(#FF9E80 10%, transparent 10%);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
+
+.container {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  border: 5px solid #FF5252; /* 빨간색 테두리 */
+}
+
+.title-container {
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+h1 {
+  color: #333;
+  font-size: 32px;
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+  font-family: 'Gaegu', cursive;
+  margin-bottom: 5px;
+}
+
+h2.highlight {
+  color: #FF5252;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(255, 82, 82, 0.3);
+  font-size: 28px;
+  font-family: 'Gaegu', cursive;
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+h2.highlight i {
+  font-size: 22px;
+  animation: spin 3s infinite linear;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.category-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.category-btn {
+  background-color: #f8f9fa;
+  border: 2px solid #dee2e6;
+  border-radius: 30px;
+  padding: 12px 18px; /* 버튼 크기 증가 */
+  font-size: 15px;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Jua', sans-serif;
+}
+
+.category-btn:hover {
+  background-color: #FFE4E1; /* 연한 분홍색 hover 효과 */
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(255, 82, 82, 0.2);
+}
+
+.category-btn.active {
+  background-color: #FF5252; /* 빨간색으로 변경 */
+  border-color: #FF5252;
+  color: white;
+}
+
+.roulette-container {
+  position: relative;
+  width: 380px;
+  height: 380px;
+  margin: 0 auto 30px;
+}
+
+/* 최상단 포인터 스타일 - 상하 반전 & 색상 변경 */
+.top-pointer {
+  position: absolute;
+  top: -10px; /* 위치 조정 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  z-index: 10;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.3));
+}
+
+.top-pointer:before {
+  content: '';
+  position: absolute;
+  bottom: 0; /* 위치 변경 - 아래에서부터 시작 */
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 35px solid #FF5252; /* 빨간색으로 변경 */
+}
+
+.top-pointer:after {
+  content: '';
+  position: absolute;
+  bottom: 8px; /* 위치 조정 */
+  left: 5px;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 25px solid white; /* 역삼각형(아래로 향하는 삼각형) */
+}
+
+canvas {
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.2));
+  animation: glow 2s infinite alternate; /* 룰렛에 글로우 효과 */
+}
+
+@keyframes glow {
+  from {
+    filter: drop-shadow(0 0 5px rgba(255, 82, 82, 0.5));
+  }
+  to {
+    filter: drop-shadow(0 0 15px rgba(255, 82, 82, 0.8));
+  }
+}
+
+.spin-button {
+  background-color: #FF5252; /* 빨간색으로 변경 */
+  color: white;
+  border: none;
+  padding: 15px 30px; /* 더 크게 */
+  font-size: 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  margin: 20px 0;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto;
+  box-shadow: 0 6px 0 #D32F2F; /* 입체감 있는 버튼 */
+  position: relative;
+  top: 0;
+  font-family: 'Jua', sans-serif;
+}
+
+.spin-button:hover {
+  background-color: #FF7676;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 #D32F2F;
+}
+
+.spin-button:active {
+  top: 6px;
+  box-shadow: 0 0 0 #D32F2F;
+}
+
+.spin-button.disabled {
+  opacity: 0.6;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.footer {
+  margin-top: 25px;
+  color: #757575;
+  font-size: 15px;
+  font-family: 'Jua', sans-serif;
+}
+
+/* 효과음 토글 버튼 스타일 */
+.sound-toggle {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 45px;
+  height: 45px;
+  background-color: #FFE0E0;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #FF5252; /* 빨간색으로 변경 */
+  font-size: 20px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sound-toggle:hover {
+  background-color: #FFCECE;
+  transform: translateY(-2px) rotate(10deg);
+}
+
+/* 결과 모달 스타일 */
+.result-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+}
+
+.result-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.result-modal-content {
+  background-color: white;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  max-width: 90%;
+  width: 400px;
+  transform: translateY(20px) scale(0.95);
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  border: 5px solid #FF5252; /* 빨간색 테두리 */
+  overflow: hidden;
+}
+
+.result-modal.show .result-modal-content {
+  transform: translateY(0) scale(1);
+}
+
+.result-modal-content::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 80px;
+  height: 80px;
+  background-color: #FF5252;
+  transform: rotate(45deg);
+  z-index: -1;
+}
+
+.result-icon {
+  width: 100px;
+  height: 100px;
+  background-color: #FF5252; /* 빨간색으로 변경 */
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px;
+  font-size: 45px;
+  color: white;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.result-food {
+  font-size: 40px;
+  font-weight: 700;
+  color: #333;
+  margin: 20px 0;
+  padding: 15px;
+  border-radius: 15px;
+  background-color: #FFF9C4; /* 노란색 배경 (음식 강조) */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: 'Jua', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.result-food::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: rotate(30deg);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) rotate(30deg); }
+  100% { transform: translateX(100%) rotate(30deg); }
+}
+
+.close-modal {
+  background-color: #FF5252; /* 빨간색으로 변경 */
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  font-size: 18px;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-top: 25px;
+  transition: all 0.3s;
+  font-weight: 500;
+  font-family: 'Jua', sans-serif;
+  box-shadow: 0 4px 0 #D32F2F;
+  position: relative;
+  top: 0;
+}
+
+.close-modal:hover {
+  background-color: #FF7676;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #D32F2F;
+}
+
+.close-modal:active {
+  top: 4px;
+  box-shadow: 0 0 0 #D32F2F;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 500px) {
+  h1 {
+    font-size: 28px;
+  }
+  
+  h2.highlight {
+    font-size: 24px;
+  }
+  
+  /* 기존 반응형 스타일 유지 */
+  .roulette-container {
+    width: 300px;
+    height: 300px;
+  }
+  
+  canvas {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .category-buttons {
+    gap: 5px;
+  }
+  
+  .category-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  
+  .result-food {
+    font-size: 32px;
+  }
+}

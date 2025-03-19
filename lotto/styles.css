@@ -1,0 +1,1095 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #121212;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+    box-sizing: border-box; /* 패딩이 너비에 포함되도록 설정 */
+}
+
+h1 {
+    text-align: center;
+    color: #ffcc00;
+    margin-bottom: 30px;
+}
+
+.lottery-machine {
+    width: 400px;
+    height: 400px;
+    background-color: transparent;
+    position: relative;
+    margin-bottom: 40px;
+    max-width: 100%; /* 최대 너비 제한 */
+}
+
+/* 튜브 및 출구 구멍 투명도 증가 */
+.tube {
+    position: absolute;
+    width: 80px;
+    height: 120px;
+    background: linear-gradient(to bottom, rgba(51, 51, 51, 0.7), rgba(34, 34, 34, 0.7));
+    bottom: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid rgba(58, 58, 58, 0.8);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    z-index: 3;
+    overflow: hidden;
+    box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.tube-top {
+    position: absolute;
+    width: 80px;
+    height: 40px;
+    background-color: rgba(51, 51, 51, 0.7);
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid rgba(58, 58, 58, 0.8);
+    border-bottom: none;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.4);
+    z-index: 2;
+}
+
+.exit-hole {
+    position: absolute;
+    width: 50px;
+    height: 30px;
+    background-color: rgba(30, 30, 30, 0.6);
+    border: 3px solid rgba(51, 51, 51, 0.7);
+    border-radius: 50%;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4;
+}
+
+.machine-body {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(40, 40, 40, 0.8);
+    position: absolute;
+    border: 10px solid #3a3a3a;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(255, 204, 0, 0.2),
+                inset 0 0 20px rgba(255, 255, 255, 0.05);
+    z-index: 1;
+}
+
+.machine-glass {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: absolute;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.1) 100%);
+    z-index: 20;
+    pointer-events: none;
+}
+
+.ball-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 5;
+    overflow: hidden; /* 볼이 컨테이너를 벗어나지 않도록 */
+    border-radius: 50%; /* 컨테이너도 원형으로 제한 */
+}
+
+.ball {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    color: white;
+    box-shadow: inset -3px -3px 8px rgba(0, 0, 0, 0.4),
+                0 0 10px rgba(255, 255, 255, 0.2);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    will-change: transform, left, top;
+    z-index: 10;
+    transition: left 0.1s linear, top 0.1s linear; /* 부드러운 움직임 */
+}
+
+/* 추첨 중에 볼에 적용할 클래스 */
+.ball-active {
+    transition: left 0.05s linear, top 0.05s linear; /* 더 빠른 응답성 */
+}
+
+.selected-ball {
+    z-index: 100;
+    box-shadow: 0 0 20px gold, inset -3px -3px 10px rgba(0, 0, 0, 0.5);
+}
+
+.result-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 100px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    min-height: 80px;
+    width: 90%; /* 퍼센트로 변경 */
+    max-width: 600px; /* 최대 너비 설정 */
+    align-items: center;
+}
+
+.result-set {
+    display: flex;
+    gap: 12px;
+    margin: 10px 0;
+    position: relative;
+    padding: 5px 15px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    width: 80%; /* 가로 길이 줄이기 */
+}
+
+.set-number {
+    position: absolute;
+    left: -30px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #ffcc00;
+    color: #121212;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.result-ball {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 24px;
+    color: white;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3),
+                inset -3px -3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(0);
+    transition: transform 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+
+.controls {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* 버튼이 화면을 넘어가면 줄바꿈 */
+    justify-content: center; /* 중앙 정렬 */
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    background-color: #ffcc00;
+    color: #121212;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #ffd700;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+.fan {
+    position: absolute;
+    bottom: 50px;
+    width: 100px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(to right, #222, #444, #222);
+    animation: fanSpin 0.5s infinite linear;
+    transform-origin: center;
+    z-index: 2;
+    opacity: 0.7;
+    left: calc(50% - 50px);
+}
+
+@keyframes fanSpin {
+    0% { transform: scaleX(1); }
+    50% { transform: scaleX(0.5); }
+    100% { transform: scaleX(1); }
+}
+
+.machine-base {
+    position: absolute;
+    width: 150px;
+    height: 30px;
+    bottom: -150px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, #3a3a3a, #222);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* 공기 효과 개선 */
+.air-effect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, transparent 30%, rgba(255, 255, 255, 0.06) 70%);
+    pointer-events: none;
+    z-index: 3;
+    animation: airEffect 5s infinite ease-in-out;
+}
+
+@keyframes airEffect {
+    0% { opacity: 0.2; transform: scale(0.97); }
+    50% { opacity: 0.4; transform: scale(1.03); }
+    100% { opacity: 0.2; transform: scale(0.97); }
+}
+
+.air-strong {
+    animation: airStrong 3s infinite ease-in-out;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 20%, rgba(255, 255, 255, 0.08) 60%, rgba(255, 204, 0, 0.04) 80%);
+}
+
+@keyframes airStrong {
+    0% { transform: scale(0.96); opacity: 0.2; }
+    50% { transform: scale(1.04); opacity: 0.4; }
+    100% { transform: scale(0.96); opacity: 0.2; }
+}
+
+.tube-light {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+    animation: tubeLight 2s infinite;
+}
+
+@keyframes tubeLight {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.3; }
+}
+
+.tube-path {
+    position: absolute;
+    width: 60px;
+    height: 200px;
+    left: 50%;
+    bottom: -120px;
+    transform: translateX(-50%);
+    z-index: 4;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+@keyframes fallDown {
+    0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+    30% { transform: translateY(50px) rotate(180deg); opacity: 1; }
+    60% { transform: translateY(150px) rotate(360deg); opacity: 1; }
+    100% { transform: translateY(250px) rotate(720deg); opacity: 0; }
+}
+
+.shake {
+    animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(-5px) rotate(-2deg); }
+    50% { transform: translateX(0) rotate(0deg); }
+    75% { transform: translateX(5px) rotate(2deg); }
+}
+
+/* 볼 애니메이션 부드럽게 조정 */
+.ball-rotate {
+    animation: ballRotate 2s infinite linear;
+    transition: left 0.3s ease-out, top 0.3s ease-out;
+}
+
+@keyframes ballRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.ball-fast {
+    animation: ballRotate 0.7s infinite linear;
+}
+
+.ball-reverse {
+    animation: ballRotateReverse 2s infinite linear;
+    transition: left 0.3s ease-out, top 0.3s ease-out;
+}
+
+@keyframes ballRotateReverse {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(-360deg); }
+}
+
+.ball-bounce {
+    animation: ballBounce 0.8s infinite alternate ease-in-out;
+}
+
+@keyframes ballBounce {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-10px) rotate(30deg); }
+}
+
+.shake-hard {
+    animation: shakeHard 0.3s infinite;
+}
+
+@keyframes shakeHard {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(-8px) rotate(-3deg); }
+    50% { transform: translateX(0) rotate(0deg); }
+    75% { transform: translateX(8px) rotate(3deg); }
+}
+
+.jump-ball {
+    animation: jumpBall 0.3s ease-out;
+}
+
+@keyframes jumpBall {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-40px) scale(1.2); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+/* sound-control 위치 및 스타일 개선 */
+.sound-control {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 100;
+    border: 2px solid #ffcc00;
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.sound-control:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.7);
+}
+
+.sound-icon {
+    width: 30px;
+    height: 30px;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0zIDloNGw1LTVzMSAxIDEgNHYxMGMwIDMtMSA0LTEgNEw3IDE1SDN6Ii8+PHBhdGggZD0iTTE2LjUgMTJjMC0xLjgtMS0zLjMtMi41LTQiLz48cGF0aCBkPSJNMTkuNSAxMmMwLTMuMS0xLjctNS43LTQuMi03LjEiIHN0cm9rZT0id2hpdGUiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNMjEuNSAxMmMwLTQuMy0yLjQtOC4xLTYtMTAiIHN0cm9rZT0id2hpdGUiIGZpbGw9Im5vbmUiLz48L3N2Zz4=');
+    background-size: contain;
+}
+
+.sound-icon.muted {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0zIDloNGw1LTVzMSAxIDEgNHYxMGMwIDMtMSA0LTEgNEw3IDE1SDN6Ii8+PHBhdGggZD0iTTE2IDE2bDYtNm0wIDZsLTYtNiIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+PC9zdmc+');
+}
+
+/* 번호 선택 라디오 버튼 스타일 */
+.number-selector {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 12px 25px;
+    border-radius: 30px;
+}
+
+.number-selector label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    color: #ffcc00;
+    cursor: pointer;
+}
+
+.number-selector input {
+    cursor: pointer;
+}
+
+/* 속도 토글 버튼 스타일 */
+.speed-toggle {
+    background-color: #666;
+    position: relative;
+}
+
+.speed-toggle.active {
+    background-color: #ff6600;
+}
+
+.speed-toggle.active::after {
+    content: '4X';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #ff0000;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+/* 8X 속도 버튼 스타일 추가 */
+.speed-toggle.ultra {
+    background-color: #ff0000;
+    color: white;
+}
+
+.speed-toggle.ultra::after {
+    content: '8X';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #ff00ff;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+/* 탑 메뉴 스타일 */
+.top-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+/* 저장된 번호 버튼 스타일 */
+.saved-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #4caf50;
+    color: white;
+}
+
+.saved-btn:hover {
+    background-color: #45a049;
+}
+
+.saved-icon {
+    font-size: 18px;
+}
+
+/* 저장 버튼 스타일 */
+.save-numbers-btn {
+    background-color: #2196f3;
+    color: white;
+    font-size: 14px;
+    padding: 6px 12px;
+    margin-left: 10px;
+    align-self: center;
+}
+
+.save-numbers-btn:hover {
+    background-color: #0b7dda;
+}
+
+/* 모달 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadeIn 0.3s;
+}
+
+.modal-content {
+    background-color: #1e1e1e;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #444;
+    border-radius: 15px;
+    width: 80%;
+    max-width: 700px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #444;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    color: #ffcc00;
+    margin: 0;
+}
+
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #ffcc00;
+}
+
+.modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* 저장된 번호 항목 스타일 */
+.saved-number-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    animation: fadeIn 0.3s;
+}
+
+.saved-date {
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 5px;
+}
+
+.saved-balls-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.saved-ball {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #d32f2f;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* 반응형 스타일 */
+@media screen and (max-width: 600px) {
+    .top-menu {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .saved-number-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .saved-balls-container {
+        margin-bottom: 10px;
+    }
+    
+    .modal-content {
+        width: 90%;
+        margin: 20% auto;
+    }
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 수정 */
+@media screen and (max-width: 600px) {
+    h1 {
+        font-size: 24px;
+    }
+    
+    .lottery-machine {
+        width: 300px;
+        height: 300px;
+        transform-origin: center;
+        transform: scale(1); /* 컨테이너 크기 비율 유지 */
+    }
+    
+    .ball {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+    
+    /* 튜브 크기도 조정 */
+    .tube {
+        width: 60px;
+        height: 90px;
+        bottom: -90px;
+    }
+    
+    .tube-top {
+        width: 60px;
+        height: 30px;
+    }
+    
+    .exit-hole {
+        width: 40px;
+        height: 25px;
+    }
+    
+    .fan {
+        width: 80px;
+        height: 15px;
+        bottom: 40px;
+        left: calc(50% - 40px);
+    }
+    
+    .tube-path {
+        width: 50px;
+        height: 150px;
+        bottom: -90px;
+    }
+    
+    .result-ball {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+    
+    .controls button {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    
+    .number-selector {
+        padding: 10px 15px;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .lottery-machine {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .ball {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+    }
+    
+    /* 더 작은 화면에서 튜브 크기 추가 조정 */
+    .tube {
+        width: 50px;
+        height: 75px;
+        bottom: -75px;
+    }
+    
+    .tube-top {
+        width: 50px;
+        height: 25px;
+    }
+    
+    .exit-hole {
+        width: 35px;
+        height: 20px;
+    }
+    
+    .tube-path {
+        width: 40px;
+        height: 120px;
+        bottom: -75px;
+    }
+    
+    .result-ball {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+}
+
+/* 당첨번호 확인 버튼 스타일 */
+.winning-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #ff9800;
+    color: white;
+}
+
+.winning-btn:hover {
+    background-color: #f57c00;
+}
+
+.winning-icon {
+    font-size: 18px;
+}
+
+/* 당첨 번호 입력 스타일 */
+.winning-numbers-input {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.winning-numbers-input h3 {
+    color: #ffcc00;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.winning-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.number-inputs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.winning-number-input, #bonusNumberInput {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #ffcc00;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.winning-number-input:focus, #bonusNumberInput:focus {
+    outline: none;
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+    background-color: rgba(255, 204, 0, 0.2);
+}
+
+.bonus-input {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.bonus-input span {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffcc00;
+}
+
+.primary-btn {
+    background-color: #4caf50;
+    padding: 12px 20px;
+    align-self: flex-end;
+}
+
+.primary-btn:hover {
+    background-color: #45a049;
+}
+
+/* 현재 설정된 당첨번호 스타일 */
+.current-winning-numbers {
+    margin-bottom: 20px;
+}
+
+.winning-number-display {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.winning-ball {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 20px;
+}
+
+.bonus-ball {
+    position: relative;
+}
+
+.bonus-ball::before {
+    content: "+";
+    position: absolute;
+    left: -18px;
+    font-size: 24px;
+    color: #ffcc00;
+}
+
+/* 당첨 결과 스타일 */
+.winning-results {
+    margin-top: 30px;
+}
+
+.result-header {
+    background-color: rgba(255, 204, 0, 0.2);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #ffcc00;
+}
+
+.match-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    animation: fadeIn 0.3s;
+}
+
+.match-date {
+    font-size: 14px;
+    color: #aaa;
+}
+
+.match-balls {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.match-ball {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 16px;
+}
+
+.match-result {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    min-width: 60px;
+    text-align: center;
+}
+
+.result-1st {
+    background-color: #ff5722;
+    color: white;
+}
+
+.result-2nd {
+    background-color: #ff9800;
+    color: white;
+}
+
+.result-3rd {
+    background-color: #ffc107;
+    color: #222;
+}
+
+.result-4th {
+    background-color: #8bc34a;
+    color: #222;
+}
+
+.result-5th {
+    background-color: #03a9f4;
+    color: white;
+}
+
+.result-none {
+    background-color: #9e9e9e;
+    color: white;
+}
+
+.menu-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+@media screen and (max-width: 600px) {
+    .input-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .bonus-input {
+        margin-top: 10px;
+    }
+    
+    .menu-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* 일괄 저장 버튼 스타일 */
+.batch-save-btn {
+    background-color: #2e7d32;
+    color: white;
+    margin-top: 20px;
+    padding: 12px 25px;
+    font-size: 16px;
+    width: auto;
+    min-width: 200px;
+}
+
+.batch-save-btn:hover {
+    background-color: #1b5e20;
+}
+
+/* 일괄 삭제 버튼 스타일 */
+.batch-delete-btn {
+    background-color: #d32f2f;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.batch-delete-btn:hover {
+    background-color: #b71c1c;
+}
+
+.batch-action-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+/* 스타일시트에 추가할 CSS */
+.skip-btn {
+    background-color: #ff7272;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    margin-left: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.skip-btn:before {
+    content: '';
+    background-color: rgba(255,255,255,0.2);
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    transition: all 0.4s;
+}
+
+.skip-btn:hover:before {
+    left: 0;
+}
+
+.skip-btn:hover {
+    background-color: #ff5252;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(255,82,82,0.3);
+}
+
+.skip-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}

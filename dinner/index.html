@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오늘 뭐 먹지? - 음식 룰렛</title>
+  <!-- 폰트어썸 아이콘 추가 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- CSS 파일 연결 -->
+  <link rel="stylesheet" href="style.css">
+  <!-- 파비콘 추가 -->
+  <link rel="icon" href="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/fork-and-knife-with-plate_1f37d-fe0f.png">
+</head>
+<body>
+  <div class="container">
+    <div class="title-container">
+      <h1>오늘 뭐 먹지?</h1>
+      <h2 class="highlight"><i class="fas fa-sync-alt"></i> 음식 룰렛</h2>
+    </div>
+    
+    <div class="category-buttons">
+      <button class="category-btn active" data-category="korean"><i class="fas fa-home"></i> 한식</button>
+      <button class="category-btn" data-category="western"><i class="fas fa-hamburger"></i> 양식</button>
+      <button class="category-btn" data-category="japanese"><i class="fas fa-fish"></i> 일식</button>
+      <button class="category-btn" data-category="chinese"><i class="fas fa-utensils"></i> 중식</button>
+    </div>
+    
+    <div class="roulette-container">
+      <div class="top-pointer"></div>
+      <canvas width="380" height="380"></canvas>
+    </div>
+    
+    <button onclick="rotate()" class="spin-button">
+      <i class="fas fa-utensils"></i> 룰렛 돌리기
+    </button>
+    
+    <p class="footer">원하는 카테고리를 선택하고 룰렛을 돌려보세요!</p>
+  </div>
+
+  <!-- JavaScript 파일 연결 -->
+  <script src="script.js"></script>
+</body>
+</html>

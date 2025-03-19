@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>네잎클로버 로또 추첨기</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 로딩 및 에러 표시 스타일 */
+        .loading {
+            text-align: center;
+            color: #555;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 5px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .error {
+            text-align: center;
+            color: #d9534f;
+            margin: 10px 0;
+            padding: 10px;
+            background: #fff8f8;
+            border-radius: 5px;
+            border-left: 4px solid #d9534f;
+        }
+
+        /* 최신 당첨번호 가져오기 버튼 스타일 */
+        .fetch-latest-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .fetch-latest-btn:hover {
+            background-color: #45a049;
+        }
+
+        .fetch-latest-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .fetch-buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        #roundInput {
+            width: 100px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        #fetchRoundBtn {
+            background-color: #3F51B5;
+        }
+
+        #fetchRoundBtn:hover {
+            background-color: #303F9F;
+        }
+    </style>
+</head>
+<body>
+    <h1>네잎클로버 로또 추첨기</h1>
+    
+    <!-- 탑 메뉴 추가: 번호 선택기 + 저장된 번호 보기 버튼 -->
+    <div class="top-menu">
+        <!-- 번호 개수 선택 옵션 -->
+        <div class="number-selector">
+            <label>
+                <input type="radio" name="numberCount" value="single" checked> 단일 조합
+            </label>
+            <label>
+                <input type="radio" name="numberCount" value="five"> 5조합 생성
+            </label>
+        </div>
+        
+        <div class="menu-buttons">
+            <!-- 저장된 번호 보기 버튼 -->
+            <button id="showSavedBtn" class="saved-btn">
+                <span class="saved-icon">📋</span> 저장된 번호
+            </button>
+            
+            <!-- 당첨번호 확인 버튼 추가 -->
+            <button id="checkWinningBtn" class="winning-btn">
+                <span class="winning-icon">🏆</span> 당첨확인
+            </button>
+        </div>
+    </div>
+    
+    <div class="lottery-machine" id="lotteryMachine">
+        <!-- 이 안에 동적으로 요소들이 추가됩니다 -->
+        <div class="sound-control" id="soundControl">
+            <div class="sound-icon" id="soundIcon"></div>
+        </div>
+    </div>
+
+    <div class="result-container" id="resultContainer">
+        <!-- 당첨 번호가 여기에 표시됩니다 -->
+    </div>
+
+    <div class="controls">
+        <button id="startBtn">추첨 시작</button>
+        <button id="speedToggleBtn" class="speed-toggle">일반속도</button>
+        
+    </div>
+
+    <!-- 저장된 번호 모달 -->
+    <div id="savedNumbersModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>저장된 번호</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="savedNumbersList">
+                <!-- 저장된 번호가 여기에 표시됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 당첨번호 확인 모달 추가 -->
+    <div id="winningNumbersModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>당첨번호 확인</h2>
+                <span class="close" id="closeWinningModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="winning-numbers-input">
+                    <h3>이번 주 당첨번호 입력</h3>
+                    <div class="winning-input-container">
+                        <div class="input-group">
+                            <div class="number-inputs">
+                                <input type="number" min="1" max="45" class="winning-number-input" placeholder="번호 1">
+                                <input type="number" min="1" max="45" class="winning-number-input" placeholder="번호 2">
+                                <input type="number" min="1" max="45" class="winning-number-input" placeholder="번호 3">
+                                <input type="number" min="1" max="45" class="winning-number-input" placeholder="번호 4">
+                                <input type="number" min="1" max="45" class="winning-number-input" placeholder="번호 5">
+                                <input type="number" min="1" max="45" class="winning-number-input" placeholder="번호 6">
+                            </div>
+                            <div class="bonus-input">
+                                <span>+</span>
+                                <input type="number" min="1" max="45" id="bonusNumberInput" placeholder="보너스">
+                            </div>
+                        </div>
+                        <button id="saveWinningBtn" class="primary-btn">당첨번호 저장</button>
+                    </div>
+                </div>
+                <div class="current-winning-numbers" id="currentWinningNumbers">
+                    <!-- 현재 설정된 당첨번호 표시 영역 -->
+                </div>
+                <div class="winning-results" id="winningResults">
+                    <!-- 당첨 결과 표시 영역 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 오디오 요소 -->
+    <audio id="machineSound" loop preload="auto">
+        <source src="m.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="ballDropSound" preload="auto">
+        <source src="https://freesound.org/data/previews/411/411088_5121236-lq.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="resultSound" preload="auto">
+        <source src="https://freesound.org/data/previews/320/320654_5260872-lq.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="startSound" preload="auto">
+        <source src="https://freesound.org/data/previews/466/466617_10062900-lq.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
