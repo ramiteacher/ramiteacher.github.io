@@ -1,3 +1,17 @@
 [build]
   command = "gem update --system && bundle install && jekyll build"
   publish = "_site"
+
+# 캐싱 설정 추가
+[build.environment]
+  NETLIFY_USE_YARN = "true"
+
+# 캐시할 디렉토리 설정
+[[plugins]]
+  package = "netlify-plugin-cache"
+    [plugins.inputs]
+      paths = [
+        "vendor/bundle",
+        ".jekyll-cache",
+        ".bundle"
+      ]
