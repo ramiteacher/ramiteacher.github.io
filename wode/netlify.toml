@@ -1,0 +1,16 @@
+[build]
+command = "jekyll build"
+publish = "_site"
+
+[build.environment]
+JEKYLL_ENV = "production"
+
+# 캐시할 디렉토리 설정
+[[plugins]]
+  package = "netlify-plugin-cache"
+    [plugins.inputs]
+      paths = [
+        "vendor/bundle",
+        ".jekyll-cache",
+        ".bundle"
+      ]

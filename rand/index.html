@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css"/>
+    <title>닉네임생성기: 하나뿐인 닉네임 생성</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="nick.js"></script>
+  </head>
+
+  <body class="bg-light">
+    <div class="wrap card p-3 bg-white">
+
+      <br>
+      <!-- 수정된 로고: 가운데 정렬 및 클릭 시 메인(index.html)으로 이동 -->
+      <img class="logo" src="logo.png" style="display:block; margin:0 auto; cursor:pointer; max-width:none; height:auto;" onclick="window.location.href='index.html'">
+      
+      <!-- 자음선택 라디오 -->
+      <div class="container_jaum_sel">
+        <span class="container_rd_jaum"><input type="radio" class="rdo" id="rd_jaum" name="rdo">
+          <label for="rd_jaum">초성선택:&nbsp</label>
+        </span>
+        <input type="text" style="font-size:1.5rem" id="ip_jaum">
+      </div>
+
+      <div class="container_jaum1">
+        <div class="btn_jaum" onclick="ja_push(this)">ㄱ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㄲ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㄴ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㄷ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㄸ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㄹ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㅁ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㅂ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㅃ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㅅ</div>
+      </div>
+
+      <div class="container_jaum2">
+        <div class="btn_jaum" onclick="ja_push(this)">ㅆ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㅇ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㅈ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㅉ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㅊ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㅋ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㅌ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㅍ</div>
+        <div class="btn_jaum" onclick="ja_push(this)">ㅎ</div>
+        <span class=btn_jaum_span></span>
+      </div>
+
+
+
+      <!-- 길이선택 라디오 -->
+      <div><input type="radio" class="rdo" id="rd_length" name="rdo">
+        <label for="rd_length">길이 선택</label>
+      </div>
+
+      <div class="container_number">
+        <div class="btn_number" id="btn1" onclick="number_push(this)">1</div>
+        <div class="btn_number" id="btn2" onclick="number_push(this)">2</div>
+        <div class="btn_number" id="btn3" onclick="number_push(this)">3</div>
+        <div class="btn_number" id="btn4" onclick="number_push(this)">4</div>
+        <div class="btn_number" id="btn5" onclick="number_push(this)">5</div>
+        <div class="btn_number" id="btn6" onclick="number_push(this)">6</div>
+        <div class="btn_number" id="btn7" onclick="number_push(this)">7</div>
+        <div class="btn_number" id="btn8" onclick="number_push(this)">8</div>
+        <div class="btn_number" id="btn9" onclick="number_push(this)">9</div>
+        <div class="btn_number" id="btn10" onclick="number_push(this)">10</div>
+      </div>
+
+      <div class="container_cb container_cb1">
+        <input type="checkbox" id="cb_jaum" class="cb_option" checked = "checked">
+        <label for="cb_jaum" class="cb_option_lbl">&nbsp주요 자음만 사용!</label>
+      </div>
+
+      <div class="container_cb container_cb2">
+        <input type="checkbox" id="cb_moum" class="cb_option" checked = "checked">
+        <label for="cb_moum" class="cb_option_lbl">&nbsp주요 모음만 사용!</label>
+      </div>
+
+      <div class="container_cb container_cb3">
+        <input type="checkbox" id="cb_no_jong" class="cb_option" checked = "checked">
+        <label for="cb_no_jong" class="cb_option_lbl">&nbsp종성 제외</label>
+      </div>
+
+      
+      <div class="container_result"></div>
+
+      <div id="toast" class="toast">클립보드에 복사되었습니다!</div>
+
+      <br>
+
+      <div class=container_btn>
+        <button type="button" class="btn btn-primary" id="btn_create" onclick="btn_create()">랜덤생성</button>
+        <button type="button" class="btn btn-primary ms-3" id="btn_copy" onclick="btn_copy()">복사하기</button>
+      </div>
+
+      <br>
+      <br>
+
+      <!-- 문의하기 링크 삭제됨 -->
+  
+      <p style="margin:0.5vh; font-size:0.5rem">Copyright 2021. (dayoffholiday@gmail.com) all rights reserved.</p>
+
+    </div>
+
+  </body>
+</html>
