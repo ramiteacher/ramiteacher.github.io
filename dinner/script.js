@@ -37,11 +37,12 @@ const colors = [
   "#E15FED", "#FF6B6B", "#FFA06B", "#F9DB6D"
 ];
 
-// 효과음 로드
+// 효과음 로드 부분 수정
 const tickSound = new Audio();
-tickSound.src = "sa.mp3";
+tickSound.src = "sa.mp3"; // sa.mp3로 변경
+tickSound.loop = true; // 연속 재생되도록 설정
 const resultSound = new Audio();
-resultSound.src = "https://assets.mixkit.co/active_storage/sfx/2017/2017-preview.mp3";
+resultSound.src = "https://assets.mixkit.co/active_storage/sfx/2017/2017-preview.mp3"; // 결과 소리는 유지
 
 // 전역 변수
 let currentCategory = "korean";
@@ -149,6 +150,10 @@ function rotate() {
   spinButton.disabled = true;
   spinButton.classList.add('disabled');
   
+  // 룰렛 시작할 때 sa.mp3 재생 시작
+  tickSound.currentTime = 0;
+  tickSound.play().catch(e => console.log("효과음 재생 실패:", e));
+  
   // 랜덤한 회전 각도 (라디안)
   const spinAngle = (Math.random() * 360 + 1440) * (Math.PI / 180); // 최소 4번 회전 후 멈춤
   const spinDuration = 5000; // 회전 시간(ms)
@@ -166,15 +171,11 @@ function rotate() {
       
       rotation = startRotation + (spinAngle * easedProgress);
       
-      // 티킹 효과음
+      // 현재 속도 계산
       const currentSpeed = spinAngle * (3 * Math.pow(1 - progress, 2));
       spinSpeed = currentSpeed;
       
-      if (currentTime - lastTickTime > (1000 / (currentSpeed * 1.5)) && currentSpeed > 0.5) {
-        tickSound.currentTime = 0;
-        tickSound.play().catch(e => console.log("효과음 재생 실패:", e));
-        lastTickTime = currentTime;
-      }
+      // 틱 효과음 관련 코드 제거 (계속 재생 중이므로)
       
       drawRoulette();
       requestAnimationFrame(frame);
@@ -183,21 +184,17 @@ function rotate() {
       rotation = (startRotation + spinAngle) % (2 * Math.PI);
       drawRoulette();
       
-      // 결과 계산 - 최상단(12시 방향)에 위치한 메뉴 선택
-      const sliceAngle = (2 * Math.PI) / menuItems.length;
+      // sa.mp3 소리 중지
+      tickSound.pause();
       
-      // 상단은 -90도(-PI/2)에 해당하는 위치
-      // 회전 방향과 좌표계를 고려하여 정확한 슬라이스 계산
+      // 결과 계산
+      const sliceAngle = (2 * Math.PI) / menuItems.length;
       let topPosition = (1.5 * Math.PI - rotation) % (2 * Math.PI);
       if (topPosition < 0) topPosition += 2 * Math.PI;
       
       const selectedIndex = Math.floor(topPosition / sliceAngle) % menuItems.length;
       
-      console.log("최종 회전 각도:", rotation);
-      console.log("상단 포인터 위치:", topPosition);
-      console.log("선택된 인덱스:", selectedIndex);
-      
-      // 결과 효과음 재생
+      // 결과 효과음 재생 - 기존 코드 유지
       resultSound.play().catch(e => console.log("효과음 재생 실패:", e));
       
       // 결과 표시
