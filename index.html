@@ -88,71 +88,86 @@
     .navigation-buttons {
       display: flex;
       justify-content: center;
-      gap: 30px;
-      margin: 50px auto;
       flex-wrap: wrap;
+      gap: 2%;
+      margin: 3% auto;
+      width: 100%;
     }
     
     .nav-button {
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 220px;
-      padding: 30px 20px;
+      justify-content: center;
+      width: 30%;
+      aspect-ratio: 1/1;
+      padding: 2%;
       background: var(--white);
       color: var(--text-color);
       text-decoration: none;
-      border-radius: 15px;
+      border-radius: 50%;
       box-shadow: var(--shadow);
       transition: all 0.3s ease;
       overflow: hidden;
       position: relative;
+      margin-bottom: 2%;
     }
     
     .nav-button::before {
       content: '';
       position: absolute;
-      top: 0;
+      bottom: 0;
       left: 0;
       width: 100%;
-      height: 6px;
-      background: var(--primary-gradient);
+      height: 0%;
+      border-radius: 50%;
+      transition: height 0.4s ease-out;
+      opacity: 0.15;
+      z-index: 0;
+    }
+    
+    .nav-button:hover::before {
+      height: 100%;
     }
     
     .nav-button:hover {
-      transform: translateY(-10px);
+      transform: translateY(-5px);
       box-shadow: var(--hover-shadow);
     }
     
-    .nav-button:nth-child(2)::before {
-      background: linear-gradient(135deg, #11cdef 0%, #1171ef 100%);
-    }
-    
-    .nav-button:nth-child(3)::before {
-      background: linear-gradient(135deg, #f5365c 0%, #fd5d93 100%);
+    .button-icon, .button-text, .button-description {
+      position: relative;
+      z-index: 1;
     }
     
     .button-icon {
-      font-size: 4rem;
-      margin-bottom: 20px;
+      font-size: 2.5rem;
+      margin-bottom: 5%;
       transition: transform 0.3s ease;
     }
     
     .nav-button:hover .button-icon {
-      transform: scale(1.2);
+      transform: scale(1.1);
     }
     
     .button-text {
       font-weight: 700;
-      font-size: 1.4rem;
-      margin-bottom: 10px;
+      font-size: 1rem;
+      margin-bottom: 2%;
       color: #32325d;
+      text-align: center;
     }
     
     .button-description {
-      font-size: 0.95rem;
+      font-size: 0.8rem;
       opacity: 0.8;
-      line-height: 1.5;
+      line-height: 1.2;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-align: center;
+      max-width: 90%;
     }
     
     .about-section {
@@ -205,8 +220,19 @@
     
     @media (max-width: 768px) {
       .nav-button {
-        width: 100%;
-        max-width: 320px;
+        width: 45%;
+      }
+      
+      .button-icon {
+        font-size: 2rem;
+      }
+      
+      .button-text {
+        font-size: 0.9rem;
+      }
+      
+      .button-description {
+        font-size: 0.7rem;
       }
       
       .welcome-section h1 {
@@ -219,6 +245,12 @@
       
       .about-section {
         padding: 30px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-button {
+        width: 80%;
       }
     }
 
@@ -245,27 +277,27 @@
       <a href="/mbti/" class="nav-button">
         <div class="button-icon">🧠</div>
         <div class="button-text">15초 MBTI 검사</div>
-        <p class="button-description">빠르고 간단하게 나의 MBTI 성격 유형을 알아보세요.</p>
+        <p class="button-description">빠르게 나의 MBTI 성격유형 확인하기</p>
       </a>
       <a href="/dinner/" class="nav-button">
         <div class="button-icon">🍽️</div>
         <div class="button-text">음식 메뉴 룰렛</div>
-        <p class="button-description">오늘 뭐 먹을지 고민될 때, 랜덤하게 메뉴를 추천해드립니다.</p>
+        <p class="button-description">오늘 뭐 먹을지 랜덤 추천</p>
       </a>
       <a href="/conch/" class="nav-button">
         <div class="button-icon">🐚</div>
         <div class="button-text">마법의 소라고동</div>
-        <p class="button-description">고민되는 질문에 소라고동이 답을 알려드립니다.</p>
+        <p class="button-description">고민에 답해주는 소라고동</p>
       </a>
       <a href="/lottoq/" class="nav-button">
         <div class="button-icon">🎱</div>
         <div class="button-text">행운의 로또 번호</div>
-        <p class="button-description">당신의 행운을 시험해볼 로또 번호를 생성해드립니다.</p>
+        <p class="button-description">당신만의 행운의 번호 생성</p>
       </a>
       <a href="/rand/" class="nav-button">
         <div class="button-icon">✨</div>
         <div class="button-text">랜덤 닉네임</div>
-        <div class="button-description">하나뿐인 특별한 닉네임을 생성해 드립니다</div>
+        <p class="button-description">특별한 나만의 닉네임 생성</p>
       </a>
     </div>
     
@@ -278,4 +310,34 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3238568174687829"
      crossorigin="anonymous"></script>
 </body>
+<script>
+  // 랜덤 색상을 생성하는 함수
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+  
+  // 모든 네비게이션 버튼에 랜덤 색상 적용
+  document.querySelectorAll('.nav-button').forEach(button => {
+    const randomColor = getRandomColor();
+    button.addEventListener('mouseenter', () => {
+      button.querySelector('::before')?.style.backgroundColor || 
+      button.style.setProperty('--hover-color', randomColor);
+      button.style.setProperty('--hover-color', randomColor);
+    });
+    
+    // 스타일 속성 추가
+    const style = document.createElement('style');
+    style.textContent = `
+      .nav-button::before {
+        background-color: var(--hover-color, ${randomColor});
+      }
+    `;
+    document.head.appendChild(style);
+  });
+</script>
 </html>
