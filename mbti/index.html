@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>라미선생님 MBTI 테스트</title>
+    <style>
+        /* Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #f0f2f5; 
+            font-family: 'Noto Sans KR', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Logo */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            max-width: 150px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        /* Test Container */
+        .test-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background: #4a90e2;
+            width: 0;
+            transition: width 0.5s;
+        }
+
+        /* Question */
+        .questions-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .question {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            visibility: hidden;
+            transition: opacity 0.5s;
+            width: 100%;
+        }
+        .question.active {
+            opacity: 1;
+            visibility: visible;
+            position: relative;
+        }
+        .question h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+        }
+
+        /* Options */
+        .option {
+            padding: 18px;
+            margin: 12px 0;
+            background: #f8f9fa;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1.1rem;
+        }
+        .option:hover {
+            background: #4a90e2;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        /* Result */
+        #result {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        #result h2 {
+            color: #e74c3c;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        #result img {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            object-fit: cover;
+        }
+        #result p {
+            margin: 20px 0;
+            line-height: 1.6;
+            color: #555;
+        }
+        #retry {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <!-- 로고 추가 -->
+        <div class="logo-container">
+            <img class="logo" src="../logo.png" alt="라미선생님 로고" onclick="window.location.href='/'">
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="questions-container">
+            <!-- 질문 18개 -->
+            <div class="question active" data-step="1">
+                <h2>Q1. 모임에서 당신은?</h2>
+                <div class="option" data-type="E">🎤 먼저 대화를 시작하는 편</div>
+                <div class="option" data-type="I">👂 주로 경청하는 편</div>
+            </div>
+
+            <div class="question" data-step="2">
+                <h2>Q2. 주말 계획은?</h2>
+                <div class="option" data-type="E">👯 친구들과 만나는 것을 선호</div>
+                <div class="option" data-type="I">🏠 혼자만의 시간을 즐김</div>
+            </div>
+
+            <div class="question" data-step="3">
+                <h2>Q3. 에너지를 얻는 방법은?</h2>
+                <div class="option" data-type="E">🔋 사람들과 대화하며</div>
+                <div class="option" data-type="I">🔄 혼자 있는 시간을 통해</div>
+            </div>
+
+            <div class="question" data-step="4">
+                <h2>Q4. 정보를 받아들일 때?</h2>
+                <div class="option" data-type="S">🔍 구체적인 사실과 세부사항 중시</div>
+                <div class="option" data-type="N">💭 가능성과 아이디어 중시</div>
+            </div>
+
+            <div class="question" data-step="5">
+                <h2>Q5. 학습 방식은?</h2>
+                <div class="option" data-type="S">📝 단계적이고 구체적인 설명 선호</div>
+                <div class="option" data-type="N">🌐 전체적인 맥락을 먼저 파악</div>
+            </div>
+
+            <div class="question" data-step="6">
+                <h2>Q6. 문제 해결 방식은?</h2>
+                <div class="option" data-type="S">🛠️ 검증된 방법 사용</div>
+                <div class="option" data-type="N">💡 새로운 접근법 시도</div>
+            </div>
+
+            <div class="question" data-step="7">
+                <h2>Q7. 영화를 볼 때?</h2>
+                <div class="option" data-type="S">🎬 현실적인 이야기 선호</div>
+                <div class="option" data-type="N">🔮 상상력 넘치는 판타지 선호</div>
+            </div>
+
+            <div class="question" data-step="8">
+                <h2>Q8. 의사결정 방식은?</h2>
+                <div class="option" data-type="T">⚖️ 논리와 객관적 사실 기반</div>
+                <div class="option" data-type="F">💗 사람과 감정 고려</div>
+            </div>
+
+            <div class="question" data-step="9">
+                <h2>Q9. 갈등 상황에서?</h2>
+                <div class="option" data-type="T">📊 사실에 근거한 해결책 찾기</div>
+                <div class="option" data-type="F">🤝 모두가 만족할 해결책 찾기</div>
+            </div>
+
+            <div class="question" data-step="10">
+                <h2>Q10. 비판을 받았을 때?</h2>
+                <div class="option" data-type="T">📈 객관적으로 분석하고 개선점 찾기</div>
+                <div class="option" data-type="F">😢 감정적으로 영향을 받는 편</div>
+            </div>
+
+            <div class="question" data-step="11">
+                <h2>Q11. 친구가 고민을 털어놓을 때?</h2>
+                <div class="option" data-type="T">🔍 해결책을 제시해주는 편</div>
+                <div class="option" data-type="F">👂 공감하며 들어주는 편</div>
+            </div>
+
+            <div class="question" data-step="12">
+                <h2>Q12. 업무 스타일은?</h2>
+                <div class="option" data-type="J">📅 계획적이고 체계적으로</div>
+                <div class="option" data-type="P">🌊 유연하게 상황에 따라</div>
+            </div>
+
+            <div class="question" data-step="13">
+                <h2>Q13. 여행 계획은?</h2>
+                <div class="option" data-type="J">🗓️ 미리 세부적으로 계획</div>
+                <div class="option" data-type="P">🚶 즉흥적으로 결정</div>
+            </div>
+
+            <div class="question" data-step="14">
+                <h2>Q14. 일상생활에서?</h2>
+                <div class="option" data-type="J">✓ 할 일 목록 작성하고 체크</div>
+                <div class="option" data-type="P">🌈 상황에 따라 유동적으로 대처</div>
+            </div>
+
+            <div class="question" data-step="15">
+                <h2>Q15. 스트레스 상황에서?</h2>
+                <div class="option" data-type="J">🧘 통제력 회복하려 노력</div>
+                <div class="option" data-type="P">🎭 다양한 가능성 탐색</div>
+            </div>
+
+            <div class="question" data-step="16">
+                <h2>Q16. 대화 중에?</h2>
+                <div class="option" data-type="E">🎯 주제를 넓게 확장하는 편</div>
+                <div class="option" data-type="I">🔍 한 주제를 깊게 파고드는 편</div>
+            </div>
+
+            <div class="question" data-step="17">
+                <h2>Q17. 새로운 아이디어를 떠올릴 때?</h2>
+                <div class="option" data-type="S">🧩 경험을 바탕으로 구상</div>
+                <div class="option" data-type="N">💫 직관적으로 영감을 얻음</div>
+            </div>
+
+            <div class="question" data-step="18">
+                <h2>Q18. 성공을 판단하는 기준은?</h2>
+                <div class="option" data-type="T">🏆 목표 달성과 성과</div>
+                <div class="option" data-type="F">❤️ 인간관계와 행복감</div>
+            </div>
+
+            <!-- 결과 화면 -->
+            <div id="result">
+                <h2 id="resultTitle"></h2>
+                <img id="resultImage" src="" alt="MBTI 결과 이미지">
+                <p id="resultDesc"></p>
+                <button id="retry">다시하기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 질문 데이터
+        const questions = [
+            { step: 1, q: "Q1. 모임에서 당신은?", options: ["E", "I"] },
+            { step: 2, q: "Q2. 주말 계획은?", options: ["E", "I"] },
+            { step: 3, q: "Q3. 에너지를 얻는 방법은?", options: ["E", "I"] },
+            { step: 4, q: "Q4. 정보를 받아들일 때?", options: ["S", "N"] },
+            { step: 5, q: "Q5. 학습 방식은?", options: ["S", "N"] },
+            { step: 6, q: "Q6. 문제 해결 방식은?", options: ["S", "N"] },
+            { step: 7, q: "Q7. 영화를 볼 때?", options: ["S", "N"] },
+            { step: 8, q: "Q8. 의사결정 방식은?", options: ["T", "F"] },
+            { step: 9, q: "Q9. 갈등 상황에서?", options: ["T", "F"] },
+            { step: 10, q: "Q10. 비판을 받았을 때?", options: ["T", "F"] },
+            { step: 11, q: "Q11. 친구가 고민을 털어놓을 때?", options: ["T", "F"] },
+            { step: 12, q: "Q12. 업무 스타일은?", options: ["J", "P"] },
+            { step: 13, q: "Q13. 여행 계획은?", options: ["J", "P"] },
+            { step: 14, q: "Q14. 일상생활에서?", options: ["J", "P"] },
+            { step: 15, q: "Q15. 스트레스 상황에서?", options: ["J", "P"] },
+            { step: 16, q: "Q16. 대화 중에?", options: ["E", "I"] },
+            { step: 17, q: "Q17. 새로운 아이디어를 떠올릴 때?", options: ["S", "N"] },
+            { step: 18, q: "Q18. 성공을 판단하는 기준은?", options: ["T", "F"] }
+        ];
+
+        // MBTI 결과 데이터
+        const results = {
+            "ISTJ": {
+                title: "ISTJ - 세상의 소금형",
+                desc: "체계적이고 신중하며 책임감이 강한 당신은 진정한 ISTJ입니다. 일을 철저히 준비하고 완수하는 인재!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/analysts_Logician_INTP_personality_header.svg"
+            },
+            "ISFJ": {
+                title: "ISFJ - 수호자형",
+                desc: "온화하고 헌신적이며 타인을 보호하는 당신은 든든한 ISFJ입니다. 주변 사람들의 안전과 행복을 챙기는 따뜻한 사람!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/diplomats_Mediator_INFP_personality_header.svg"
+            },
+            "INFJ": {
+                title: "INFJ - 예언자형",
+                desc: "이상적이고 통찰력이 뛰어난 당신은 신비로운 INFJ입니다. 세상을 더 나은 곳으로 만들기 위해 노력하는 사람!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/diplomats_Advocate_INFJ_personality_header.svg"
+            },
+            "INTJ": {
+                title: "INTJ - 전략가형",
+                desc: "독립적이고 분석력이 뛰어난 당신은 논리적인 INTJ입니다. 끊임없이 개선점을 찾아 혁신을 이루는 전략가!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/analysts_Architect_INTJ_personality_header.svg"
+            },
+            "ISTP": {
+                title: "ISTP - 장인형",
+                desc: "논리적이고 실용적인 문제 해결사인 당신은 기술적인 ISTP입니다. 상황을 빠르게 분석하고 효율적으로 대처하는 능력자!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/explorers_Virtuoso_ISTP_personality_header.svg"
+            },
+            "ISFP": {
+                title: "ISFP - 예술가형",
+                desc: "온화하고 감성적인 당신은 창의적인 ISFP입니다. 주변의 아름다움을 발견하고 자신만의 방식으로 표현하는 예술가!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/explorers_Adventurer_ISFP_personality_header.svg"
+            },
+            "INFP": {
+                title: "INFP - 중재자형",
+                desc: "이상주의적이고 공감 능력이 뛰어난 당신은 감성적인 INFP입니다. 세상에 선한 영향력을 미치기 위해 노력하는 이상주의자!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/diplomats_Mediator_INFP_personality_header.svg"
+            },
+            "INTP": {
+                title: "INTP - 아이디어 뱅크형",
+                desc: "논리적이고 창의적인 당신은 지적인 INTP입니다. 끊임없이 새로운 이론과 아이디어를 탐구하는 사색가!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/analysts_Logician_INTP_personality_header.svg"
+            },
+            "ESTP": {
+                title: "ESTP - 수완가형",
+                desc: "활동적이고 적응력이 뛰어난 당신은 모험을 즐기는 ESTP입니다. 현실적인 문제를 즉각적으로 해결하는 실용주의자!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/explorers_Entrepreneur_ESTP_personality_header.svg"
+            },
+            "ESFP": {
+                title: "ESFP - 연예인형",
+                desc: "열정적이고 사교적인 당신은 인기 많은 ESFP입니다. 주변에 활력과 즐거움을 전파하는 분위기 메이커!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/explorers_Entertainer_ESFP_personality_header.svg"
+            },
+            "ENFP": {
+                title: "ENFP - 스파크형",
+                desc: "열정적이고 창의적인 당신은 매력적인 ENFP입니다. 사람들에게 영감을 주고 새로운 가능성을 발견하는 자유로운 영혼!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/diplomats_Campaigner_ENFP_personality_header.svg"
+            },
+            "ENTP": {
+                title: "ENTP - 발명가형",
+                desc: "독창적이고 호기심 많은 당신은 도전적인 ENTP입니다. 끊임없이 새로운 아이디어를 생각해내는 혁신적인 발명가!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/analysts_Debater_ENTP_personality_header.svg"
+            },
+            "ESTJ": {
+                title: "ESTJ - 경영자형",
+                desc: "체계적이고 실용적인 당신은 리더십 있는 ESTJ입니다. 목표를 효율적으로 달성하기 위해 조직을 이끄는 관리자!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/sentinels_Executive_ESTJ_personality_header.svg"
+            },
+            "ESFJ": {
+                title: "ESFJ - 친선도모형",
+                desc: "사교적이고 배려심 깊은 당신은 협조적인 ESFJ입니다. 타인의 필요를 챙기고 조화로운 환경을 만드는 사회적 리더!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/sentinels_Consul_ESFJ_personality_header.svg"
+            },
+            "ENFJ": {
+                title: "ENFJ - 언변능숙형",
+                desc: "카리스마 있고 이타적인 당신은 영감을 주는 ENFJ입니다. 다른 사람의 성장을 돕고 공동체를 이끄는 사람들의 리더!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/diplomats_Protagonist_ENFJ_personality_header.svg"
+            },
+            "ENTJ": {
+                title: "ENTJ - 지도자형",
+                desc: "자신감 있고 결단력 있는 당신은 전략적인 ENTJ입니다. 목표를 향해 효율적으로 조직을 이끄는 타고난 리더!",
+                img: "https://www.16personalities.com/static/images/personality-types/headers/analysts_Commander_ENTJ_personality_header.svg"
+            }
+        };
+
+        // 변수 초기화
+        let currentStep = 1;
+        let userType = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+        const totalSteps = 18;
+
+        // 옵션 선택 핸들러
+        document.querySelectorAll('.option').forEach(opt => {
+            opt.addEventListener('click', function() {
+                const type = this.dataset.type;
+                userType[type]++;
+                nextQuestion();
+            });
+        });
+
+        // 다음 질문 이동
+        function nextQuestion() {
+            // 프로그레스 업데이트
+            const progressPercent = (currentStep / totalSteps) * 100;
+            document.getElementById('progress').style.width = `${progressPercent}%`;
+
+            // 현재 질문 숨기기
+            document.querySelector(`[data-step="${currentStep}"]`).classList.remove('active');
+            
+            if(currentStep === totalSteps) {
+                showResult();
+            } else {
+                currentStep++;
+                document.querySelector(`[data-step="${currentStep}"]`).classList.add('active');
+            }
+        }
+
+        // 결과 표시
+        function showResult() {
+            // 각 차원별 선호도 결정
+            const mbti = [
+                userType.E > userType.I ? 'E' : 'I',
+                userType.S > userType.N ? 'S' : 'N',
+                userType.T > userType.F ? 'T' : 'F',
+                userType.J > userType.P ? 'J' : 'P'
+            ].join('');
+            
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('resultTitle').textContent = results[mbti].title;
+            document.getElementById('resultDesc').textContent = results[mbti].desc;
+            
+            // 결과 이미지 설정
+            const resultImage = document.getElementById('resultImage');
+            resultImage.src = results[mbti].img;
+            resultImage.alt = results[mbti].title;
+            
+            // 이미지 로드 오류 대비 예비 이미지 설정
+            resultImage.onerror = function() {
+                this.src = 'https://www.16personalities.com/static/images/personality-types/headers/diplomats_Mediator_INFP_personality_header.svg';
+                this.alt = '이미지를 불러올 수 없습니다';
+            };
+        }
+
+        // 다시하기
+        document.getElementById('retry').addEventListener('click', () => location.reload());
+    </script>
+</body>
+</html>
