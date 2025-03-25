@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+    
+    <title>국기 퀴즈: 세계 국기 맞추기</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: 'Do Hyeon', sans-serif;
+      }
+      
+      body {
+        background-color: #f5f5f5;
+        padding: 20px;
+      }
+      
+      .wrap {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .logo {
+        width: 150px;
+        display: block;
+        margin: 0 auto 20px;
+        cursor: pointer;
+      }
+      
+      .container_option {
+        margin: 20px 0;
+        text-align: center;
+      }
+      
+      .btn_option {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 0 5px;
+        background-color: #e9ecef;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      
+      .btn_option.active {
+        background-color: #007bff;
+        color: white;
+      }
+      
+      .quiz_container {
+        text-align: center;
+        margin: 20px 0;
+        display: none;
+      }
+      
+      .flag_image {
+        width: 80%;
+        max-width: 300px;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      
+      .answer_container {
+        margin: 20px 0;
+      }
+      
+      .answer_input {
+        padding: 10px;
+        width: 80%;
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+        font-size: 1.2rem;
+        text-align: center;
+      }
+      
+      .btn_submit {
+        display: block;
+        margin: 10px auto;
+        padding: 10px 30px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.1rem;
+      }
+      
+      .feedback {
+        height: 30px;
+        margin: 10px 0;
+        font-size: 1.2rem;
+      }
+      
+      .correct {
+        color: #28a745;
+      }
+      
+      .incorrect {
+        color: #dc3545;
+      }
+      
+      .result_container {
+        text-align: center;
+        margin: 20px 0;
+        display: none;
+      }
+      
+      .progress_container {
+        background-color: #e9ecef;
+        border-radius: 5px;
+        height: 20px;
+        margin: 20px 0;
+        overflow: hidden;
+      }
+      
+      .progress_bar {
+        height: 100%;
+        background-color: #007bff;
+        width: 0%;
+        transition: width 0.3s;
+      }
+
+      .toast {
+        visibility: hidden;
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 30px;
+        background-color: #333;
+        color: #fff;
+        padding: 15px 25px;
+        border-radius: 25px;
+        z-index: 1000;
+      }
+
+      .toast.show {
+        visibility: visible;
+        animation: fadein 0.5s, fadeout 0.5s 2s;
+      }
+
+      @keyframes fadein {
+        from {bottom: 0; opacity: 0;}
+        to {bottom: 30px; opacity: 1;}
+      }
+
+      @keyframes fadeout {
+        from {bottom: 30px; opacity: 1;}
+        to {bottom: 0; opacity: 0;}
+      }
+    </style>
+    <script>
+      // 국가 데이터 수정 - 다양한 표기법 배열로 저장
+      const countries = [
+        { name: "대한민국", answers: ["대한민국", "한국", "korea", "south korea", "코리아"], flag: "https://flagcdn.com/w320/kr.png" },
+        { name: "미국", answers: ["미국", "usa", "america", "아메리카", "미합중국", "united states"], flag: "https://flagcdn.com/w320/us.png" },
+        { name: "일본", answers: ["일본", "japan", "닛폰", "니혼"], flag: "https://flagcdn.com/w320/jp.png" },
+        { name: "중국", answers: ["중국", "china", "중화인민공화국"], flag: "https://flagcdn.com/w320/cn.png" },
+        { name: "영국", answers: ["영국", "england", "great britain", "uk", "united kingdom", "그레이트 브리튼"], flag: "https://flagcdn.com/w320/gb.png" },
+        { name: "프랑스", answers: ["프랑스", "france"], flag: "https://flagcdn.com/w320/fr.png" },
+        { name: "독일", answers: ["독일", "germany"], flag: "https://flagcdn.com/w320/de.png" },
+        { name: "이탈리아", answers: ["이탈리아", "italy"], flag: "https://flagcdn.com/w320/it.png" },
+        { name: "스페인", answers: ["스페인", "spain"], flag: "https://flagcdn.com/w320/es.png" },
+        { name: "캐나다", answers: ["캐나다", "canada"], flag: "https://flagcdn.com/w320/ca.png" },
+        { name: "호주", answers: ["호주", "australia","오스트레일리아"], flag: "https://flagcdn.com/w320/au.png" },
+        { name: "브라질", answers: ["브라질", "brazil"], flag: "https://flagcdn.com/w320/br.png" },
+        { name: "멕시코", answers: ["멕시코", "mexico"], flag: "https://flagcdn.com/w320/mx.png" },
+        { name: "인도", answers: ["인도", "india"], flag: "https://flagcdn.com/w320/in.png" },
+        { name: "러시아", answers: ["러시아", "russia"], flag: "https://flagcdn.com/w320/ru.png" },
+        { name: "아르헨티나", answers: ["아르헨티나", "argentina"], flag: "https://flagcdn.com/w320/ar.png" },
+        { name: "남아프리카공화국", answers: ["남아프리카공화국", "남아공", "south africa"], flag: "https://flagcdn.com/w320/za.png" },
+        { name: "이집트", answers: ["이집트", "egypt"], flag: "https://flagcdn.com/w320/eg.png" },
+        { name: "사우디아라비아", answers: ["사우디아라비아", "사우디", "saudi arabia"], flag: "https://flagcdn.com/w320/sa.png" },
+        { name: "스웨덴", answers: ["스웨덴", "sweden"], flag: "https://flagcdn.com/w320/se.png" },
+        { name: "노르웨이", answers: ["노르웨이", "norway"], flag: "https://flagcdn.com/w320/no.png" },
+        { name: "덴마크", answers: ["덴마크", "denmark"], flag: "https://flagcdn.com/w320/dk.png" },
+        { name: "핀란드", answers: ["핀란드", "finland"], flag: "https://flagcdn.com/w320/fi.png" },
+        { name: "네덜란드", answers: ["네덜란드", "holland", "netherlands"], flag: "https://flagcdn.com/w320/nl.png" },
+        { name: "벨기에", answers: ["벨기에", "belgium"], flag: "https://flagcdn.com/w320/be.png" },
+        { name: "스위스", answers: ["스위스", "switzerland"], flag: "https://flagcdn.com/w320/ch.png" },
+        { name: "오스트리아", answers: ["오스트리아", "austria"], flag: "https://flagcdn.com/w320/at.png" },
+        { name: "그리스", answers: ["그리스", "greece"], flag: "https://flagcdn.com/w320/gr.png" },
+        { name: "포르투갈", answers: ["포르투갈", "portugal"], flag: "https://flagcdn.com/w320/pt.png" },
+        { name: "터키", answers: ["터키", "turkey"], flag: "https://flagcdn.com/w320/tr.png" },
+        { name: "태국", answers: ["태국", "thailand"], flag: "https://flagcdn.com/w320/th.png" },
+        { name: "베트남", answers: ["베트남", "vietnam"], flag: "https://flagcdn.com/w320/vn.png" },
+        { name: "인도네시아", answers: ["인도네시아", "indonesia"], flag: "https://flagcdn.com/w320/id.png" },
+        { name: "말레이시아", answers: ["말레이시아", "malaysia"], flag: "https://flagcdn.com/w320/my.png" },
+        { name: "싱가포르", answers: ["싱가포르", "singapore"], flag: "https://flagcdn.com/w320/sg.png" },
+        { name: "필리핀", answers: ["필리핀", "philippines"], flag: "https://flagcdn.com/w320/ph.png" },
+        { name: "뉴질랜드", answers: ["뉴질랜드", "new zealand"], flag: "https://flagcdn.com/w320/nz.png" },
+        { name: "아이슬란드", answers: ["아이슬란드", "iceland"], flag: "https://flagcdn.com/w320/is.png" },
+        { name: "이스라엘", answers: ["이스라엘", "israel"], flag: "https://flagcdn.com/w320/il.png" },
+        { name: "아랍에미리트", answers: ["아랍에미리트", "아랍에미레이트", "uae"], flag: "https://flagcdn.com/w320/ae.png" },
+        { name: "카타르", answers: ["카타르", "qatar"], flag: "https://flagcdn.com/w320/qa.png" },
+        { name: "쿠웨이트", answers: ["쿠웨이트", "kuwait"], flag: "https://flagcdn.com/w320/kw.png" },
+        { name: "이란", answers: ["이란", "iran"], flag: "https://flagcdn.com/w320/ir.png" },
+        { name: "파키스탄", answers: ["파키스탄", "pakistan"], flag: "https://flagcdn.com/w320/pk.png" },
+        { name: "나이지리아", answers: ["나이지리아", "nigeria"], flag: "https://flagcdn.com/w320/ng.png" },
+        { name: "케냐", answers: ["케냐", "kenya"], flag: "https://flagcdn.com/w320/ke.png" },
+        { name: "모로코", answers: ["모로코", "morocco"], flag: "https://flagcdn.com/w320/ma.png" },
+        { name: "콜롬비아", answers: ["콜롬비아", "colombia"], flag: "https://flagcdn.com/w320/co.png" },
+        { name: "칠레", answers: ["칠레", "chile"], flag: "https://flagcdn.com/w320/cl.png" },
+        { name: "페루", answers: ["페루", "peru"], flag: "https://flagcdn.com/w320/pe.png" },
+        { name: "쿠바", answers: ["쿠바", "cuba"], flag: "https://flagcdn.com/w320/cu.png" },
+        { name: "폴란드", answers: ["폴란드", "poland"], flag: "https://flagcdn.com/w320/pl.png" },
+        { name: "헝가리", answers: ["헝가리", "hungary"], flag: "https://flagcdn.com/w320/hu.png" },
+        { name: "체코", answers: ["체코", "czech republic", "czechia"], flag: "https://flagcdn.com/w320/cz.png" },
+        { name: "슬로바키아", answers: ["슬로바키아", "slovakia"], flag: "https://flagcdn.com/w320/sk.png" },
+        { name: "루마니아", answers: ["루마니아", "romania"], flag: "https://flagcdn.com/w320/ro.png" },
+        { name: "불가리아", answers: ["불가리아", "bulgaria"], flag: "https://flagcdn.com/w320/bg.png" },
+        { name: "크로아티아", answers: ["크로아티아", "croatia"], flag: "https://flagcdn.com/w320/hr.png" },
+        { name: "슬로베니아", answers: ["슬로베니아", "slovenia"], flag: "https://flagcdn.com/w320/si.png" },
+        { name: "세르비아", answers: ["세르비아", "serbia"], flag: "https://flagcdn.com/w320/rs.png" },
+        { name: "보스니아 헤르체고비나", answers: ["보스니아 헤르체고비나", "bosnia and herzegovina","보스니아"], flag: "https://flagcdn.com/w320/ba.png" },
+        { name: "몬테네그로", answers: ["몬테네그로", "montenegro"], flag: "https://flagcdn.com/w320/me.png" },
+        { name: "북마케도니아", answers: ["북마케도니아", "north macedonia"], flag: "https://flagcdn.com/w320/mk.png" },
+        { name: "알바니아", answers: ["알바니아", "albania"], flag: "https://flagcdn.com/w320/al.png" },
+        { name: "코소보", answers: ["코소보", "kosovo"], flag: "https://flagcdn.com/w320/xk.png" },
+        { name: "몰도바", answers: ["몰도바", "moldova"], flag: "https://flagcdn.com/w320/md.png" },
+        { name: "벨라루스", answers: ["벨라루스", "belarus"], flag: "https://flagcdn.com/w320/by.png" },
+        { name: "우크라이나", answers: ["우크라이나", "ukraine"], flag: "https://flagcdn.com/w320/ua.png" },
+        { name: "리투아니아", answers: ["리투아니아", "lithuania"], flag: "https://flagcdn.com/w320/lt.png" },
+        { name: "라트비아", answers: ["라트비아", "latvia"], flag: "https://flagcdn.com/w320/lv.png" },
+        { name: "에스토니아", answers: ["에스토니아", "estonia"], flag: "https://flagcdn.com/w320/ee.png" },
+        { name: "조지아", answers: ["조지아", "georgia"], flag: "https://flagcdn.com/w320/ge.png" },
+        { name: "아르메니아", answers: ["아르메니아", "armenia"], flag: "https://flagcdn.com/w320/am.png" },
+        { name: "아제르바이잔", answers: ["아제르바이잔", "azerbaijan"], flag: "https://flagcdn.com/w320/az.png" },
+        { name: "카자흐스탄", answers: ["카자흐스탄", "kazakhstan"], flag: "https://flagcdn.com/w320/kz.png" },
+        { name: "우즈베키스탄", answers: ["우즈베키스탄", "uzbekistan"], flag: "https://flagcdn.com/w320/uz.png" },
+        { name: "투르크메니스탄", answers: ["투르크메니스탄", "turkmenistan"], flag: "https://flagcdn.com/w320/tm.png" },
+        { name: "키르기스스탄", answers: ["키르기스스탄", "kyrgyzstan"], flag: "https://flagcdn.com/w320/kg.png" },
+        { name: "타지키스탄", answers: ["타지키스탄", "tajikistan"], flag: "https://flagcdn.com/w320/tj.png" },
+        { name: "몽골", answers: ["몽골", "mongolia"], flag: "https://flagcdn.com/w320/mn.png" },
+        { name: "미얀마", answers: ["미얀마", "myanmar", "버마", "burma"], flag: "https://flagcdn.com/w320/mm.png" },
+        { name: "라오스", answers: ["라오스", "laos"], flag: "https://flagcdn.com/w320/la.png" },
+        { name: "캄보디아", answers: ["캄보디아", "cambodia"], flag: "https://flagcdn.com/w320/kh.png" },
+        { name: "방글라데시", answers: ["방글라데시", "bangladesh"], flag: "https://flagcdn.com/w320/bd.png" },
+        { name: "스리랑카", answers: ["스리랑카", "sri lanka"], flag: "https://flagcdn.com/w320/lk.png" },
+        { name: "네팔", answers: ["네팔", "nepal"], flag: "https://flagcdn.com/w320/np.png" },
+        { name: "부탄", answers: ["부탄", "bhutan"], flag: "https://flagcdn.com/w320/bt.png" },
+        { name: "몰디브", answers: ["몰디브", "maldives"], flag: "https://flagcdn.com/w320/mv.png" },
+        { name: "파푸아뉴기니", answers: ["파푸아뉴기니", "papua new guinea"], flag: "https://flagcdn.com/w320/pg.png" },
+        { name: "피지", answers: ["피지", "fiji"], flag: "https://flagcdn.com/w320/fj.png" }
+      ];
+    </script>
+  </head>
+
+  <body>
+    <div class="wrap card p-3 bg-white">
+      <img class="logo" src="logo.png" style="display:block; margin:0 auto; cursor:pointer; max-width:none; height:auto;" onclick="window.location.href='/'">
+      
+      <h1 class="text-center mb-4">국기 퀴즈</h1>
+      <p class="text-center">국기를 보고 나라 이름을 맞춰보세요!</p>
+      
+      <div class="container_option" id="option_container">
+        <p>문제 수 선택:</p>
+        <div class="btn_option active" data-count="10">10문제</div>
+        <div class="btn_option" data-count="30">30문제</div>
+      </div>
+      
+      <div class="progress_container">
+        <div class="progress_bar" id="progress"></div>
+      </div>
+      
+      <button type="button" class="btn btn-primary d-block mx-auto" id="btn_start">시작하기</button>
+      
+      <div class="quiz_container" id="quiz">
+        <div class="question_number">Question <span id="current_question">1</span>/<span id="total_questions">10</span></div>
+        <img class="flag_image" id="flag_img" src="" alt="국기 이미지">
+        <div class="answer_container">
+          <input type="text" class="answer_input" id="answer_input" placeholder="나라 이름 입력">
+          <button type="button" class="btn_submit" id="btn_submit">제출</button>
+          <div class="feedback" id="feedback"></div>
+        </div>
+      </div>
+      
+      <div class="result_container" id="result">
+        <h2 class="text-center mb-4">퀴즈 결과</h2>
+        <div class="result-stats">
+          <p>총 문제 수: <span id="total_count">0</span></p>
+          <p>맞춘 문제 수: <span id="correct_count">0</span></p>
+          <p>정답률: <span id="percentage">0%</span></p>
+          <p>결과: <span id="result_summary">0/0</span></p>
+        </div>
+      </div>
+      
+      <div id="toast" class="toast">정답입니다!</div>
+    </div>
+    <style>
+      .result_container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .result-stats p {
+        font-size: 1.2rem;
+        margin: 10px 0;
+      }
+      #result_summary {
+        font-weight: bold;
+        font-size: 1.5rem;
+        color: #007bff;
+      }
+    </style>
+
+    <script>
+      // 게임 변수
+      let questionCount = 10;
+      let quizQuestions = [];
+      let currentQuestionIndex = 0;
+      let correctAnswers = 0;
+      
+      // DOM 요소 선택
+      const btnOptions = document.querySelectorAll('.btn_option');
+      const btnStart = document.getElementById('btn_start');
+      const btnSubmit = document.getElementById('btn_submit');
+      const btnRestart = document.getElementById('btn_restart');
+      const quizContainer = document.getElementById('quiz');
+      const resultContainer = document.getElementById('result');
+      const flagImg = document.getElementById('flag_img');
+      const answerInput = document.getElementById('answer_input');
+      const feedback = document.getElementById('feedback');
+      const currentQuestionElement = document.getElementById('current_question');
+      const totalQuestionsElement = document.getElementById('total_questions');
+      const progressBar = document.getElementById('progress');
+      const totalCountElement = document.getElementById('total_count');
+      const correctCountElement = document.getElementById('correct_count');
+      const percentageElement = document.getElementById('percentage');
+      const toast = document.getElementById('toast');
+      
+      // 문제 수 선택
+      btnOptions.forEach(btn => {
+        btn.addEventListener('click', function() {
+          btnOptions.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          questionCount = parseInt(this.dataset.count);
+          totalQuestionsElement.textContent = questionCount;
+        });
+      });
+      
+      // 시작하기 버튼
+      btnStart.addEventListener('click', function() {
+        // 시작 버튼과 문제 수 선택 영역을 명시적으로 완전히 숨김
+        btnStart.style.display = 'none';
+        document.getElementById('option_container').style.display = 'none';
+        
+        // 퀴즈 컨테이너 표시 및 퀴즈 시작
+        quizContainer.style.display = 'block';
+        startQuiz();
+        
+        // 포커스 설정
+        setTimeout(() => {
+          answerInput.focus();
+        }, 100);
+      });
+      
+      // 제출 버튼
+      btnSubmit.addEventListener('click', function() {
+        checkAnswer();
+      });
+      
+      // 엔터 키로 제출
+      answerInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          checkAnswer();
+        }
+      });
+      
+      // 다시 시작 버튼
+      btnRestart.addEventListener('click', function() {
+        // 결과창 숨기기
+        resultContainer.style.display = 'none';
+        
+        // 시작 버튼과 옵션 선택 영역이 보이지 않도록 명시적으로 설정
+        btnStart.style.display = 'none';
+        document.getElementById('option_container').style.display = 'none';
+        
+        // 퀴즈 컨테이너 표시
+        quizContainer.style.display = 'block';
+        
+        // 새 퀴즈 시작
+        resetQuiz();
+        startQuiz();
+      });
+      
+      // 퀴즈 시작
+      function startQuiz() {
+        // UI 요소 상태 명확하게 설정
+        btnStart.style.display = 'none';
+        document.getElementById('option_container').style.display = 'none';
+        quizContainer.style.display = 'block';
+        resultContainer.style.display = 'none';
+        
+        // 문제 랜덤 선택 및 초기화
+        quizQuestions = getRandomQuestions(questionCount);
+        currentQuestionIndex = 0;
+        correctAnswers = 0;
+        
+        // 첫 문제 표시
+        showQuestion();
+      }
+      
+      // 랜덤 문제 선택
+      function getRandomQuestions(count) {
+        // 중복된 국기가 없도록 필터링
+        const uniqueFlags = [];
+        const uniqueCountries = countries.filter(country => {
+          if (!uniqueFlags.includes(country.flag)) {
+            uniqueFlags.push(country.flag);
+            return true;
+          }
+          return false;
+        });
+        
+        const shuffled = [...uniqueCountries].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count);
+      }
+      
+      // 문제 표시
+      function showQuestion() {
+        const question = quizQuestions[currentQuestionIndex];
+        flagImg.src = question.flag;
+        flagImg.alt = `${question.name} 국기`;
+        
+        answerInput.value = '';
+        feedback.textContent = '';
+        feedback.className = 'feedback';
+        
+        currentQuestionElement.textContent = currentQuestionIndex + 1;
+        updateProgress();
+        
+        // 텍스트 상자에 강제로 포커스 주기
+        setTimeout(() => {
+          answerInput.focus();
+        }, 100);
+      }
+      
+      // 정답 확인
+      function checkAnswer() {
+        const userAnswer = answerInput.value.trim().toLowerCase();
+        const currentQuestion = quizQuestions[currentQuestionIndex];
+        const validAnswers = currentQuestion.answers.map(a => a.toLowerCase());
+        
+        if (userAnswer === '') {
+          feedback.textContent = '답을 입력해주세요!';
+          feedback.className = 'feedback incorrect';
+          return;
+        }
+        
+        if (validAnswers.includes(userAnswer)) {
+          feedback.textContent = '정답입니다!';
+          feedback.className = 'feedback correct';
+          correctAnswers++;
+          showToast('정답입니다!');
+        } else {
+          feedback.textContent = `오답입니다. 정답은 ${currentQuestion.name}입니다.`;
+          feedback.className = 'feedback incorrect';
+          showToast('오답입니다!', false);
+        }
+        
+        // 다음 문제로 진행 또는 결과 표시
+        setTimeout(() => {
+          currentQuestionIndex++;
+          if (currentQuestionIndex < quizQuestions.length) {
+            showQuestion();
+          } else {
+            showResult();
+          }
+        }, 1500);
+        
+        // 제출 후 버튼 비활성화
+        btnSubmit.disabled = true;
+        answerInput.disabled = true;
+        
+        setTimeout(() => {
+          btnSubmit.disabled = false;
+          answerInput.disabled = false;
+        }, 1500);
+      }
+      
+      // 토스트 메시지 표시
+      function showToast(message, isCorrect = true) {
+        toast.textContent = message;
+        toast.style.backgroundColor = isCorrect ? '#28a745' : '#dc3545';
+        toast.className = 'toast show';
+        
+        setTimeout(() => {
+          toast.className = toast.className.replace('show', '');
+        }, 2500);
+      }
+      
+      // 진행 상태 업데이트
+      function updateProgress() {
+        const progress = ((currentQuestionIndex) / questionCount) * 100;
+        progressBar.style.width = `${progress}%`;
+      }
+      
+      // 결과 표시
+      function showResult() {
+        quizContainer.style.display = 'none';
+        resultContainer.style.display = 'block';
+        
+        totalCountElement.textContent = questionCount;
+        correctCountElement.textContent = correctAnswers;
+        const percentage = Math.round((correctAnswers / questionCount) * 100);
+        percentageElement.textContent = `${percentage}%`;
+        document.getElementById('result_summary').textContent = `${correctAnswers}/${questionCount}`;
+        
+        progressBar.style.width = '100%';
+      }
+      
+      // 퀴즈 초기화
+      function resetQuiz() {
+        currentQuestionIndex = 0;
+        correctAnswers = 0;
+        quizQuestions = [];
+        progressBar.style.width = '0%';
+        feedback.textContent = '';
+      }
+    </script>
+  </body>
+</html>
