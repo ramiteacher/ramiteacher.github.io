@@ -102,8 +102,55 @@ window.onload = () => {
   }
   
   if (!email) {
-    alert("로그인 정보가 없습니다.");
-    document.getElementById("status").innerText = "❌ 로그인 정보가 없습니다. 먼저 로그인하세요.";
+    alert("로그인 정보가 없습니다. 구글 로그인을 진행합니다.");
+    document.getElementById("status").innerText = "⏳ 구글 로그인을 시작합니다...";
+    
+    // 즉시 Google OAuth 인증 프로세스 시작
+    setTimeout(() => {
+      try {
+        const tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: "192783618509-d0ev6sp714cr4d43cfumfaum005g485t.apps.googleusercontent.com",
+          scope: "https://www.googleapis.com/auth/spreadsheets",
+          callback: (response) => {
+            if (response && response.access_token) {
+              // 토큰 저장
+              localStorage.setItem("accessToken", response.access_token);
+              sessionStorage.setItem("accessToken", response.access_token);
+              
+              // 사용자 이메일 가져오기
+              fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+                headers: { Authorization: `Bearer ${response.access_token}` }
+              })
+              .then(res => res.json())
+              .then(data => {
+                if (data.email) {
+                  localStorage.setItem("userEmail", data.email);
+                  // 페이지 새로고침하여 로그인된 상태로 시작
+                  window.location.reload();
+                }
+              })
+              .catch(err => {
+                console.error("사용자 정보 가져오기 실패:", err);
+                document.getElementById("status").innerText = "❌ 로그인은 성공했으나 사용자 정보를 가져오지 못했습니다. 새로고침 후 다시 시도하세요.";
+              });
+            } else {
+              document.getElementById("status").innerText = "❌ 로그인에 실패했습니다. 새로고침 후 다시 시도하세요.";
+            }
+          },
+          error_callback: (err) => {
+            console.error("로그인 오류:", err);
+            document.getElementById("status").innerText = "❌ 로그인 중 오류가 발생했습니다: " + err.toString().substring(0, 50);
+          }
+        });
+        
+        // 로그인 프로세스 시작 - 팝업으로 로그인 창 표시
+        tokenClient.requestAccessToken({ prompt: 'consent' });
+      } catch (error) {
+        console.error("Google 로그인 초기화 오류:", error);
+        document.getElementById("status").innerText = "❌ Google 로그인을 시작할 수 없습니다: " + error.toString().substring(0, 50);
+      }
+    }, 500); // 0.5초 후 로그인 프로세스 시작
+    
     return;
   }
 
