@@ -1,4 +1,3 @@
-
 let email = localStorage.getItem("userEmail") || "";
 
 function decodeJWT(token) {
@@ -164,8 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-
-
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("accessToken");
   if (!token) {
@@ -181,4 +178,73 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("userInfo").innerText = `${email}님 환영합니다!`;
     }
   }
+});
+
+// DOM 요소
+const userInfoDisplay = document.getElementById('userInfoDisplay');
+const userEmail = document.getElementById('userEmail');
+const loginButton = document.getElementById('loginButton');
+const logoutButton = document.getElementById('logoutButton');
+
+// 로그인 상태 확인 및 UI 업데이트 함수
+function updateLoginUI(user) {
+  if (user && user.email) {
+    // 로그인 상태
+    loginButton.style.display = 'none';
+    userInfoDisplay.style.display = 'block';
+    userEmail.textContent = user.email;
+    
+    // sheetSetup div도 표시
+    document.getElementById('sheetSetup').style.display = 'block';
+  } else {
+    // 로그아웃 상태
+    loginButton.style.display = 'block';
+    userInfoDisplay.style.display = 'none';
+    document.getElementById('sheetSetup').style.display = 'none';
+  }
+}
+
+// 로그아웃 함수
+function handleLogout() {
+  // Google 로그아웃
+  const auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(() => {
+    console.log('User signed out.');
+    // 로컬 스토리지에서 인증 정보 제거
+    localStorage.removeItem('googleToken');
+    localStorage.removeItem('userEmail');
+    
+    // UI 업데이트
+    updateLoginUI(null);
+  });
+}
+
+// 로그인 성공 후 호출되는 함수에 UI 업데이트 추가
+// 아래는 기존 로그인 성공 핸들러가 있는 위치에 추가해야 합니다
+// 예시: handleAuthSuccess 함수 내부 또는 로그인 완료 후에 호출되는 위치
+function handleAuthSuccess(response) {
+  // 기존 코드...
+  
+  // 사용자 정보 가져오기
+  const user = {
+    email: response.email || localStorage.getItem('userEmail')
+  };
+  
+  // 로컬 스토리지에 사용자 이메일 저장
+  localStorage.setItem('userEmail', user.email);
+  
+  // UI 업데이트
+  updateLoginUI(user);
+}
+
+// 페이지 로드 시 로그인 상태 확인
+document.addEventListener('DOMContentLoaded', () => {
+  // 로컬 스토리지에서 이메일 정보 확인
+  const storedEmail = localStorage.getItem('userEmail');
+  if (storedEmail) {
+    updateLoginUI({ email: storedEmail });
+  }
+  
+  // 로그아웃 버튼 이벤트 리스너
+  logoutButton.addEventListener('click', handleLogout);
 });
