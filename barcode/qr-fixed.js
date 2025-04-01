@@ -104,8 +104,6 @@ window.onload = () => {
   if (!email) {
     alert("로그인 정보가 없습니다.");
     document.getElementById("status").innerText = "❌ 로그인 정보가 없습니다. 먼저 로그인하세요.";
-    // 로그인 안 된 경우 인덱스로 리디렉션
-    setTimeout(() => location.href = "index.html", 1000);
     return;
   }
 
