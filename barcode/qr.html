@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>QR 인식 재고 관리</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://accounts.google.com/gsi/client" async defer>
+if (!sheetId) {
+  const saved = sessionStorage.getItem("sheetId");
+  if (saved) {
+    location.href = `qr.html?sheetId=${saved}`;
+  }
+}
+
+</script>
+  <script src="https://unpkg.com/html5-qrcode">
+if (!sheetId) {
+  const saved = sessionStorage.getItem("sheetId");
+  if (saved) {
+    location.href = `qr.html?sheetId=${saved}`;
+  }
+}
+
+</script>
+  <link rel="stylesheet" href="style.css" />
+  <!-- PWA 관련 메타태그 및 매니페스트 링크 추가 -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#00f0ff" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <style>
+    .top-button {
+      background-color: #1e293b;
+      color: #00f0ff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      border: 1px solid #00f0ff;
+      margin-left: 6px;
+      cursor: pointer;
+    }
+    .top-button:hover {
+      background-color: #00f0ff;
+      color: #000;
+    }
+    
+    /* 설치 버튼 스타일 */
+    #installButton {
+      background-color: #00f0ff;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 10px auto;
+      display: block;
+      font-size: 16px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    #installButton:hover {
+      background-color: #00d6e0;
+      transform: translateY(-2px);
+      transition: all 0.2s;
+    }
+
+    /* 앱 설치 안내 배너 */
+    #installBanner {
+      display: none;
+      background-color: rgba(30, 41, 59, 0.95);
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 10px auto;
+      max-width: 480px;
+      border: 2px solid #00f0ff;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 1000;
+    }
+
+    .banner-title {
+      font-weight: bold;
+      color: #00f0ff;
+      margin-bottom: 8px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .banner-close {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      background: none;
+      border: none;
+      color: #00f0ff;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    
+    /* 홈 화면에 추가 가이드 */
+    .install-guide {
+      margin-top: 8px;
+      padding: 8px;
+      border-left: 3px solid #00f0ff;
+      font-size: 14px;
+    }
+    
+    /* 입고, 출고 등 버튼을 바로 보이게 함 */
+    .action-buttons {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.9);
+      padding: 12px;
+      text-align: center;
+      z-index: 999;
+      border-top: 1px solid #00f0ff;
+    }
+    
+    /* QR 스캐너와 입력 필드를 한 화면에 배치하기 위한 컨테이너 */
+    .scanner-form-container {
+      display: flex;
+      flex-direction: column;
+      max-width: 480px;
+      margin: 0 auto;
+      position: relative;
+      padding-bottom: 60px; /* 하단 버튼을 위한 공간 */
+    }
+    
+    /* QR 스캐너 영역 최적화 */
+    #reader {
+      width: 100%;
+      max-height: 45vh;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    
+    /* 입력 필드를 컴팩트하게 정렬 */
+    .input-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 0 5px;
+    }
+    
+    /* 상태 및 요약 정보 표시 영역 */
+    .status-container {
+      margin-top: 8px;
+      padding: 0 5px;
+    }
+    
+    #status, #summary {
+      margin: 5px 0;
+      font-size: 0.9rem;
+    }
+    
+    /* 모바일 화면에서 최적화 */
+    @media (max-width: 480px) {
+      #reader {
+        max-height: 38vh;
+      }
+      
+      .scanner-form-container {
+        height: calc(100vh - 130px);
+        justify-content: space-between;
+      }
+      
+      input {
+        font-size: 14px;
+        padding: 8px;
+      }
+      
+      .action-buttons button {
+        padding: 10px 15px;
+        font-size: 15px;
+      }
+    }
+    
+    /* 가로 모드에서는 QR 스캐너와 입력 폼을 나란히 배치 */
+    @media (min-width: 800px) and (orientation: landscape) {
+      .scanner-form-container {
+        flex-direction: row;
+        max-width: 90%;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      #reader {
+        width: 60%;
+        max-height: 70vh;
+      }
+      
+      .form-container {
+        width: 40%;
+      }
+      
+      .input-fields {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div style="display: flex; justify-content: space-between; padding: 4px 8px; align-items: center;">
+    <div id="sheetTitle" style="color: #00f0ff;">📄 시트 불러오는 중...</div>
+    <div>
+      <button id="sheetButton" class="top-button">시트</button>
+      <button id="adminButton" class="top-button">관리자</button>
+<button id="changeSheetButton" class="top-button">시트 변경</button>
+    </div>
+  </div>
+
+  <!-- 앱 설치 안내 배너 -->
+  <div id="installBanner">
+    <button class="banner-close" id="closeBanner">✕</button>
+    <div class="banner-title">
+      <span>📱</span>
+      <span>앱 설치 안내</span>
+    </div>
+    <p>더 빠르고 편리하게 사용하려면 앱을 설치해보세요!</p>
+    <button id="installButton">앱 설치하기</button>
+    
+    <div id="installGuide" class="install-guide">
+      <!-- 기기별 설치 가이드는 자바스크립트로 동적 삽입됨 -->
+    </div>
+  </div>
+
+  <!-- QR 스캐너와 입력 필드를 한 컨테이너에 통합 -->
+  <div class="scanner-form-container">
+    <div id="reader"></div>
+    
+    <div class="form-container">
+      <div class="input-fields">
+        <input id="code" placeholder="상품코드" readonly />
+        <input id="name" placeholder="상품명" />
+        <input id="quantity" type="number" placeholder="수량" value="1" />
+        <input id="user" placeholder="담당자명" />
+      </div>
+      
+      <div class="status-container">
+        <p id="status"></p>
+        <div id="summary"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 하단에 고정된 액션 버튼 -->
+  <div class="action-buttons">
+    <button class="action 입고" onclick="setAction('입고')">입고</button>
+    <button class="action 출고" onclick="setAction('출고')">출고</button>
+    <button class="action 반품" onclick="setAction('반품')">반품</button>
+    <button class="action 하자" onclick="setAction('하자')">하자</button>
+  </div>
+
+  <script src="qr.js">
+if (!sheetId) {
+  const saved = sessionStorage.getItem("sheetId");
+  if (saved) {
+    location.href = `qr.html?sheetId=${saved}`;
+  }
+}
+
+</script>
+  <script src="qr-fixed.js">
+if (!sheetId) {
+  const saved = sessionStorage.getItem("sheetId");
+  if (saved) {
+    location.href = `qr.html?sheetId=${saved}`;
+  }
+}
+
+</script>
+  <script>
+    // COOP 오류 해결을 위한 개선된 함수
+    async function getSheetAccessToken() {
+      // 이미 로드된 qr-fixed.js의 getAccessToken 함수 사용 시도
+      if (typeof getAccessToken === 'function') {
+        return await getAccessToken();
+      }
+      
+      // 또는 직접 구현
+      return new Promise((resolve) => {
+        const cached = localStorage.getItem("accessToken");
+        if (cached) {
+          // 캐시된 토큰 검증
+          fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?fields=properties.title`, {
+            headers: { Authorization: "Bearer " + cached }
+          })
+          .then(res => {
+            if (res.ok) return resolve(cached);
+            // 유효하지 않으면 새로 요청
+            localStorage.removeItem("accessToken");
+            requestNewToken();
+          })
+          .catch(() => {
+            localStorage.removeItem("accessToken");
+            requestNewToken();
+          });
+        } else {
+          requestNewToken();
+        }
+        
+        function requestNewToken() {
+          const tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: "192783618509-d0ev6sp714cr4d43cfumfaum005g485t.apps.googleusercontent.com",
+            scope: "https://www.googleapis.com/auth/spreadsheets", // 전체 권한으로 통일
+            callback: (res) => {
+              if (res && res.access_token) {
+                localStorage.setItem("accessToken", res.access_token);
+                resolve(res.access_token);
+              } else {
+                resolve(null);
+              }
+            }
+          });
+          
+          // 이전에 동의했다면 조용히 요청
+          tokenClient.requestAccessToken({prompt: ''});
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const sheetId = new URLSearchParams(location.search).get("sheetId");
+      const sheetTitle = document.getElementById("sheetTitle");
+      const sheetBtn = document.getElementById("sheetButton");
+      const adminBtn = document.getElementById("adminButton");
+
+      sheetBtn.onclick = () => {
+        if (sheetId) {
+          window.open(`https://docs.google.com/spreadsheets/d/${sheetId}`, "_blank");
+        } else {
+          alert("❌ 시트 ID가 없습니다.");
+        }
+      };
+
+      adminBtn.onclick = () => {
+        if (sheetId) {
+          window.location.href = `admin.html?sheetId=${sheetId}`;
+        } else {
+          alert("❌ 시트 ID가 없습니다.");
+        }
+      };
+
+      // OAuth 인증을 사용하여 시트 제목 가져오기
+      if (sheetId) {
+        try {
+          const token = await getSheetAccessToken();
+          
+          if (!token) {
+            sheetTitle.innerText = "📄 로그인이 필요합니다";
+            return;
+          }
+          
+          const response = await fetch(
+            `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?fields=properties.title`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          
+          if (!response.ok) {
+            throw new Error(`API 오류: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          sheetTitle.innerText = `📄 연결된 시트: ${data.properties.title}`;
+        } catch (error) {
+          console.error("시트 정보 가져오기 실패:", error);
+          sheetTitle.innerText = "📄 시트 접근 오류 발생";
+        }
+      }
+      
+      // 입고 버튼을 기본 선택으로 설정
+      if (typeof setAction === 'function') {
+        setTimeout(() => setAction('입고'), 1000);
+      }
+    });
+
+    // PWA 설치 관련 코드
+    let deferredPrompt;
+    const installButton = document.getElementById('installButton');
+    const installBanner = document.getElementById('installBanner');
+    const closeBanner = document.getElementById('closeBanner');
+    const installGuide = document.getElementById('installGuide');
+
+    // 서비스 워커 등록
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('서비스 워커 등록 성공:', reg.scope))
+          .catch(err => console.log('서비스 워커 등록 실패:', err));
+      });
+    }
+
+    // 최근에 설치 배너를 닫았는지 확인 (3일간 유효)
+    function hasRecentlyDismissedInstall() {
+      const dismissedTime = parseInt(localStorage.getItem('installBannerDismissedTime') || '0');
+      const now = Date.now();
+      // 3일(259,200,000 밀리초) 내에 닫았으면 true 반환
+      return now - dismissedTime < 259200000;
+    }
+
+    // 배너 닫기 이벤트
+    closeBanner.addEventListener('click', () => {
+      installBanner.style.display = 'none';
+      localStorage.setItem('installBannerDismissedTime', Date.now().toString());
+    });
+    
+    // 브라우저 종류 감지
+    function detectBrowser() {
+      const userAgent = navigator.userAgent;
+      
+      if (/iPhone|iPad|iPod/.test(userAgent) && !window.MSStream) {
+        return 'safari';
+      } else if (/Android/.test(userAgent)) {
+        if (/NAVER/.test(userAgent)) {
+          return 'naver';
+        } else if (/whale/.test(userAgent)) {
+          return 'whale';
+        } else if (/SamsungBrowser/.test(userAgent)) {
+          return 'samsung';
+        } else if (/Chrome/.test(userAgent)) {
+          return 'chrome';
+        } else {
+          return 'android-other';
+        }
+      } else if (/Chrome/.test(userAgent)) {
+        return 'chrome';
+      } else if (/Firefox/.test(userAgent)) {
+        return 'firefox';
+      } else if (/Edge|Edg/.test(userAgent)) {
+        return 'edge';
+      } else {
+        return 'unknown';
+      }
+    }
+    
+    // 브라우저별 설치 가이드 생성
+    function createInstallGuide() {
+      const browser = detectBrowser();
+      let guideHtml = '';
+      
+      switch(browser) {
+        case 'safari':
+          guideHtml = `
+            <strong>사파리에서 설치하기:</strong><br>
+            1. 하단 공유 버튼 <span style="font-size:18px">⏫</span> 탭<br>
+            2. "홈 화면에 추가" 선택
+          `;
+          break;
+        case 'chrome':
+          guideHtml = `
+            <strong>크롬에서 설치하기:</strong><br>
+            1. 메뉴 <span style="font-size:18px">⋮</span> 탭<br>
+            2. "앱 설치" 또는 "홈 화면에 추가" 선택
+          `;
+          break;
+        case 'naver':
+          guideHtml = `
+            <strong>네이버 웨일에서 설치하기:</strong><br>
+            1. 메뉴 <span style="font-size:18px">⋮</span> 탭<br>
+            2. "홈 화면에 추가" 선택
+          `;
+          break;
+        case 'whale':
+          guideHtml = `
+            <strong>네이버 웨일에서 설치하기:</strong><br>
+            1. 메뉴 <span style="font-size:18px">⋮</span> 탭<br>
+            2. "홈 화면에 추가" 선택
+          `;
+          break;
+        case 'samsung':
+          guideHtml = `
+            <strong>삼성 인터넷에서 설치하기:</strong><br>
+            1. 메뉴 <span style="font-size:18px">≡</span> 탭<br>
+            2. "홈 화면에 추가" 선택
+          `;
+          break;
+        case 'firefox':
+          guideHtml = `
+            <strong>파이어폭스에서 설치하기:</strong><br>
+            1. 메뉴 <span style="font-size:18px">≡</span> 탭<br>
+            2. "앱 설치" 또는 "홈 화면에 추가" 선택
+          `;
+          break;
+        case 'edge':
+          guideHtml = `
+            <strong>엣지에서 설치하기:</strong><br>
+            1. 메뉴 <span style="font-size:18px">…</span> 탭<br>
+            2. "앱 설치" 선택
+          `;
+          break;
+        default:
+          guideHtml = `
+            <strong>앱 설치 방법:</strong><br>
+            브라우저 메뉴에서 "앱 설치" 또는<br>
+            "홈 화면에 추가" 옵션을 찾아 선택하세요.
+          `;
+      }
+      
+      installGuide.innerHTML = guideHtml;
+    }
+
+    // 설치 안내 표시 여부 결정 및 표시
+    function showInstallPromotion() {
+      // 이미 앱이 설치되어 있거나 최근에 배너를 닫은 경우는 표시하지 않음
+      if (window.matchMedia('(display-mode: standalone)').matches || 
+          window.navigator.standalone === true ||
+          localStorage.getItem('appInstalled') === 'true' ||
+          hasRecentlyDismissedInstall()) {
+        return;
+      }
+      
+      // 설치 가이드 생성
+      createInstallGuide();
+      
+      // 설치 배너 표시
+      installBanner.style.display = 'block';
+    }
+
+    // 앱 설치 프롬프트 표시
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // 브라우저 기본 설치 프롬프트 방지
+      e.preventDefault();
+      // 이벤트 저장
+      deferredPrompt = e;
+      
+      // 설치 안내 표시
+      showInstallPromotion();
+    });
+
+    // 설치 버튼 클릭 이벤트
+    installButton.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        // 설치 프롬프트 표시
+        deferredPrompt.prompt();
+        // 사용자 응답 대기
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`사용자 선택: ${outcome}`);
+        // 이벤트 참조 정리
+        deferredPrompt = null;
+        // 설치 배너 숨기기
+        installBanner.style.display = 'none';
+      } else {
+        // beforeinstallprompt가 지원되지 않는 브라우저의 경우
+        // 수동 설치 가이드만 표시
+        alert('브라우저 메뉴를 이용하여 앱을 설치해주세요.');
+      }
+    });
+
+    // 앱이 이미 설치된 경우
+    window.addEventListener('appinstalled', () => {
+      console.log('앱이 설치되었습니다!');
+      installBanner.style.display = 'none';
+      localStorage.setItem('appInstalled', 'true');
+    });
+
+    // 페이지 로드 시 설치 안내 표시
+    window.addEventListener('load', () => {
+      // iOS에서는 beforeinstallprompt가 지원되지 않으므로 직접 설치 안내 표시
+      if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream) {
+        if (!window.navigator.standalone && 
+            localStorage.getItem('appInstalled') !== 'true' && 
+            !hasRecentlyDismissedInstall()) {
+          createInstallGuide();
+          installBanner.style.display = 'block';
+        }
+      } else {
+        // beforeinstallprompt 이벤트가 지원되는 브라우저는 해당 이벤트에서 처리
+        showInstallPromotion();
+      }
+    });
+  
+if (!sheetId) {
+  const saved = sessionStorage.getItem("sheetId");
+  if (saved) {
+    location.href = `qr.html?sheetId=${saved}`;
+  }
+}
+
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const changeSheetBtn = document.getElementById("changeSheetButton");
+    if (changeSheetBtn) {
+      changeSheetBtn.addEventListener("click", () => {
+        sessionStorage.removeItem("sheetId"); // 기존 시트ID 제거
+        window.location.href = "index.html";
+      });
+    }
+  });
+
+if (!sheetId) {
+  const saved = sessionStorage.getItem("sheetId");
+  if (saved) {
+    location.href = `qr.html?sheetId=${saved}`;
+  }
+}
+
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const changeSheetBtn = document.getElementById("changeSheetButton");
+  if (changeSheetBtn) {
+    changeSheetBtn.addEventListener("click", () => {
+      sessionStorage.removeItem("sheetId");
+      window.location.replace("index.html?nocache=" + Date.now());
+    });
+  }
+});
+</script>
+</body>
+</html>

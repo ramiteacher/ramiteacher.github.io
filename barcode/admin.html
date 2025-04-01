@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>📊 관리자 통계 시각화</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    canvas { background-color: #fff; border-radius: 12px; box-shadow: 0 0 10px #0003; }
+    h2 { color: #00f0ff; margin-bottom: 4px; }
+    #sheetName a { color: #00ff88; text-decoration: underline; font-size: 0.95rem; }
+    #chart-container { max-width: 900px; margin: 0 auto; padding: 12px; }
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
+    .controls select, .controls button { padding: 8px 12px; border-radius: 6px; border: 1px solid #ddd; background: #fff; }
+    .controls button { cursor: pointer; display: flex; align-items: center; }
+    .controls button:hover { background-color: #f5f5f5; }
+    .controls button svg { margin-right: 5px; }
+    #dataTable { margin-top: 20px; width: 100%; border-collapse: collapse; }
+    #dataTable th, #dataTable td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }
+    #dataTable th { background-color: #f2f2f2; position: sticky; top: 0; }
+    #dataTable tbody tr:hover { background-color: #f5f5f5; }
+    .table-container { max-height: 400px; overflow-y: auto; margin-top: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .tab-buttons { display: flex; gap: 5px; margin: 15px 0; }
+    .tab-button { padding: 8px 15px; border: none; background: #eee; border-radius: 5px; cursor: pointer; }
+    .tab-button.active { background: #00b894; color: white; }
+    .tabs { margin-top: 15px; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body>
+  <h2>📊 품목별 입출고 통계</h2>
+  <div id="sheetName">시트 불러오는 중...</div>
+  
+  <div id="chart-container">
+    <div class="controls">
+      <select id="chartType">
+        <option value="bar">막대 그래프</option>
+        <option value="line">선 그래프</option>
+        <option value="pie">파이 차트</option>
+        <option value="radar">레이더 차트</option>
+      </select>
+      
+      <select id="itemFilter">
+        <option value="all">모든 품목</option>
+      </select>
+      
+      <button id="downloadCSV">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 12l-4-4h2.5V2h3v6H12L8 12z"/>
+          <path d="M14 13v1H2v-1h12z"/>
+        </svg>
+        CSV 다운로드
+      </button>
+    </div>
+    
+    <div class="tab-buttons">
+      <button class="tab-button active" data-tab="chart">차트 보기</button>
+      <button class="tab-button" data-tab="table">데이터 테이블</button>
+    </div>
+    
+    <div class="tabs">
+      <div class="tab-content active" id="chart-tab">
+        <canvas id="chartCanvas"></canvas>
+      </div>
+      <div class="tab-content" id="table-tab">
+        <div class="table-container">
+          <table id="dataTable">
+            <thead>
+              <tr>
+                <th>품목</th>
+                <th>입고</th>
+                <th>출고</th>
+                <th>반품</th>
+                <th>하자</th>
+                <th>재고</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sheetId = new URLSearchParams(location.search).get("sheetId");
+    let rawData = [];
+    let chart = null;
+
+    async function getAccessToken() {
+      return new Promise((resolve) => {
+        const cached = localStorage.getItem("accessToken");
+        if (cached) return resolve(cached);
+        google.accounts.oauth2.initTokenClient({
+          client_id: "192783618509-d0ev6sp714cr4d43cfumfaum005g485t.apps.googleusercontent.com",
+          scope: "https://www.googleapis.com/auth/spreadsheets.readonly",
+          callback: (res) => {
+            localStorage.setItem("accessToken", res.access_token);
+            resolve(res.access_token);
+          }
+        }).requestAccessToken();
+      });
+    }
+
+    async function fetchSheetData() {
+      const token = await getAccessToken();
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/입출고기록!A2:F1000`;
+      const res = await fetch(url, {
+        headers: { Authorization: "Bearer " + token }
+      });
+      const json = await res.json();
+      rawData = json.values || [];
+      return rawData;
+    }
+
+    async function fetchSheetTitle() {
+      try {
+        // OAuth 토큰을 사용하여 시트 정보 직접 가져오기
+        const token = await getAccessToken();
+        
+        if (!token) {
+          throw new Error('인증 토큰을 가져올 수 없습니다');
+        }
+        
+        const response = await fetch(
+          `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?fields=properties.title`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        
+        if (!response.ok) {
+          throw new Error(`API 응답 오류: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        const title = data.properties?.title || '(이름 없음)';
+        
+        document.getElementById("sheetName").innerHTML =
+          `📄 시트: <strong>${title}</strong> <a href="https://docs.google.com/spreadsheets/d/${sheetId}" target="_blank">[열기]</a>`;
+      } catch (error) {
+        console.error("시트 제목 가져오기 실패:", error);
+        document.getElementById("sheetName").innerHTML = 
+          `❌ 시트 정보 로드 실패 <small>(${error.message})</small>`;
+      }
+    }
+
+    function summarizeByItem(data) {
+      const summary = {};
+      for (const row of data) {
+        const name = row[2];
+        const qty = parseInt(row[3]) || 1;
+        const type = row[5];
+
+        if (!summary[name]) {
+          summary[name] = { 입고: 0, 출고: 0, 반품: 0, 하자: 0 };
+        }
+        if (summary[name][type] !== undefined) {
+          summary[name][type] += qty;
+        }
+      }
+      return summary;
+    }
+
+    function populateItemFilter(summary) {
+      const select = document.getElementById('itemFilter');
+      // 기존 옵션 삭제 (첫 번째 "모든 품목" 제외)
+      while (select.options.length > 1) {
+        select.remove(1);
+      }
+      
+      // 품목별 옵션 추가
+      Object.keys(summary).sort().forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        option.textContent = item;
+        select.appendChild(option);
+      });
+    }
+
+    function renderDataTable(summary) {
+      const tbody = document.querySelector('#dataTable tbody');
+      tbody.innerHTML = '';
+      
+      // 이름순으로 정렬
+      const sortedItems = Object.keys(summary).sort();
+      
+      sortedItems.forEach(item => {
+        const row = document.createElement('tr');
+        const data = summary[item];
+        const stock = data.입고 - data.출고 - data.하자; // 재고 = 입고 - 출고 - 하자
+        
+        row.innerHTML = `
+          <td>${item}</td>
+          <td>${data.입고}</td>
+          <td>${data.출고}</td>
+          <td>${data.반품}</td>
+          <td>${data.하자}</td>
+          <td>${stock}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function renderChart(summary, chartType = 'bar', itemFilter = 'all') {
+      const ctx = document.getElementById("chartCanvas").getContext('2d');
+      
+      let labels = Object.keys(summary);
+      
+      // 품목 필터 적용
+      if (itemFilter !== 'all') {
+        labels = labels.filter(item => item === itemFilter);
+      }
+      
+      // 이름순 정렬
+      labels.sort();
+      
+      const datasets = [];
+      
+      if (chartType === 'pie' || chartType === 'radar') {
+        // 파이/레이더 차트는 각 유형(입고,출고,반품,하자)별로 다른 차트를 보여줌
+        const dataTypes = ['입고', '출고', '반품', '하자'];
+        const colorMap = {
+          '입고': '#00b894',
+          '출고': '#d63031',
+          '반품': '#0984e3',
+          '하자': '#ffb6c1'
+        };
+        
+        dataTypes.forEach(type => {
+          datasets.push({
+            label: type,
+            data: labels.map(l => summary[l][type]),
+            backgroundColor: colorMap[type],
+            borderColor: colorMap[type]
+          });
+        });
+      } else {
+        // 막대/선 그래프는 모든 유형을 하나의 차트에 표시
+        datasets.push(
+          { label: '입고', data: labels.map(l => summary[l].입고), backgroundColor: '#00b894', borderColor: '#00b894' },
+          { label: '출고', data: labels.map(l => summary[l].출고), backgroundColor: '#d63031', borderColor: '#d63031' },
+          { label: '반품', data: labels.map(l => summary[l].반품), backgroundColor: '#0984e3', borderColor: '#0984e3' },
+          { label: '하자', data: labels.map(l => summary[l].하자), backgroundColor: '#ffb6c1', borderColor: '#ffb6c1' }
+        );
+      }
+      
+      // 기존 차트가 있으면 파괴
+      if (chart) {
+        chart.destroy();
+      }
+      
+      // 차트 옵션 설정
+      const options = {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+          title: { display: true, text: '📦 품목별 입출고/하자/반품 통계' }
+        }
+      };
+      
+      // 차트 타입별 추가 옵션
+      if (chartType === 'bar') {
+        options.scales = {
+          x: { stacked: false },
+          y: { beginAtZero: true }
+        };
+      }
+      
+      // 차트 생성
+      chart = new Chart(ctx, {
+        type: chartType,
+        data: {
+          labels,
+          datasets
+        },
+        options
+      });
+    }
+    
+    function convertToCSV(summary) {
+      // CSV 헤더
+      let csv = '품목,입고,출고,반품,하자,재고\n';
+      
+      // 각 행 데이터 추가
+      Object.keys(summary).sort().forEach(item => {
+        const data = summary[item];
+        const stock = data.입고 - data.출고 - data.하자;
+        csv += `"${item}",${data.입고},${data.출고},${data.반품},${data.하자},${stock}\n`;
+      });
+      
+      return csv;
+    }
+    
+    function downloadCSV(csv, filename = 'inventory-data.csv') {
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.display = 'none';
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    async function run() {
+      if (!sheetId) {
+        document.getElementById("sheetName").innerText = "❌ sheetId 누락";
+        return;
+      }
+      
+      await fetchSheetTitle();
+      const raw = await fetchSheetData();
+      const summary = summarizeByItem(raw);
+      
+      // 품목 필터 옵션 채우기
+      populateItemFilter(summary);
+      
+      // 기본 차트 렌더링
+      renderChart(summary);
+      
+      // 데이터 테이블 렌더링
+      renderDataTable(summary);
+      
+      // 이벤트 리스너 설정
+      document.getElementById('chartType').addEventListener('change', e => {
+        const chartType = e.target.value;
+        const itemFilter = document.getElementById('itemFilter').value;
+        renderChart(summary, chartType, itemFilter);
+      });
+      
+      document.getElementById('itemFilter').addEventListener('change', e => {
+        const chartType = document.getElementById('chartType').value;
+        const itemFilter = e.target.value;
+        renderChart(summary, chartType, itemFilter);
+      });
+      
+      document.getElementById('downloadCSV').addEventListener('click', () => {
+        const csv = convertToCSV(summary);
+        downloadCSV(csv, `inventory-data-${new Date().toISOString().slice(0,10)}.csv`);
+      });
+      
+      // 탭 전환 기능
+      document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+          // 모든 탭 버튼에서 active 클래스 제거
+          document.querySelectorAll('.tab-button').forEach(btn => {
+            btn.classList.remove('active');
+          });
+          
+          // 모든 탭 콘텐츠에서 active 클래스 제거
+          document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+          });
+          
+          // 클릭된 버튼과 해당 탭에 active 클래스 추가
+          button.classList.add('active');
+          const tabId = button.dataset.tab + '-tab';
+          document.getElementById(tabId).classList.add('active');
+        });
+      });
+    }
+
+    run();
+  </script>
+</body>
+</html>

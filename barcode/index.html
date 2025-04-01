@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>네온 재고관리 시스템</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="sheet.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h2>📦 네온 재고관리 시스템</h2>
+
+    <div id="loginSection">
+      <button id="loginButton">🔐 Google 로그인</button>
+    </div>
+
+    <div id="sheetSetup" style="display:none;">
+      <p id="userInfo"></p>
+      <input id="sheetName" placeholder="시트 이름을 입력하세요" />
+      <button id="createBtn">시트 생성</button>
+
+      <div id="existingSheetSection" style="margin-top: 20px;">
+        <label for="sheetSelect"><strong>기존 시트 선택:</strong></label><br>
+        <select id="sheetSelect" style="padding: 6px; font-size: 16px; width: 100%; max-width: 400px; margin-top: 5px;"></select><br>
+        <button onclick="goToSelectedSheet()" style="margin-top: 10px;">기존 시트 연결</button>
+        <div id="sheetLoading" style="margin-top: 10px; color: #00f0ff;"></div>
+      </div>
+    </div>
+
+    <div id="errorMessage" style="color: red; display: none;"></div>
+  </body>
+</html>
