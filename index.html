@@ -276,6 +276,45 @@
       margin-bottom: 2%;
       width: 100%;
     }
+        /* style 태그 내에 추가 */
+    .tab-navigation {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+      gap: 10px;
+    }
+    
+    .tab-button {
+      padding: 12px 24px;
+      background: var(--white);
+      border: none;
+      border-radius: 10px;
+      color: var(--text-color);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+    }
+    
+    .tab-button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--hover-shadow);
+    }
+    
+    .tab-button.active {
+      background: var(--primary-gradient);
+      color: var(--white);
+    }
+    
+    .button-category {
+      display: none;
+      width: 100%;
+    }
+    
+    .button-category.active {
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -285,74 +324,86 @@
         <img src="/assets/images/meee.png" alt="RAMI TEACHER" class="logo">
       </a>
     </div>
-    
+  
+
+<!-- 탭 네비게이션 추가 -->
+<div class="tab-navigation">
+  <button class="tab-button active" data-category="test">테스트</button>
+  <button class="tab-button" data-category="decision">결정 도우미</button>
+  <button class="tab-button" data-category="tools">툴</button>
+</div>
 
 <div class="navigation-buttons">
-  <div class="button-row">
-    <a href="/mbti/" class="nav-button">
-      <div class="button-icon">🧠</div>
-      <div class="button-text">15초 MBTI 검사</div>
-      <p class="button-description">빠르게 나의 MBTI 성격유형 확인하기</p>
-    </a>
-    <a href="/adhd/" class="nav-button">
-      <div class="button-icon">🧩</div>
-      <div class="button-text">ADHD 자가진단</div>
-      <p class="button-description">설마 내가 adhd?</p>
-    </a>
-    <a href="/conch/" class="nav-button">
-      <div class="button-icon">🐚</div>
-      <div class="button-text">마법의 소라고동</div>
-      <p class="button-description">고민에 답해주는 소라고동</p>
-    </a>
-  </div>
-  <div class="button-row">
-    <a href="/lottoq/" class="nav-button">
-      <div class="button-icon">🎱</div>
-      <div class="button-text">행운의 로또 번호</div>
-      <p class="button-description">당신만의 행운의 번호 생성</p>
-    </a>
-    <a href="/dinner/" class="nav-button">
-      <div class="button-icon">🍽️</div>
-      <div class="button-text">음식 메뉴 룰렛</div>
-      <p class="button-description">오늘 뭐 먹을지 랜덤 추천</p>
-    </a>
-    <a href="/rand/" class="nav-button">
-      <div class="button-icon">✨</div>
-      <div class="button-text">랜덤 닉네임</div>
-      <p class="button-description">특별한 나만의 닉네임 생성</p>
-    </a>
-  </div>
-  </div>
-  <div class="button-row">
-    <a href="/casa/" class="nav-button">
-      <div class="button-icon">🌍</div>
-      <div class="button-text">국기 퀴즈</div>
-      <p class="button-description">얼마나 알고 계신가요?</p>
-    </a>
-    <a href="/inventory/" class="nav-button">
-      <div class="button-icon">📦</div>
-      <div class="button-text">재고관리</div>
-      <p class="button-description">스프레드시트 재고관리</p>
-    </a>
-    <a href="/baseball/" class="nav-button">
-      <div class="button-icon">⚾</div>
-      <div class="button-text">KBO</div>
-      <p class="button-description">야구 순위, 경기결과 </p>
-    </a>
-  </div>
-</div>
-<div class="button-row">
-  <a href="/zisha/" class="nav-button">
-    <div class="button-icon">💔</div>
-    <div class="button-text">자살 위험도 테스트</div>
-    <p class="button-description">가벼운 생명은 없습니다</p>
-  </a>
-</div> 
-    <div class="about-section">
-      <h2>RAMI TEACHER 소개</h2>
-      <p>RAMI TEACHER는 일상의 소소한 결정과 재미를 위한 다양한 웹 도구를 제공합니다. 식사 메뉴 선택의 고민을 덜어주는 룰렛부터, 고민에 답해주는 소라고동, 그리고 행운을 시험해볼 수 있는 로또 번호 생성기까지! 더 많은 기능을 계속해서 추가할 예정이니 자주 방문해주세요.</p>
+  <!-- 테스트 카테고리 -->
+  <div class="button-category active" id="test-category">
+    <div class="button-row">
+      <a href="/mbti/" class="nav-button">
+        <div class="button-icon">🧠</div>
+        <div class="button-text">15초 MBTI 검사</div>
+        <p class="button-description">빠르게 나의 MBTI 성격유형 확인하기</p>
+      </a>
+      <a href="/adhd/" class="nav-button">
+        <div class="button-icon">🧩</div>
+        <div class="button-text">ADHD 자가진단</div>
+        <p class="button-description">설마 내가 adhd?</p>
+      </a>
+      <a href="/zisha/" class="nav-button">
+        <div class="button-icon">�</div>
+        <div class="button-text">자살 위험도 테스트</div>
+        <p class="button-description">가벼운 생명은 없습니다</p>
+      </a>
+    </div>
+    <div class="button-row">
+      <a href="/casa/" class="nav-button">
+        <div class="button-icon">�</div>
+        <div class="button-text">국기 퀴즈</div>
+        <p class="button-description">얼마나 알고 계신가요?</p>
+      </a>
     </div>
   </div>
+  
+  <!-- 결정 도우미 카테고리 -->
+  <div class="button-category" id="decision-category">
+    <div class="button-row">
+      <a href="/dinner/" class="nav-button">
+        <div class="button-icon">🍽️</div>
+        <div class="button-text">음식 메뉴 룰렛</div>
+        <p class="button-description">오늘 뭐 먹을지 랜덤 추천</p>
+      </a>
+      <a href="/conch/" class="nav-button">
+        <div class="button-icon">🐚</div>
+        <div class="button-text">마법의 소라고동</div>
+        <p class="button-description">고민에 답해주는 소라고동</p>
+      </a>
+      <a href="/rand/" class="nav-button">
+        <div class="button-icon">✨</div>
+        <div class="button-text">랜덤 닉네임</div>
+        <p class="button-description">특별한 나만의 닉네임 생성</p>
+      </a>
+    </div>
+  </div>
+  
+  <!-- 툴 카테고리 -->
+  <div class="button-category" id="tools-category">
+    <div class="button-row">
+      <a href="/lottoq/" class="nav-button">
+        <div class="button-icon">🎱</div>
+        <div class="button-text">행운의 로또 번호</div>
+        <p class="button-description">당신만의 행운의 번호 생성</p>
+      </a>
+      <a href="/inventory/" class="nav-button">
+        <div class="button-icon">📦</div>
+        <div class="button-text">재고관리</div>
+        <p class="button-description">스프레드시트 재고관리</p>
+      </a>
+      <a href="/baseball/" class="nav-button">
+        <div class="button-icon">⚾</div>
+        <div class="button-text">KBO</div>
+        <p class="button-description">야구 순위, 경기결과</p>
+      </a>
+    </div>
+  </div>
+</div>
   <!-- 구글 애드센스 코드 -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3238568174687829"
      crossorigin="anonymous"></script>
@@ -385,6 +436,29 @@
       }
     `;
     document.head.appendChild(style);
+  });
+</script>
+<script>
+  // 탭 네비게이션 기능
+  document.querySelectorAll('.tab-button').forEach(button => {
+    button.addEventListener('click', () => {
+      // 모든 탭 버튼의 활성 상태 제거
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // 클릭한 버튼 활성화
+      button.classList.add('active');
+      
+      // 모든 카테고리 숨기기
+      document.querySelectorAll('.button-category').forEach(category => {
+        category.classList.remove('active');
+      });
+      
+      // 선택한 카테고리 표시
+      const categoryId = button.getAttribute('data-category') + '-category';
+      document.getElementById(categoryId).classList.add('active');
+    });
   });
 </script>
 </html>
