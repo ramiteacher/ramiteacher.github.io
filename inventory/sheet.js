@@ -7,6 +7,21 @@ function decodeJWT(token) {
   return JSON.parse(atob(padded));
 }
 
+// 토큰 유효성 검사 함수 추가
+async function validateToken(token) {
+  if (!token) return false;
+  
+  try {
+    const response = await fetch("https://www.googleapis.com/drive/v3/about?fields=user", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.ok;
+  } catch (error) {
+    console.error("토큰 검증 오류:", error);
+    return false;
+  }
+}
+
 function handleCredentialResponse(response) {
   const payload = decodeJWT(response.credential);
   email = payload.email;
@@ -16,6 +31,10 @@ function handleCredentialResponse(response) {
   document.getElementById("sheetSetup").style.display = "block";
   document.getElementById("userInfo").innerText = `${email}님 환영합니다!`;
 
+  // UI 업데이트
+  updateLoginUI({ email: email });
+
+  // 자동으로 권한 요청
   requestFullPermissions();
 }
 
@@ -88,7 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-
 async function createSheet() {
   const sheetName = document.getElementById("sheetName").value.trim();
   if (!sheetName) return alert("시트 이름을 입력하세요");
@@ -141,41 +159,63 @@ async function createSheet() {
   window.location.href = `qr.html?sheetId=${sheetId}`;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+// 기존 DOMContentLoaded 이벤트 리스너를 모두 통합하고 자동 로그인 처리
+document.addEventListener("DOMContentLoaded", async () => {
+  console.log("🔄 페이지 로드됨");
+  
+  // UI 요소들 초기화
   const loginBtn = document.getElementById("loginButton");
-  if (loginBtn) {
-    loginBtn.addEventListener("click", () => {
-      const token = getAccessToken();
-      if (token) {
-        console.log("✅ 이미 로그인됨, 시트 불러오기 실행");
-        document.getElementById("loginSection").style.display = "none";
-        document.getElementById("sheetSetup").style.display = "block";
-        listCompatibleSheets();
-      } else {
-        requestFullPermissions();
-      }
-    });
-  }
-
   const createBtn = document.getElementById("createBtn");
+  const logoutButton = document.getElementById("logoutButton");
+  
+  // 버튼 이벤트 리스너 등록
+  if (loginBtn) {
+    loginBtn.addEventListener("click", requestFullPermissions);
+  }
+  
   if (createBtn) {
     createBtn.addEventListener("click", createSheet);
   }
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("accessToken");
-  if (!token) {
-    console.log("🔄 accessToken 없음 → 로그인 prompt 실행");
-    google.accounts.id.prompt();
-  } else {
-    console.log("✅ accessToken 있음 → 시트 목록 불러오기");
-    listCompatibleSheets();
+  
+  if (logoutButton) {
+    logoutButton.addEventListener("click", handleLogout);
+  }
+  
+  // 저장된 사용자 이메일로 UI 초기 업데이트
+  const storedEmail = localStorage.getItem('userEmail');
+  if (storedEmail) {
+    updateLoginUI({ email: storedEmail });
+  }
+  
+  // 토큰 유효성 검사 및 자동 로그인
+  const accessToken = getAccessToken();
+  const isTokenValid = await validateToken(accessToken);
+  
+  if (isTokenValid) {
+    // 유효한 토큰이 있으면 바로 시트 목록 불러오기
+    console.log("✅ 유효한 토큰 확인됨 → 시트 목록 불러오기");
     document.getElementById("loginSection").style.display = "none";
     document.getElementById("sheetSetup").style.display = "block";
     const email = localStorage.getItem("userEmail");
     if (email) {
       document.getElementById("userInfo").innerText = `${email}님 환영합니다!`;
+    }
+    listCompatibleSheets();
+  } else {
+    // 토큰이 유효하지 않으면
+    console.log("⚠️ 유효한 토큰 없음");
+    // 저장된 토큰 제거
+    localStorage.removeItem("accessToken");
+    sessionStorage.removeItem("accessToken");
+    
+    if (storedEmail) {
+      // 사용자 이메일은 있으므로 자동으로 재인증 시도
+      console.log("🔄 이메일 정보 있음 → 자동 재인증 시도");
+      requestFullPermissions();
+    } else {
+      // 이메일도 없으면 로그인 화면 표시
+      console.log("🔄 로그인 필요 → 로그인 프롬프트 표시");
+      google.accounts.id.prompt();
     }
   }
 });
@@ -206,17 +246,23 @@ function updateLoginUI(user) {
 
 // 로그아웃 함수
 function handleLogout() {
-  // Google 로그아웃
-  const auth2 = gapi.auth2.getAuthInstance();
-  auth2.signOut().then(() => {
-    console.log('User signed out.');
-    // 로컬 스토리지에서 인증 정보 제거
-    localStorage.removeItem('googleToken');
-    localStorage.removeItem('userEmail');
-    
-    // UI 업데이트
-    updateLoginUI(null);
-  });
+  console.log("로그아웃 시작");
+  
+  // Google Identity API를 사용하여 로그아웃
+  google.accounts.id.disableAutoSelect();
+  
+  // 로컬 스토리지 및 세션 스토리지에서 모든 인증 정보 제거
+  localStorage.removeItem('accessToken');
+  sessionStorage.removeItem('accessToken');
+  localStorage.removeItem('userEmail');
+  sessionStorage.removeItem('userEmail');
+  
+  // UI 업데이트
+  updateLoginUI(null);
+  
+  console.log("✅ 로그아웃 완료");
+  // 페이지 새로고침
+  location.reload();
 }
 
 // 로그인 성공 후 호출되는 함수에 UI 업데이트 추가
