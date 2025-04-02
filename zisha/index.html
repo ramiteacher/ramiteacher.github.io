@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자살 위험도 테스트</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f0f7ff;
+            font-family: 'Noto Sans KR', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* 로고 스타일 수정 - rand 페이지와 동일하게 */
+        .logo {
+            width: 150px;
+            margin-bottom: 30px;
+            max-width: 200px; /* 더 큰 최대 크기 허용 */
+        }
+
+        .test-container {
+            margin-top: 10px; /* 로고와 컨테이너 사이 간격 조정 */
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: #4a90e2;
+            width: 0;
+            transition: width 0.5s;
+        }
+
+        .question {
+            display: none;
+            margin-bottom: 25px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .question.active {
+            display: block;
+            opacity: 1;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        .option {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option:hover {
+            background: #4a90e2;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .option-emoji {
+            font-size: 1.4em;
+        }
+
+        #result {
+            display: none;
+            text-align: center;
+        }
+
+        .risk-meter {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            background: conic-gradient(
+                #ff4444 0%, 
+                #ffbb33 30%, 
+                #00C851 60%, 
+                #00C851 100%
+            );
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .risk-percent {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            background: white;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #warning {
+            color: #e74c3c;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+
+        button {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(74,144,226,0.3);
+        }
+    </style>
+</head>
+<body>
+    <img class="logo" src="logo.png" style="display:block; margin:0 auto; cursor:pointer; max-width:none; height:auto;" onclick="window.location.href='/'">
+    
+    <div class="test-container">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+
+                <!-- 전체 15개 질문 -->
+        <div class="question active" data-step="1">
+            <h2>1. 최근 삶이 무의미하게 느껴지나요? �️</h2>
+            <div class="option" data-score="3"><span class="option-emoji">�</span>항상 그래요</div>
+            <div class="option" data-score="2"><span class="option-emoji">�</span>자주 그래요</div>
+            <div class="option" data-score="1"><span class="option-emoji">😕</span>가끔 그래요</div>
+            <div class="option" data-score="0"><span class="option-emoji">😌</span>전혀 아니에요</div>
+        </div>
+
+        <div class="question" data-step="2">
+            <h2>2. 미래에 대한 희망이 없다고 느끼나요? ⏳</h2>
+            <div class="option" data-score="3"><span class="option-emoji">😰</span>완전히 절망적이에요</div>
+            <div class="option" data-score="2"><span class="option-emoji">😓</span>대부분 희망이 없어요</div>
+            <div class="option" data-score="1"><span class="option-emoji">😐</span>가끔 그렇게 느껴요</div>
+            <div class="option" data-score="0"><span class="option-emoji">😌</span>희망을 갖고 있어요</div>
+        </div>
+
+        <div class="question" data-step="3">
+            <h2>3. 죽음에 대해 생각하는 빈도가 어떻게 되나요? 💭</h2>
+            <div class="option" data-score="3"><span class="option-emoji">😱</span>거의 매일</div>
+            <div class="option" data-score="2"><span class="option-emoji">😥</span>일주일에 여러 번</div>
+            <div class="option" data-score="1"><span class="option-emoji">🤔</span>가끔 생각해요</div>
+            <div class="option" data-score="0"><span class="option-emoji">😎</span>거의 생각하지 않아요</div>
+        </div>
+
+        <div class="question" data-step="4">
+            <h2>4. 최근 극심한 감정 변화를 경험하나요? 🌊</h2>
+            <div class="option" data-score="3"><span class="option-emoji">😵</span>매우 심하게 변해요</div>
+            <div class="option" data-score="2"><span class="option-emoji">😟</span>자주 변해요</div>
+            <div class="option" data-score="1"><span class="option-emoji">😐</span>가끔 변해요</div>
+            <div class="option" data-score="0"><span class="option-emoji">😌</span>안정적이에요</div>
+        </div>
+
+        <div class="question" data-step="5">
+            <h2>5. 주변 사람들에게 짐이 된다고 느끼나요? 🧳</h2>
+            <div class="option" data-score="3"><span class="option-emoji">😫</span>항상 그렇게 느껴요</div>
+            <div class="option" data-score="2"><span class="option-emoji">😔</span>자주 그렇게 느껴요</div>
+            <div class="option" data-score="1"><span class="option-emoji">😕</span>가끔 그렇게 느껴요</div>
+            <div class="option" data-score="0"><span class="option-emoji">😌</span>전혀 아니에요</div>
+        </div>
+
+        <div class="question" data-step="6">
+            <h2>6. 최근 식욕에 변화가 있나요? 🍽️</h2>
+            <div class="option" data-score="3"><span class="option-emoji">😵</span>심각하게 변했어요</div>
+            <div class="option" data-score="2"><span class="option-emoji">😟</span>상당히 변했어요</div>
+            <div class="option" data-score="1"><span class="option-emoji">😐</span>약간 변했어요</div>
+            <div class="option" data-score="0"><span class="option-emoji">😌</span>변화 없어요</div>
+        </div>
+
+        <div class="question" data-step="7">
+            <h2>7. 수면 패턴에 문제가 있나요? �</h2>
+            <div class="option" data-score="3"><span class="option-emoji">😫</span>심각한 문제가 있어요</div>
+            <div class="option" data-score="2"><span class="option-emoji">😔</span>자주 문제가 있어요</div>
+            <div class="option" data-score="1"><span class="option-emoji">😕</span>가끔 문제가 있어요</div>
+            <div class="option" data-score="0"><span class="option-emoji">😌</span>잘 자는 편이에요</div>
+        </div>
+
+        <div class="question" data-step="8">
+            <h2>8. 사회적으로 고립되었다고 느끼나요? 🏝️</h2>
+            <div class="option" data-score="3"><span class="option-emoji">😱</span>완전히 고립되었어요</div>
+            <div class="option" data-score="2"><span class="option-emoji">😥</span>대부분 혼자예요</div>
+            <div class="option" data-score="1"><span class="option-emoji">🤔</span>가끔 외로워요</div>
+            <div class="option" data-score="0"><span class="option-emoji">😎</span>연결되어 있다고 느껴요</div>
+        </div>
+
+        <div class="question" data-step="9">
+            <h2>9. 최근 알코올이나 약물 사용이 증가했나요? 🍷</h2>
+            <div class="option" data-score="3"><span class="option-emoji">😵</span>크게 증가했어요</div>
+            <div class="option" data-score="2"><span class="option-emoji">😟</span>어느 정도 증가했어요</div>
+            <div class="option" data-score="1"><span class="option-emoji">😐</span>약간 증가했어요</div>
+            <div class="option" data-score="0"><span class="option-emoji">😌</span>변화 없거나 사용 안 해요</div>
+        </div>
+
+        <div class="question" data-step="10">
+            <h2>10. 최근 중요한 활동이나 취미에 흥미를 잃었나요? 🎭</h2>
+            <div class="option" data-score="3"><span class="option-emoji">😫</span>모든 흥미를 잃었어요</div>
+            <div class="option" data-score="2"><span class="option-emoji">😔</span>대부분 흥미를 잃었어요</div>
+            <div class="option" data-score="1"><span class="option-emoji">😕</span>일부 흥미를 잃었어요</div>
+            <div class="option" data-score="0"><span class="option-emoji">😌</span>여전히 즐기고 있어요</div>
+        </div>
+
+        <div class="question" data-step="11">
+            <h2>11. 자신을 해치고 싶은 충동을 느낀 적이 있나요? �</h2>
+            <div class="option" data-score="3"><span class="option-emoji">😫</span>자주 느껴요</div>
+            <div class="option" data-score="2"><span class="option-emoji">😔</span>가끔 느껴요</div>
+            <div class="option" data-score="1"><span class="option-emoji">😕</span>드물게 느껴요</div>
+            <div class="option" data-score="0"><span class="option-emoji">😌</span>전혀 없어요</div>
+        </div>
+
+        <div class="question" data-step="12">
+            <h2>12. 죽음에 대한 구체적인 계획을 세운 적이 있나요? �</h2>
+            <div class="option" data-score="3"><span class="option-emoji">😫</span>구체적인 계획이 있어요</div>
+            <div class="option" data-score="2"><span class="option-emoji">😔</span>생각해 본 적 있어요</div>
+            <div class="option" data-score="1"><span class="option-emoji">😕</span>막연히 떠올린 적 있어요</div>
+            <div class="option" data-score="0"><span class="option-emoji">😌</span>전혀 없어요</div>
+        </div>
+
+        <div class="question" data-step="13">
+            <h2>13. 최근 소유물을 정리하거나 나눠주고 있나요? 🎁</h2>
+            <div class="option" data-score="3"><span class="option-emoji">😫</span>적극적으로 하고 있어요</div>
+            <div class="option" data-score="2"><span class="option-emoji">😔</span>일부 시작했어요</div>
+            <div class="option" data-score="1"><span class="option-emoji">😕</span>가끔 생각해요</div>
+            <div class="option" data-score="0"><span class="option-emoji">😌</span>전혀 아니에요</div>
+        </div>
+
+        <div class="question" data-step="14">
+            <h2>14. 과거에 자살을 시도한 적이 있나요? 🚨</h2>
+            <div class="option" data-score="3"><span class="option-emoji">😫</span>여러 번 있어요</div>
+            <div class="option" data-score="2"><span class="option-emoji">😔</span>한 번 있어요</div>
+            <div class="option" data-score="1"><span class="option-emoji">😕</span>구체적 행동 직전까지 갔어요</div>
+            <div class="option" data-score="0"><span class="option-emoji">😌</span>전혀 없어요</div>
+        </div>
+
+        <div class="question" data-step="15">
+            <h2>15. 도움을 요청하는 것이 어렵게 느껴지나요? �</h2>
+            <div class="option" data-score="3"><span class="option-emoji">🌀</span>불가능하게 느껴져요</div>
+            <div class="option" data-score="2"><span class="option-emoji">💨</span>매우 어려워요</div>
+            <div class="option" data-score="1"><span class="option-emoji">🌫️</span>약간 어려워요</div>
+            <div class="option" data-score="0"><span class="option-emoji">🌞</span>어렵지 않아요</div>
+        </div>
+        </div>
+        </div>
+
+        <div id="result">
+            <div class="risk-meter">
+                <div class="risk-percent" id="riskPercent">0%</div>
+            </div>
+            <h2 id="riskLevel"></h2>
+            <p id="riskDesc"></p>
+            <p id="warning">※ 본 테스트는 간단한 자가진단용이며 정확한 진단은 전문의 상담이 필요합니다.<br>위기 상황시 자살예방상담전화 1393, 정신건강 위기상담전화 1577-0199로 연락하세요.</p>
+            <button onclick="location.reload()">🔄 다시 테스트하기</button>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        let totalScore = 0;
+        const maxScore = 45;
+
+        document.querySelectorAll('.option').forEach(opt => {
+            opt.addEventListener('click', function() {
+                totalScore += parseInt(this.dataset.score);
+                currentQuestion++;
+                
+                // 프로그레스 업데이트
+                const progressPercent = (currentQuestion / 15) * 100;
+                document.getElementById('progress').style.width = `${progressPercent}%`;
+
+                if(currentQuestion > 15) {
+                    showResult();
+                } else {
+                    // 질문 전환 애니메이션
+                    document.querySelector('.question.active').style.opacity = 0;
+                    setTimeout(() => {
+                        document.querySelector('.question.active').classList.remove('active');
+                        document.querySelector(`[data-step="${currentQuestion}"]`).classList.add('active');
+                    }, 300);
+                }
+            });
+        });
+
+        function showResult() {
+            // 모든 질문을 숨기고 결과 섹션만 표시
+            document.querySelectorAll('.question').forEach(q => q.style.display = 'none');
+            document.getElementById('result').style.display = 'block';
+            
+            const percent = Math.round((totalScore / maxScore) * 100);
+            
+            // 결과 표시
+            document.getElementById('riskPercent').textContent = `${percent}%`;
+            document.getElementById('riskLevel').innerHTML = getRiskLevel(percent) + getEmojiByRisk(percent);
+            document.getElementById('riskDesc').innerHTML = getRiskDescription(percent); // textContent에서 innerHTML로 변경
+            
+            // 진행 상태바 100%로 설정
+            document.getElementById('progress').style.width = '100%';
+        }
+
+        function getRiskLevel(percent) {
+            if(percent <= 30) return '위험도 낮음';
+            if(percent <= 60) return '위험도 중간';
+            return '위험도 높음';
+        }
+
+
+        function getEmojiByRisk(percent) {
+            if(percent <= 30) return '🟢';
+            if(percent <= 60) return '🟡';
+            return '🔴';
+        }
+
+        function getRiskDescription(percent) {
+            const messages = {
+            low: ["현재 자살 위험도가 낮은 것으로 보입니다. 😊", "그래도 정신 건강을 지속적으로 관리하는 것이 중요합니다.", "<img src='low.png' alt='Low Risk' style='width: 80%;'>", "<strong>도움이 필요하시면 자살예방상담전화 1393으로 연락하세요.</strong>"],
+            mid: ["중간 수준의 자살 위험도가 있습니다. ⚠️", "전문가와 상담하는 것을 권장합니다.", "<img src='mid.png' alt='Mid Risk' style='width: 80%;'>", "<strong>자살예방상담전화: 1393 (24시간 운영)</strong>"],
+            high: ["높은 자살 위험도가 감지되었습니다. 🚨", "즉시 전문가의 도움을 받으세요.", "<img src='high.png' alt='High Risk' style='width: 80%;'>", "<strong>긴급 연락처: 자살예방상담전화 1393, 정신건강 위기상담전화 1577-0199</strong>"]
+            };
+
+            if(percent <= 30) return messages.low.join('<br>');
+            if(percent <= 60) return messages.mid.join('<br>');
+            return messages.high.join('<br>');
+        }
+
+
+    </script>
+</body>
+</html>
