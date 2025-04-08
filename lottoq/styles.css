@@ -1,22 +1,42 @@
 body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
     font-family: 'Arial', sans-serif;
     background-color: #121212;
     color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 2px;
+    justify-content: flex-start;
     min-height: 100vh;
-    margin: 0;
-    overflow-x: hidden; /* 가로 스크롤 방지 */
-    box-sizing: border-box; /* 패딩이 너비에 포함되도록 설정 */
+    
+    background-image: none !important;
+    background-color: #121212 !important; /* 필요 시 원하는 색으로 변경 */
 }
-
+.logo-title-container {
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 */
+    justify-content: center; /* 가로 가운데 정렬 */
+    gap: 0px; /* 로고와 h1 사이 간격 조절 (원하면 0도 가능) */
+    margin: 0;
+    padding: 0 20px 0 0;
+  }
+  
+  .logo-title-container img.logo {
+    height: 60px;
+    cursor: pointer;
+    display: block;
+    margin: 0;
+  }
 h1 {
     text-align: center;
-    color: #ffcc00;
-    margin-bottom: 15px;
+    color: #c6f539;
+    margin: 6px 0 0 0;
+    padding: 0px 0;
+    font-size: 20px;
+    line-height: 1.2;
 }
 
 .lottery-machine {
@@ -441,6 +461,7 @@ button:disabled {
     right: 20px;
     background-color: rgba(0, 0, 0, 0.7);
     border-radius: 50%;
+    margin-top: 70px;
     width: 50px;
     height: 50px;
     display: flex;
@@ -713,7 +734,7 @@ button:disabled {
 /* 반응형 디자인을 위한 미디어 쿼리 수정 */
 @media screen and (max-width: 600px) {
     h1 {
-        font-size: 24px;
+        font-size: 20px;
     }
     
     .lottery-machine {

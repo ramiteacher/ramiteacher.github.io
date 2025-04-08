@@ -1328,6 +1328,10 @@ if (resultSets.length > 0) {
 }
 
 console.log('추첨 종료: 볼들이 바닥으로 가라앉습니다');
+ // **추가된 코드: 최하단으로 스크롤**
+ setTimeout(() => {
+    resultContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+}, 500); // 결과가 모두 표시된 후 스크롤
 }
 
 // 모든 추첨 결과 일괄 저장 함수
