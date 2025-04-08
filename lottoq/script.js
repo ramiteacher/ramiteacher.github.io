@@ -90,17 +90,6 @@ function initMachine() {
     lotteryMachine.innerHTML = '';
     balls = [];
 
-    // 사운드 컨트롤 다시 추가
-    const soundControl = document.createElement('div');
-    soundControl.className = 'sound-control';
-    soundControl.id = 'soundControl';
-
-    const soundIcon = document.createElement('div');
-    soundIcon.className = soundEnabled ? 'sound-icon' : 'sound-icon muted';
-    soundIcon.id = 'soundIcon';
-
-    soundControl.appendChild(soundIcon);
-    lotteryMachine.appendChild(soundControl);
 
     // 기계 구성요소 생성 (최적화: 단일 함수로 묶음)
     createMachineComponents(lotteryMachine);
@@ -181,10 +170,7 @@ function createMachineComponents(lotteryMachine) {
     machineGlass.className = 'machine-glass';
     fragment.appendChild(machineGlass);
 
-    // 받침대 추가
-    const machineBase = document.createElement('div');
-    machineBase.className = 'machine-base';
-    fragment.appendChild(machineBase);
+
 
     // 한 번에 DOM에 추가
     lotteryMachine.appendChild(fragment);
@@ -1178,14 +1164,14 @@ function toggleSpeed() {
     const {speedToggleBtn} = machineElements;
     if (speedToggleBtn) {
         if (speedMode === 1) {
-            speedToggleBtn.textContent = "일반 속도";
+            speedToggleBtn.textContent = "1X🚶";
             speedToggleBtn.classList.remove('active', 'ultra');
         } else if (speedMode === 4) {
-            speedToggleBtn.textContent = "4X 속도";
+            speedToggleBtn.textContent = "4X🚄";
             speedToggleBtn.classList.add('active');
             speedToggleBtn.classList.remove('ultra');
         } else {
-            speedToggleBtn.textContent = "8X 속도";
+            speedToggleBtn.textContent = "8X🚀";
             speedToggleBtn.classList.add('active', 'ultra');
         }
     }
@@ -2131,7 +2117,7 @@ function createSkipButton() {
     const skipBtn = document.createElement('button');
     skipBtn.id = 'skipBtn';
     skipBtn.className = 'skip-btn';
-    skipBtn.textContent = '결과 바로보기';
+    skipBtn.textContent = 'SKIP';
     skipBtn.style.display = 'none'; // 초기에는 숨김 상태
     skipBtn.onclick = skipDrawingProcess;
     

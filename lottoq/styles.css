@@ -6,7 +6,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 2px;
     min-height: 100vh;
     margin: 0;
     overflow-x: hidden; /* 가로 스크롤 방지 */
@@ -16,7 +16,7 @@ body {
 h1 {
     text-align: center;
     color: #ffcc00;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 .lottery-machine {
@@ -24,7 +24,7 @@ h1 {
     height: 400px;
     background-color: transparent;
     position: relative;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     max-width: 100%; /* 최대 너비 제한 */
 }
 
@@ -140,10 +140,10 @@ h1 {
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
-    margin-top: 100px;
+    gap: 2px;
+    margin-top: 80px;
     background-color: rgba(255, 255, 255, 0.1);
-    padding: 20px;
+    padding: 10px;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     min-height: 80px;
@@ -154,20 +154,20 @@ h1 {
 
 .result-set {
     display: flex;
-    gap: 12px;
-    margin: 10px 0;
+    gap: 7px;
+    margin: 1px 0;
     position: relative;
-    padding: 5px 15px;
+    padding: 1px 1px;
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     align-items: center;
     justify-content: center;
-    width: 80%; /* 가로 길이 줄이기 */
+    width: 100%; /* 가로 길이 전체 사용 */
 }
 
 .set-number {
     position: absolute;
-    left: -30px;
+    left: -17px;
     width: 24px;
     height: 24px;
     border-radius: 50%;
@@ -204,16 +204,19 @@ h1 {
 }
 
 button {
-    padding: 12px 25px;
+    padding: 6px 10px;
     font-size: 16px;
     background-color: #ffcc00;
     color: #121212;
     border: none;
-    border-radius: 30px;
+    border-radius: 90px;
     cursor: pointer;
     font-weight: bold;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 button:hover {
@@ -228,6 +231,43 @@ button:active {
 }
 
 button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+.round-btn {
+    padding: 0;
+    width: 80px;
+    height: 80px;
+    font-size: 16px;
+    background-color: #579affc8;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.round-btn:hover {
+    background-color: #f44926e1;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.round-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.round-btn:disabled {
     background-color: #555;
     cursor: not-allowed;
     transform: none;
@@ -258,8 +298,8 @@ button:disabled {
 .machine-base {
     position: absolute;
     width: 150px;
-    height: 30px;
-    bottom: -150px;
+    height: 20px;
+    bottom: -38%;
     left: 50%;
     transform: translateX(-50%);
     background: linear-gradient(to bottom, #3a3a3a, #222);
@@ -527,10 +567,11 @@ button:disabled {
 .save-numbers-btn {
     background-color: #2196f3;
     color: white;
-    font-size: 14px;
-    padding: 6px 12px;
-    margin-left: 10px;
+    font-size: 12px;
+    padding: 8px 8px;
+    margin-left: 5px;
     align-self: center;
+    display: inline-block; /* 가로 쓰기 */
 }
 
 .save-numbers-btn:hover {
@@ -651,7 +692,7 @@ button:disabled {
 @media screen and (max-width: 600px) {
     .top-menu {
         flex-direction: column;
-        gap: 10px;
+        gap: 1px;
     }
     
     .saved-number-item {
@@ -722,6 +763,7 @@ button:disabled {
         width: 45px;
         height: 45px;
         font-size: 18px;
+        border-radius: 50%;
     }
     
     .controls button {
@@ -735,9 +777,36 @@ button:disabled {
         gap: 10px;
         align-items: flex-start;
     }
+    
+}
+
+/* 가로 676px 이하에서 result-ball 크기 조정 */
+@media screen and (max-width: 676px) {
+    .result-ball {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+        border-radius: 50%;
+    }
+    
 }
 
 @media screen and (max-width: 400px) {
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #121212;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        padding: 2px;
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden; /* 가로 스크롤 방지 */
+        box-sizing: border-box; /* 패딩이 너비에 포함되도록 설정 */
+    }
     .lottery-machine {
         width: 250px;
         height: 250px;
@@ -776,6 +845,22 @@ button:disabled {
         width: 35px;
         height: 35px;
         font-size: 16px;
+    }
+    .result-container {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1px;
+        margin-top: 80px;
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 10px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        min-height: 80px;
+        width: 90%; /* 퍼센트로 변경 */
+        max-width: 600px; /* 최대 너비 설정 */
+        align-items: center;
     }
 }
 
@@ -862,7 +947,7 @@ button:disabled {
 
 .primary-btn {
     background-color: #4caf50;
-    padding: 12px 20px;
+    padding: 4px 10px;
     align-self: flex-end;
 }
 
@@ -996,8 +1081,24 @@ button:disabled {
 
 .menu-buttons {
     display: flex;
+    flex-wrap: wrap; /* 버튼을 한 줄에 두 개씩 배치 */
     gap: 10px;
+    border-radius: 30px; /* 동글 동글하게 */
+    background-color: rgba(255, 255, 255, 0.1); /* 배경색 추가 */
+    padding: 8px; /* 내부 여백 추가 */
+    justify-content: space-between; /* 버튼 간격 조정 */
 }
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap; /* 버튼을 한 줄에 두 개씩 배치 */
+    gap: 10px;
+    border-radius: 30px; /* 동글 동글하게 */
+    background-color: rgba(255, 255, 255, 0); /* 배경색 추가 */
+    padding: 8px; /* 내부 여백 추가 */
+    justify-content: space-between; /* 버튼 간격 조정 */
+}
+
+
 
 @media screen and (max-width: 600px) {
     .input-group {
@@ -1011,11 +1112,39 @@ button:disabled {
     
     .menu-buttons {
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap; /* 버튼을 한 줄에 두 개씩 배치 */
         gap: 10px;
+        border-radius: 30px; /* 동글 동글하게 */
+        background-color: rgba(255, 255, 255, 0.1); /* 배경색 추가 */
+        padding: 8px; /* 내부 여백 추가 */
+        justify-content: space-between; /* 버튼 간격 조정 */
+    }
+    .action-buttons {
+        display: flex;
+        flex-wrap: wrap; /* 버튼을 한 줄에 두 개씩 배치 */
+        gap: 10px;
+        border-radius: 30px; /* 동글 동글하게 */
+        background-color: rgba(255, 255, 255, 0); /* 배경색 추가 */
+        padding: 8px; /* 내부 여백 추가 */
+        justify-content: space-between; /* 버튼 간격 조정 */
     }
 }
-
+.result-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px;
+    margin-top: 70px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    min-height: 80px;
+    width: 90%; /* 퍼센트로 변경 */
+    max-width: 600px; /* 최대 너비 설정 */
+    align-items: center;
+}
 /* 일괄 저장 버튼 스타일 */
 .batch-save-btn {
     background-color: #2e7d32;
@@ -1053,17 +1182,22 @@ button:disabled {
 
 /* 스타일시트에 추가할 CSS */
 .skip-btn {
-    background-color: #ff7272;
+    background-color: #ff4141;
     color: white;
     border: none;
-    border-radius: 4px;
-    padding: 8px 16px;
-    margin-left: 8px;
+    border-radius: 80px;
+    padding: 0;
+    width: 80px;
+    height: 80px;
+    font-size: 16px;
     cursor: pointer;
     font-weight: bold;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    display: flex;
+    
+    align-items: center; /* 세로 중앙 정렬 */
 }
 
 .skip-btn:before {
