@@ -106,9 +106,13 @@ h2.highlight i {
 
 .roulette-container {
   position: relative;
-  width: 380px;
-  height: 380px;
-  margin: 0 auto 30px;
+  width: 100%; /* 화면 크기에 맞게 설정 */
+  max-width: 380px; /* 최대 크기 제한 */
+  height: auto;
+  margin: 0 auto; /* 중앙 정렬 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* 최상단 포인터 스타일 - 상하 반전 & 색상 변경 */
@@ -446,4 +450,24 @@ canvas {
 .nav-button {
   width: 220px;
   height: auto;
+}
+
+@media (max-width: 400px) {
+  .roulette-container {
+    position: relative;
+    width: 100%; /* 화면 크기에 맞게 설정 */
+    max-width: 380px; /* 최대 크기 제한 */
+    height: auto;
+    margin: 0 auto; /* 중앙 정렬 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  canvas {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%; /* 화면 크기에 맞게 조정 */
+    height: auto;
+  }
 }
