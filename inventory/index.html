@@ -34,5 +34,17 @@
     </div>
 
     <div id="errorMessage" style="color: red; display: none;"></div>
+             <!-- 구글 애드센스 코드 -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3238568174687829"
+      crossorigin="anonymous"></script>
+    <div id="footer-placeholder"></div>
+    <script>
+      fetch('/footer.html')
+        .then(res => res.text())
+        .then(data => {
+          document.getElementById('footer-placeholder').innerHTML = data;
+        });
+    </script>
+  
   </body>
 </html>
