@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAMI KBO</title>
+
+    <!-- SEO 메타 태그 -->
+    <meta name="description" content="KBO 리그 순위, 경기 결과, 팀 응원가 및 하이라이트를 확인하세요.">
+    <meta name="keywords" content="KBO, 야구, 한국 프로야구, 국내야구 순위, 경기 결과, KBO 순위, 하이라이트">
+    <meta name="author" content="RAMI Teacher">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            transition: background-color 0.5s ease;
+            background-color: #f0f7ff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #f0f7ff;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 150px;
+            height: 150px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        h1, h2, h3 {
+            margin-bottom: 15px;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        p {
+            margin-bottom: 15px;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #ddd;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+            font-weight: bold;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        .tab.active {
+            background-color: #fff;
+            border-bottom: 3px solid #1a3a7e;
+        }
+        
+        .content {
+            display: none;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 0 5px 5px 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .content.active {
+            display: block;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            table-layout: fixed;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #1a3a7e;
+            color: white;
+        }
+        
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .team-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .team-results {
+            margin-bottom: 30px;
+        }
+
+        .team-results h3 {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .team-results h3 img {
+            margin-right: 10px;
+        }
+        .team-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .team-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+        .team-filter-btn {
+            padding: 2px;
+            margin: 8px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .team-filter-btn:hover {
+            transform: scale(1.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        .team-emblem {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        .highlight-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        #team-selection {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+            text-align: center;
+        }
+        
+        #stadium-splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+            text-align: center;
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        #stadium-splash.active {
+            display: flex;
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        #stadium-splash.hidden {
+            opacity: 0;
+            transform: scale(1.2);
+            pointer-events: none;
+        }
+        
+        .splash-image {
+            width: 970px;
+            height: 647px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            object-fit: cover;
+        }
+        
+        #stadium-team-name.hidden {
+            display: none;
+        }
+        #team-selection .team-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        #team-selection.active {
+            display: flex;
+        }
+        
+        #team-selection.hidden {
+            display: none;
+        }
+        #team-home {
+            display: none;
+        }
+
+        #team-home.active {
+            display: block;
+        }
+
+        @media (max-width: 430px) {
+            table {
+                font-size: 11px;
+            }
+
+            th, td {
+                padding: 2px 4px;
+                font-size: 11px;
+                text-align: center;
+            }
+            th {
+                font-size:11px;
+                text-align: center;
+            }
+            .team-emblem {
+                width: 40px;
+                height: 40px;
+            }
+
+            .team-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .tab-container {
+                display: flex;
+                margin-bottom: 20px;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .tab {
+                padding: 5px 10px; /* 가로 패딩 줄임 */
+                cursor: pointer;
+                background-color: #ddd;
+                border: none;
+                border-radius: 5px 5px 0 0;
+                margin-right: 5px;
+                font-weight: bold;
+                font-family: 'Noto Sans KR', sans-serif;
+                display: inline-block;
+                white-space: nowrap;
+            }
+            .splash-image {
+            width: 647px;
+            height: 647px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            object-fit: cover;
+        }
+            
+            .tab.active {
+                background-color: #fff;
+                border-bottom: 3px solid #1a3a7e;
+                display: inline-block;
+                white-space: nowrap;
+            }
+            .team-btn {
+                padding: 3px 2px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: bold;
+                color: white;
+                transition: all 0.3s ease;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="images/logo.png" alt="KBO Logo" style="width: 150px; height: auto; margin-bottom: 10px;" onclick="window.location.href='/'">
+    </header>
+
+    <div id="team-selection" class="content active">
+        <h2>선호 구단을 선택하세요</h2>
+        <div class="team-buttons"></div>
+    </div>
+
+    <div id="stadium-splash" class="splash hidden">
+        <h2 id="stadium-team-name"></h2>
+        <img id="stadium-image" src="" alt="스타디움 이미지" class="splash-image">
+    </div>
+
+    <div id="team-home" class="content">
+        <h2 id="team-name"></h2>
+        <img id="team-stadium" src="" alt="홈구장 이미지" style="width: 100%; max-height: 300px; object-fit: cover; margin-bottom: 20px;">
+        <audio id="team-cheer-song" src="" preload="auto"></audio>
+    </div>
+
+    <div class="container">
+        <div class="tab-container">
+            <button class="tab active" onclick="openTab('standings')">순위</button>
+            <button class="tab" onclick="openTab('results')">최근 결과</button>
+            <button class="tab" onclick="openTab('teams')">팀 응원가</button>
+            <button class="tab" onclick="openTab('change-team')">선호 구단 변경</button>
+        </div>
+
+        <div id="standings" class="content active">
+            <h2>KBO 리그 순위</h2>
+            <div id="standings-table">
+                <div class="loading">순위 정보를 불러오는 중...</div>
+            </div>
+        </div>
+
+        <div id="results" class="content">
+            <h2>최근 경기 결과</h2>
+            <div id="team-selector" style="text-align: center; margin-bottom: 20px;"></div>
+            <div id="results-list">
+                <div class="loading">경기 결과를 불러오는 중...</div>
+            </div>
+        </div>
+
+        <div id="teams" class="content">
+            <h2>KBO 팀 응원가</h2>
+            <div class="team-buttons"></div>
+        </div>
+
+        <div id="change-team" class="content">
+            <h2>선호 구단 변경</h2>
+            <div id="change-team-buttons" class="team-buttons"></div>
+        </div>
+    </div>
+
+    <script>
+        const kboTeams = [
+            { name: 'SSG 랜더스', color: '#CE0E2D', cheerSong: 'https://www.youtube.com/watch?v=Ae5vJe0VSac', emblem: 'images/ssg.png', stadium: './images/ssgh.webp' },
+            { name: '키움 히어로즈', color: '#6F263D', cheerSong: 'https://www.youtube.com/watch?v=80HiZa_kD8A', emblem: 'images/kiwoom.png', stadium: './images/kiwoomh.webp' },
+            { name: 'LG 트윈스', color: '#C30452', cheerSong: 'https://www.youtube.com/watch?v=GC0rYa-jzss', emblem: 'images/lg.png', stadium: './images/lgh.jpg' },
+            { name: 'KT 위즈', color: '#000000', cheerSong: 'https://www.youtube.com/watch?v=g-epGphW8FU', emblem: 'images/kt.png', stadium: './images/wizh.webp' },
+            { name: 'KIA 타이거즈', color: '#EA0029', cheerSong: 'https://www.youtube.com/watch?v=zxT6hgRCNVo', emblem: 'images/kia.png', stadium: './images/kiah.jpg' },
+            { name: 'NC 다이노스', color: '#315288', cheerSong: 'https://www.youtube.com/watch?v=Gl6jdPTrM14', emblem: 'images/nc.png', stadium: './images/nch.jpeg' },
+            { name: '삼성 라이온즈', color: '#0066B3', cheerSong: 'https://www.youtube.com/watch?v=1einbSNenqo', emblem: 'images/samsung.png', stadium: './images/samsungh.jpg' },
+            { name: '롯데 자이언츠', color: '#002B70', cheerSong: 'https://www.youtube.com/watch?v=-sB8lMaqRdo', emblem: 'images/lotte.png', stadium: './images/lotteh.jpg' },
+            { name: '두산 베어스', color: '#131230', cheerSong: 'https://www.youtube.com/watch?v=M4ZjtWK3UqI', emblem: 'images/doosan.png', stadium: './images/lgh.jpg' },
+            { name: '한화 이글스', color: '#FF6600', cheerSong: 'https://www.youtube.com/watch?v=6tFcBE_hRLU', emblem: 'images/hanwha.png', stadium: './images/eagleh.jpg' }
+        ];
+
+        const teamFileMapping = {
+            'SSG 랜더스': 'ssg.MP3',
+            '키움 히어로즈': 'kiwoom.MP3',
+            'LG 트윈스': 'lg.MP3',
+            'KT 위즈': 'kt.MP3',
+            'KIA 타이거즈': 'kia.MP3',
+            'NC 다이노스': 'nc.MP3',
+            '삼성 라이온즈': 'samsung.MP3',
+            '롯데 자이언츠': 'lotte.MP3',
+            '두산 베어스': 'doosan.MP3',
+            '한화 이글스': 'hanwha.MP3'
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTeam = localStorage.getItem('selectedTeam');
+            const teamSelection = document.getElementById('team-selection');
+            if (savedTeam) {
+                const team = JSON.parse(savedTeam);
+                applyTeamSelection(team, false); // 스플래시를 표시하지 않음
+                teamSelection.classList.remove('active'); // 스플래시 활성화 제거
+                teamSelection.classList.add('hidden'); // 스플래시 숨김
+            } else {
+                teamSelection.classList.add('active');
+                teamSelection.classList.remove('hidden'); // 스플래시 표시
+            }
+            fetchLocalRankings();
+            fetchLocalResults();
+            createTeamSelection();
+            createTeamButtons();
+            createChangeTeamButtons(); // "선호 구단 변경" 탭 버튼 생성
+            addDateSelector();
+            createTeamEmblemButtons();
+        });
+
+        function createTeamSelection() {
+            const teamButtonsContainer = document.querySelector('#team-selection .team-buttons');
+            teamButtonsContainer.innerHTML = '';
+            kboTeams.forEach(team => {
+                const button = document.createElement('button');
+                button.className = 'team-btn';
+                button.innerHTML = `<img src="${team.emblem}" alt="${team.name}" class="team-emblem"> ${team.name}`;
+                button.style.backgroundColor = team.color;
+                button.onclick = () => selectTeam(team);
+                teamButtonsContainer.appendChild(button);
+            });
+        }
+
+        function createChangeTeamButtons() {
+            const changeTeamButtonsContainer = document.getElementById('change-team-buttons');
+            changeTeamButtonsContainer.innerHTML = '';
+            kboTeams.forEach(team => {
+                const button = document.createElement('button');
+                button.className = 'team-btn';
+                button.innerHTML = `<img src="${team.emblem}" alt="${team.name}" class="team-emblem"> ${team.name}`;
+                button.style.backgroundColor = team.color;
+                button.onclick = () => selectTeam(team);
+                changeTeamButtonsContainer.appendChild(button);
+            });
+        }
+
+        function selectTeam(team) {
+            const teamSelection = document.getElementById('team-selection');
+            teamSelection.classList.add('hidden');
+            localStorage.setItem('selectedTeam', JSON.stringify(team));
+            applyTeamSelection(team, true); // 스플래시를 표시
+        }
+
+        function applyTeamSelection(team, showSplash) {
+            document.body.style.backgroundColor = team.color;
+            const header = document.querySelector('header');
+            let teamNameElement = document.getElementById('selected-team-name');
+            if (!teamNameElement) {
+                teamNameElement = document.createElement('h2');
+                teamNameElement.id = 'selected-team-name';
+                header.appendChild(teamNameElement);
+            }
+            teamNameElement.textContent = `선호 구단: ${team.name}`;
+            teamNameElement.style.color = team.color;
+            if (showSplash) showSplashScreen(team);
+        }
+
+        function showSplashScreen(team) {
+            const stadiumSplash = document.getElementById('stadium-splash');
+            const stadiumTeamName = document.getElementById('stadium-team-name');
+            const stadiumImage = document.getElementById('stadium-image');
+            const cheerSong = document.getElementById('team-cheer-song');
+            stadiumTeamName.textContent = team.name;
+            stadiumImage.src = team.stadium;
+            cheerSong.src = `./music/${teamFileMapping[team.name] || 'default.mp3'}`; // 매핑된 파일 경로 설정
+            stadiumSplash.classList.remove('hidden');
+            stadiumSplash.classList.add('active');
+            cheerSong.volume = 1;
+            cheerSong.play();
+
+            // 6초 동안 점점 볼륨 줄이기
+            const fadeOutDuration = 7000; // 6초
+            const fadeOutInterval = 100; // 0.1초마다 볼륨 감소
+            const fadeOutStep = cheerSong.volume / (fadeOutDuration / fadeOutInterval);
+            const fadeOut = setInterval(() => {
+                if (cheerSong.volume > 0) {
+                    cheerSong.volume = Math.max(0, cheerSong.volume - fadeOutStep);
+                } else {
+                    clearInterval(fadeOut);
+                    cheerSong.pause();
+                }
+            }, fadeOutInterval);
+
+            setTimeout(() => {
+                stadiumSplash.classList.add('hidden');
+                setTimeout(() => stadiumSplash.classList.remove('active'), 800);
+            }, 1000);
+        }
+
+        function openTab(tabName) {
+            const tabs = document.getElementsByClassName('tab');
+            const contents = document.getElementsByClassName('content');
+            for (let i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+            for (let i = 0; i < contents.length; i++) contents[i].classList.remove('active');
+            document.getElementById(tabName).classList.add('active');
+            document.querySelector(`.tab[onclick="openTab('${tabName}')"]`).classList.add('active');
+            if (tabName === 'teams') createTeamButtons();
+        }
+
+        async function fetchLocalRankings() {
+            try {
+                const response = await fetch('./rank.json');
+                if (!response.ok) throw new Error('순위 데이터를 가져오는데 실패했습니다');
+                const data = await response.json();
+                displayLocalRankings(data);
+            } catch (error) {
+                console.error('순위 데이터 가져오기 오류:', error);
+                displayStandingsFallback();
+            }
+        }
+
+        async function fetchLocalResults(selectedDate) {
+            try {
+                const response = await fetch('./wanle.json');
+                if (!response.ok) throw new Error('경기 결과 데이터를 가져오는데 실패했습니다');
+                const games = await response.json();
+                const resultsList = document.getElementById('results-list');
+                resultsList.dataset.games = JSON.stringify(games);
+                displayFilteredResults(games);
+                let filteredGames = games;
+                if (selectedDate && selectedDate !== 'all') {
+                    filteredGames = games.filter(game => game.date === selectedDate);
+                    if (filteredGames.length === 0) {
+                        resultsList.innerHTML = `<div class="no-games-message" style="text-align: center; padding: 30px;"><p>선택하신 날짜(${selectedDate})에 경기 결과가 없습니다.</p><button class="date-btn" style="margin-top: 15px; padding: 8px 15px; background-color: #1a3a7e; color: white; border: none; border-radius: 4px; cursor: pointer;" onclick="fetchLocalResults('all')">모든 경기 보기</button></div>`;
+                        return;
+                    }
+                }
+                displayLocalResults(filteredGames);
+            } catch (error) {
+                console.error('경기 결과 데이터 가져오기 오류:', error);
+                useHardcodedData(selectedDate);
+            }
+        }
+
+        function displayLocalRankings(data) {
+            const standingsTable = document.getElementById('standings-table');
+            let tableHTML = `<table><thead><tr><th>순위</th><th>팀명</th><th>경기</th><th>승</th><th>패</th><th>무</th><th>승률</th><th>게임차</th></tr></thead><tbody>`;
+            const teams = data.rankings || [];
+            teams.forEach(team => {
+                const teamData = kboTeams.find(t => t.name.includes(team.team) || team.team.includes(t.name));
+                const emblem = teamData ? `<img src="${teamData.emblem}" alt="${team.team}" class="team-emblem">` : '';
+                tableHTML += `<tr><td>${team.rank}</td><td>${emblem}${team.team}</td><td>${team.games}</td><td>${team.win}</td><td>${team.lose}</td><td>${team.draw}</td><td>${team.win_rate.toFixed(3)}</td><td>${team.games_behind}</td></tr>`;
+            });
+            tableHTML += `</tbody></table><p><small>최종 업데이트: ${data.last_updated || new Date().toLocaleString('ko-KR')}</small></p>`;
+            standingsTable.innerHTML = tableHTML;
+        }
+
+        function displayLocalResults(games) {
+            const resultsList = document.getElementById('results-list');
+            let html = `<table><thead><tr><th>날짜</th><th>홈팀</th><th>점수</th><th>원정팀</th><th>하이라이트</th></tr></thead><tbody>`;
+            games.forEach(game => {
+                const homeTeamData = kboTeams.find(t => t.name.includes(game.home) || game.home.includes(t.name));
+                const awayTeamData = kboTeams.find(t => t.name.includes(game.away) || game.away.includes(t.name));
+                const homeEmblem = homeTeamData ? `<img src="${homeTeamData.emblem}" alt="${game.home}" class="team-emblem">` : '';
+                const awayEmblem = awayTeamData ? `<img src="${awayTeamData.emblem}" alt="${game.away}" class="team-emblem">` : '';
+                html += `<tr><td>${game.date}</td><td>${homeEmblem}${game.home}</td><td>${game.score}</td><td>${awayEmblem}${game.away}</td><td><button class="highlight-btn" onclick="fetchYouTubeHighlight('${game.home} vs ${game.away} 하이라이트', '${game.date}')">영상</button></td></tr>`;
+            });
+            html += `</tbody></table>`;
+            resultsList.innerHTML = html;
+        }
+         // YouTube 하이라이트 검색 함수
+        async function fetchYouTubeHighlight(query, gameDate) {
+            const ENCODED_API_KEYS = [
+                'QUl6YVN5QlVkWjVWMjFGZjRKcDBnTWNlc1NUZXNITTFmc3pFZ1Aw', // 기존 키
+                'QUl6YVN5QjlMVzBpZXNxcVl6WkJzWWJsX184VlhhaV9IdW9lc2lJ', // 새 키 1
+                'QUl6YVN5QUlsTFpyb3IyallXUHRBaV8tQXRoV1ctQThTcGVySU1F'  // 새 키 2
+            ];
+
+            const API_KEYS = ENCODED_API_KEYS.map(key => atob(key));
+            let currentApiKeyIndex = 0;
+
+            function getCurrentApiKey() {
+                return API_KEYS[currentApiKeyIndex];
+            }
+
+            function rotateApiKey() {
+                currentApiKeyIndex = (currentApiKeyIndex + 1) % API_KEYS.length;
+                console.log(`🔄 API 키 변경: ${getCurrentApiKey()}`);
+            }
+
+            try {
+                console.log(`YouTube 검색 쿼리: ${query}`);
+                console.log(`경기 날짜: ${gameDate}`);
+
+                const dateObj = new Date(gameDate);
+                const formattedDate = `${dateObj.getMonth() + 1}월 ${dateObj.getDate()}일`;
+                console.log(`변환된 날짜 형식: ${formattedDate}`);
+
+                const startOfDay = new Date(gameDate);
+                startOfDay.setHours(0, 0, 0, 0);
+                const endOfDay = new Date(gameDate);
+                endOfDay.setHours(23, 59, 59, 999);
+
+                const publishedAfter = startOfDay.toISOString();
+                const publishedBefore = endOfDay.toISOString();
+
+                console.log(`검색 날짜 범위: ${publishedAfter} ~ ${publishedBefore}`);
+
+                const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=1&videoDuration=medium&q=${encodeURIComponent(query)}&publishedAfter=${publishedAfter}&publishedBefore=${publishedBefore}&key=${getCurrentApiKey()}`);
+                if (!response.ok) {
+                    if (response.status === 403) {
+                        console.warn('❌ API 키 할당량 초과. 다음 키로 전환합니다.');
+                        rotateApiKey();
+                        return fetchYouTubeHighlight(query, gameDate);
+                    }
+                    throw new Error(`YouTube API 요청 실패: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('YouTube API 응답 데이터:', data);
+
+                if (data.items && data.items.length > 0) {
+                    const videoId = data.items[0].id.videoId;
+                    const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+                    console.log(`동영상 URL: ${videoUrl}`);
+                    window.open(videoUrl, '_blank');
+                } else {
+                    alert('해당 날짜에 업로드된 관련 동영상을 찾을 수 없습니다. YouTube 검색 페이지로 이동합니다.');
+                    window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank');
+                }
+            } catch (error) {
+                console.error('YouTube API 오류:', error);
+                alert('YouTube 동영상을 가져오는 중 오류가 발생했습니다. 콘솔 로그를 확인하세요.');
+            }
+        }
+        function createTeamButtons() {
+            const teamButtonsContainer = document.querySelector('#teams .team-buttons');
+            if (!teamButtonsContainer) return;
+            teamButtonsContainer.innerHTML = '';
+            kboTeams.forEach(team => {
+                const button = document.createElement('button');
+                button.className = 'team-btn';
+                button.innerHTML = `<img src="${team.emblem}" alt="${team.name}" class="team-emblem"> ${team.name}`;
+                button.style.backgroundColor = team.color;
+                button.onclick = () => window.open(team.cheerSong, '_blank');
+                teamButtonsContainer.appendChild(button);
+            });
+        }
+
+        function addDateSelector() {
+            const resultsTab = document.getElementById('results');
+            const resultsHeading = resultsTab.querySelector('h2');
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            const twoDaysAgo = new Date(today);
+            twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+            const formatDate = (date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+            const todayStr = formatDate(today);
+            const yesterdayStr = formatDate(yesterday);
+            const twoDaysAgoStr = formatDate(twoDaysAgo);
+            const dateSelector = document.createElement('div');
+            dateSelector.className = 'date-selector';
+            dateSelector.innerHTML = `<style>.date-selector {margin-bottom: 20px;display: flex;flex-wrap: wrap;gap: 10px;}.date-btn {padding: 8px 15px;background-color: #1a3a7e;color: white;border: none;border-radius: 4px;cursor: pointer;font-weight: bold;}.date-btn:hover {background-color: #2c4e9e;}.date-btn.active {background-color: #ff6600;}.date-input {padding: 8px;border: 1px solid #ddd;border-radius: 4px;}</style><button class="date-btn" data-date="${todayStr}">오늘 (${todayStr})</button><button class="date-btn" data-date="${yesterdayStr}">어제 (${yesterdayStr})</button><button class="date-btn" data-date="${twoDaysAgoStr}">그저께 (${twoDaysAgoStr})</button><button class="date-btn" data-date="all">전체 보기</button><input type="date" class="date-input" value="${todayStr}" max="${todayStr}"><button class="date-btn" id="date-search-btn">조회</button>`;
+            resultsHeading.insertAdjacentElement('afterend', dateSelector);
+            const dateButtons = dateSelector.querySelectorAll('.date-btn');
+            dateButtons.forEach(button => {
+                if (button.id !== 'date-search-btn') {
+                    button.addEventListener('click', () => {
+                        dateButtons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        const selectedDate = button.getAttribute('data-date');
+                        if (selectedDate !== 'all') document.querySelector('.date-input').value = selectedDate;
+                        fetchLocalResults(selectedDate);
+                    });
+                }
+            });
+            const searchBtn = dateSelector.querySelector('#date-search-btn');
+            searchBtn.addEventListener('click', () => {
+                dateButtons.forEach(btn => btn.classList.remove('active'));
+                const selectedDate = dateSelector.querySelector('.date-input').value;
+                fetchLocalResults(selectedDate);
+            });
+            dateSelector.querySelector(`.date-btn[data-date="${todayStr}"]`).classList.add('active');
+        }
+
+        function createTeamEmblemButtons() {
+            const teamSelector = document.getElementById('team-selector');
+            kboTeams.forEach(team => {
+                const button = document.createElement('button');
+                button.className = 'team-filter-btn';
+                button.dataset.team = team.name;
+                button.style.border = 'none';
+                button.style.background = 'none';
+                button.style.cursor = 'pointer';
+                button.innerHTML = `<img src="${team.emblem}" alt="${team.name}" class="team-emblem" title="${team.name}">`;
+                button.onclick = () => filterResultsByTeam(team.name);
+                teamSelector.appendChild(button);
+            });
+        }
+
+        function filterResultsByTeam(teamName) {
+            const resultsList = document.getElementById('results-list');
+            const allGames = JSON.parse(resultsList.dataset.games || '[]');
+            const teamMapping = kboTeams.reduce((map, team) => {
+                map[team.name] = team.name;
+                map[team.name.split(' ')[0]] = team.name;
+                return map;
+            }, {});
+            let filteredGames = allGames;
+            if (teamName !== 'all') {
+                filteredGames = allGames.filter(game => {
+                    const homeMatch = teamMapping[game.home] === teamName;
+                    const awayMatch = teamMapping[game.away] === teamName;
+                    return homeMatch || awayMatch;
+                });
+            }
+            displayFilteredResults(filteredGames);
+        }
+
+        function displayFilteredResults(games) {
+            const resultsList = document.getElementById('results-list');
+            let html = `<table><thead><tr><th>날짜</th><th>홈팀</th><th>점수</th><th>원정팀</th><th>하이라이트</th></tr></thead><tbody>`;
+            games.forEach(game => {
+                const homeTeamData = kboTeams.find(t => t.name.includes(game.home) || game.home.includes(t.name));
+                const awayTeamData = kboTeams.find(t => t.name.includes(game.away) || game.away.includes(t.name));
+                const homeEmblem = homeTeamData ? `<img src="${homeTeamData.emblem}" alt="${game.home}" class="team-emblem">` : '';
+                const awayEmblem = awayTeamData ? `<img src="${awayTeamData.emblem}" alt="${game.away}" class="team-emblem">` : '';
+                html += `<tr><td>${game.date}</td><td>${homeEmblem} ${game.home}</td><td>${game.score}</td><td>${awayEmblem} ${game.away}</td><td><button class="highlight-btn" onclick="fetchYouTubeHighlight('${game.home} vs ${game.away} 하이라이트', '${game.date}')">영상</button></td></tr>`;
+            });
+            html += `</tbody></table>`;
+            resultsList.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
