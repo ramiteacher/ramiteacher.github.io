@@ -1,105 +1,105 @@
 {
-  "last_updated": "2025-04-09 10:36:47",
+  "last_updated": "2025-04-09 13:40:39",
   "rankings": [
     {
       "rank": 1,
       "team": "LG",
-      "games": "12",
+      "games": "13",
       "win": "11",
-      "lose": "1",
+      "lose": "2",
       "draw": "0",
-      "win_rate": 0.917,
+      "win_rate": 0.846,
       "games_behind": "0.0"
     },
     {
       "rank": 2,
-      "team": "삼성",
-      "games": "14",
-      "win": "9",
-      "lose": "5",
+      "team": "SSG",
+      "games": "12",
+      "win": "8",
+      "lose": "4",
       "draw": "0",
-      "win_rate": 0.643,
-      "games_behind": "3.0"
+      "win_rate": 0.667,
+      "games_behind": "2.5"
     },
     {
       "rank": 3,
-      "team": "SSG",
-      "games": "11",
-      "win": "7",
-      "lose": "4",
+      "team": "삼성",
+      "games": "15",
+      "win": "9",
+      "lose": "6",
       "draw": "0",
-      "win_rate": 0.636,
-      "games_behind": "3.5"
-    },
-    {
-      "rank": 4,
-      "team": "두산",
-      "games": "14",
-      "win": "7",
-      "lose": "7",
-      "draw": "0",
-      "win_rate": 0.5,
-      "games_behind": "5.0"
+      "win_rate": 0.6,
+      "games_behind": "3.0"
     },
     {
       "rank": 4,
       "team": "KT",
-      "games": "13",
-      "win": "6",
+      "games": "14",
+      "win": "7",
       "lose": "6",
       "draw": "1",
-      "win_rate": 0.5,
+      "win_rate": 0.538,
+      "games_behind": "4.0"
+    },
+    {
+      "rank": 5,
+      "team": "두산",
+      "games": "15",
+      "win": "7",
+      "lose": "8",
+      "draw": "0",
+      "win_rate": 0.467,
       "games_behind": "5.0"
     },
     {
       "rank": 6,
-      "team": "NC",
-      "games": "11",
-      "win": "5",
-      "lose": "6",
+      "team": "KIA",
+      "games": "14",
+      "win": "6",
+      "lose": "8",
       "draw": "0",
-      "win_rate": 0.455,
+      "win_rate": 0.429,
       "games_behind": "5.5"
     },
     {
       "rank": 7,
-      "team": "KIA",
-      "games": "13",
+      "team": "NC",
+      "games": "12",
       "win": "5",
-      "lose": "8",
+      "lose": "7",
       "draw": "0",
-      "win_rate": 0.385,
-      "games_behind": "6.5"
+      "win_rate": 0.417,
+      "games_behind": "5.5"
     },
     {
-      "rank": 7,
-      "team": "롯데",
-      "games": "14",
-      "win": "5",
-      "lose": "8",
-      "draw": "1",
-      "win_rate": 0.385,
-      "games_behind": "6.5"
+      "rank": 8,
+      "team": "키움",
+      "games": "15",
+      "win": "6",
+      "lose": "9",
+      "draw": "0",
+      "win_rate": 0.4,
+      "games_behind": "6.0"
     },
     {
       "rank": 9,
-      "team": "키움",
-      "games": "14",
+      "team": "롯데",
+      "games": "15",
       "win": "5",
       "lose": "9",
-      "draw": "0",
+      "draw": "1",
       "win_rate": 0.357,
-      "games_behind": "7.0"
+      "games_behind": "6.5"
     },
     {
       "rank": 10,
       "team": "한화",
-      "games": "14",
-      "win": "4",
+      "games": "15",
+      "win": "5",
       "lose": "10",
       "draw": "0",
-      "win_rate": 0.286,
-      "games_behind": "8.0"
+      "win_rate": 0.333,
+      "games_behind": "7.0"
     }
   ]
 }
