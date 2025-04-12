@@ -1,14 +1,14 @@
 {
-  "last_updated": "2025-04-11 13:38:39",
+  "last_updated": "2025-04-12 10:29:36",
   "rankings": [
     {
       "rank": 1,
       "team": "LG",
-      "games": "15",
-      "win": "13",
+      "games": "16",
+      "win": "14",
       "lose": "2",
       "draw": "0",
-      "win_rate": 0.867,
+      "win_rate": 0.875,
       "games_behind": "0.0"
     },
     {
@@ -19,7 +19,7 @@
       "lose": "5",
       "draw": "0",
       "win_rate": 0.643,
-      "games_behind": "3.5"
+      "games_behind": "4.0"
     },
     {
       "rank": 3,
@@ -29,7 +29,7 @@
       "lose": "7",
       "draw": "0",
       "win_rate": 0.588,
-      "games_behind": "4.0"
+      "games_behind": "4.5"
     },
     {
       "rank": 4,
@@ -39,7 +39,7 @@
       "lose": "7",
       "draw": "1",
       "win_rate": 0.533,
-      "games_behind": "5.0"
+      "games_behind": "5.5"
     },
     {
       "rank": 5,
@@ -49,7 +49,7 @@
       "lose": "9",
       "draw": "1",
       "win_rate": 0.438,
-      "games_behind": "6.5"
+      "games_behind": "7.0"
     },
     {
       "rank": 6,
@@ -59,16 +59,6 @@
       "lose": "8",
       "draw": "0",
       "win_rate": 0.429,
-      "games_behind": "6.5"
-    },
-    {
-      "rank": 7,
-      "team": "두산",
-      "games": "17",
-      "win": "7",
-      "lose": "10",
-      "draw": "0",
-      "win_rate": 0.412,
       "games_behind": "7.0"
     },
     {
@@ -79,7 +69,17 @@
       "lose": "10",
       "draw": "0",
       "win_rate": 0.412,
-      "games_behind": "7.0"
+      "games_behind": "7.5"
+    },
+    {
+      "rank": 8,
+      "team": "두산",
+      "games": "18",
+      "win": "7",
+      "lose": "11",
+      "draw": "0",
+      "win_rate": 0.389,
+      "games_behind": "8.0"
     },
     {
       "rank": 9,
@@ -89,7 +89,7 @@
       "lose": "10",
       "draw": "0",
       "win_rate": 0.375,
-      "games_behind": "7.5"
+      "games_behind": "8.0"
     },
     {
       "rank": 10,
@@ -99,7 +99,7 @@
       "lose": "11",
       "draw": "0",
       "win_rate": 0.353,
-      "games_behind": "8.0"
+      "games_behind": "8.5"
     }
   ]
 }

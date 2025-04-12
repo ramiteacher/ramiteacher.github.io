@@ -1,5 +1,12 @@
 [
   {
+    "date": "2025-04-12",
+    "home": "LG",
+    "away": "두산",
+    "score": "4 : 0",
+    "highlight": ""
+  },
+  {
     "date": "2025-04-11",
     "home": "LG",
     "away": "두산",
@@ -312,41 +319,6 @@
     "home": "한화",
     "away": "KIA",
     "score": "3 : 5",
-    "highlight": ""
-  },
-  {
-    "date": "2025-03-29",
-    "home": "키움",
-    "away": "SSG",
-    "score": "3 : 1",
-    "highlight": ""
-  },
-  {
-    "date": "2025-03-29",
-    "home": "한화",
-    "away": "KIA",
-    "score": "5 : 4",
-    "highlight": ""
-  },
-  {
-    "date": "2025-03-29",
-    "home": "두산",
-    "away": "삼성",
-    "score": "2 : 13",
-    "highlight": ""
-  },
-  {
-    "date": "2025-03-29",
-    "home": "롯데",
-    "away": "KT",
-    "score": "3 : 1",
-    "highlight": ""
-  },
-  {
-    "date": "2025-03-29",
-    "home": "NC",
-    "away": "LG",
-    "score": "4 : 14",
     "highlight": ""
   }
 ]
