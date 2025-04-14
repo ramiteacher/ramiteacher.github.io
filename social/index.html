@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사회성 테스트 - RAMI TEACHER</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #5e72e4;
+      --primary-gradient: linear-gradient(135deg, #5e72e4 0%, #825ee4 100%);
+      --secondary-color: #fd5d93;
+      --accent-color: #11cdef;
+      --text-color: #525f7f;
+      --light-gray: #f8f9fe;
+      --white: #ffffff;
+      --shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+      --hover-shadow: 0 14px 26px rgba(50, 50, 93, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background: var(--light-gray);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .logo-container {
+      margin: 20px 0 40px;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .logo {
+      max-width: 120px;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+    
+    .logo:hover {
+      transform: scale(1.05);
+    }
+    
+    .test-container {
+      background: var(--white);
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+      margin-bottom: 30px;
+      text-align: left;
+    }
+    
+    .test-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .test-header h1 {
+      color: var(--primary-color);
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    
+    .test-header .icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+    
+    .test-header p {
+      color: var(--text-color);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .progress-container {
+      width: 100%;
+      height: 8px;
+      background: var(--light-gray);
+      border-radius: 4px;
+      margin: 20px 0 30px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: var(--primary-gradient);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    .question-container {
+      margin-bottom: 30px;
+    }
+    
+    .question {
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      color: #32325d;
+    }
+    
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .option {
+      padding: 15px 20px;
+      background: var(--white);
+      border: 1px solid #e9ecef;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+    
+    .option:hover {
+      background: #f6f9fc;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    .option.selected {
+      background: rgba(94, 114, 228, 0.1);
+      border-color: var(--primary-color);
+      box-shadow: var(--shadow);
+    }
+    
+    .option-radio {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #cbd5e0;
+      border-radius: 50%;
+      margin-right: 15px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    
+    .option.selected .option-radio {
+      border-color: var(--primary-color);
+    }
+    
+    .option.selected .option-radio::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .option-text {
+      font-size: 1rem;
+    }
+    
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    
+    .nav-button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .prev-button {
+      background: #e9ecef;
+      color: var(--text-color);
+    }
+    
+    .prev-button:hover {
+      background: #dee2e6;
+    }
+    
+    .next-button {
+      background: var(--primary-gradient);
+      color: var(--white);
+    }
+    
+    .next-button:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+    
+    .next-button:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .result-container {
+      display: none;
+      text-align: center;
+    }
+    
+    .result-header {
+      margin-bottom: 30px;
+    }
+    
+    .result-header h2 {
+      color: var(--primary-color);
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    
+    .result-content {
+      margin-bottom: 30px;
+    }
+    
+    .result-description {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 30px;
+      text-align: left;
+    }
+    
+    .share-container {
+      margin-top: 30px;
+    }
+    
+    .share-button {
+      padding: 10px 20px;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .share-button:hover {
+      background: #e9ecef;
+    }
+    
+    .restart-button {
+      padding: 12px 24px;
+      background: var(--primary-gradient);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 20px;
+    }
+    
+    .restart-button:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+    
+    .home-button {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #e9ecef;
+      color: var(--text-color);
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 20px;
+      transition: all 0.2s ease;
+    }
+    
+    .home-button:hover {
+      background: #dee2e6;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 15px;
+      }
+      
+      .test-header h1 {
+        font-size: 1.7rem;
+      }
+      
+      .question {
+        font-size: 1.1rem;
+      }
+      
+      .option {
+        padding: 12px 15px;
+      }
+      
+      .option-text {
+        font-size: 0.95rem;
+      }
+      
+      .nav-button {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-container">
+      <a href="/">
+        <img src="/assets/images/meee.png" alt="RAMI TEACHER" class="logo">
+      </a>
+    </div>
+    
+    <div class="test-container">
+      <div class="test-header">
+        <div class="icon">👥</div>
+        <h1>사회성 테스트</h1>
+        <p>당신은 얼마나 사회적인가요? 10개의 질문에 답하고 자신의 사회성 수준을 알아보세요.</p>
+      </div>
+      
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+      </div>
+      
+      <div id="question-container" class="question-container">
+        <!-- 질문과 선택지는 JavaScript로 동적 생성됩니다 -->
+      </div>
+      
+      <div class="button-container">
+        <button id="prev-button" class="nav-button prev-button" style="visibility: hidden;">이전</button>
+        <button id="next-button" class="nav-button next-button" disabled>다음</button>
+      </div>
+    </div>
+    
+    <div id="result-container" class="result-container">
+      <div class="test-header">
+        <div class="icon">👥</div>
+        <h1>사회성 테스트 결과</h1>
+      </div>
+      
+      <div class="test-container">
+        <div class="result-header">
+          <h2 id="result-title"></h2>
+        </div>
+        
+        <div class="result-content">
+          <p id="result-description" class="result-description"></p>
+        </div>
+        
+        <div class="share-container">
+          <button class="share-button" onclick="shareResult()">결과 공유하기</button>
+        </div>
+        
+        <div style="margin-top: 30px;">
+          <button id="restart-button" class="restart-button">테스트 다시하기</button>
+          <br>
+          <a href="/" class="home-button">홈으로 돌아가기</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 테스트 데이터
+    const socialityTest = {
+      title: "사회성 테스트",
+      description: "당신은 얼마나 사회적인가요?",
+      icon: "👥",
+      questions: [
+        {
+          question: "새로운 사람들을 만날 때 어떤 느낌이 드나요?",
+          options: [
+            { text: "매우 불편하고 긴장된다", score: 1 },
+            { text: "약간 불편하지만 견딜 만하다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "대체로 편안하고 즐겁다", score: 4 },
+            { text: "매우 편안하고 흥미롭다", score: 5 }
+          ]
+        },
+        {
+          question: "대화를 시작하거나 이어가는 것이 얼마나 쉬운가요?",
+          options: [
+            { text: "매우 어렵다", score: 1 },
+            { text: "어려운 편이다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "쉬운 편이다", score: 4 },
+            { text: "매우 쉽다", score: 5 }
+          ]
+        },
+        {
+          question: "사회적 모임이나 파티에 참석하는 것을 어떻게 생각하나요?",
+          options: [
+            { text: "가능한 피하고 싶다", score: 1 },
+            { text: "약간 부담스럽다", score: 2 },
+            { text: "괜찮다", score: 3 },
+            { text: "즐거운 편이다", score: 4 },
+            { text: "매우 즐겁고 기대된다", score: 5 }
+          ]
+        },
+        {
+          question: "다른 사람의 감정이나 기분을 파악하는 능력은 어떤가요?",
+          options: [
+            { text: "매우 어렵다", score: 1 },
+            { text: "어려운 편이다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "잘하는 편이다", score: 4 },
+            { text: "매우 잘한다", score: 5 }
+          ]
+        },
+        {
+          question: "갈등 상황에서 당신의 대처 방식은?",
+          options: [
+            { text: "회피하거나 무시한다", score: 1 },
+            { text: "불편함을 느끼고 어려워한다", score: 2 },
+            { text: "상황에 따라 대응한다", score: 3 },
+            { text: "대체로 잘 해결하는 편이다", score: 4 },
+            { text: "적극적으로 소통하며 해결한다", score: 5 }
+          ]
+        },
+        {
+          question: "팀 활동이나 그룹 프로젝트에서 어떤 역할을 선호하나요?",
+          options: [
+            { text: "혼자 일하는 것을 선호한다", score: 1 },
+            { text: "조용히 맡은 일만 한다", score: 2 },
+            { text: "필요에 따라 참여한다", score: 3 },
+            { text: "적극적으로 의견을 내고 참여한다", score: 4 },
+            { text: "리더 역할을 맡거나 주도적으로 참여한다", score: 5 }
+          ]
+        },
+        {
+          question: "다른 사람들의 관심사나 이야기에 얼마나 관심을 가지나요?",
+          options: [
+            { text: "거의 관심이 없다", score: 1 },
+            { text: "약간 관심이 있다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "꽤 관심이 있다", score: 4 },
+            { text: "매우 관심이 많다", score: 5 }
+          ]
+        },
+        {
+          question: "사회적 규범이나 예의를 이해하고 따르는 것이 얼마나 쉬운가요?",
+          options: [
+            { text: "매우 어렵다", score: 1 },
+            { text: "어려운 편이다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "쉬운 편이다", score: 4 },
+            { text: "매우 쉽다", score: 5 }
+          ]
+        },
+        {
+          question: "친밀한 관계를 형성하고 유지하는 것이 얼마나 쉬운가요?",
+          options: [
+            { text: "매우 어렵다", score: 1 },
+            { text: "어려운 편이다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "쉬운 편이다", score: 4 },
+            { text: "매우 쉽다", score: 5 }
+          ]
+        },
+        {
+          question: "사회적 상황에서 자신감을 느끼는 정도는?",
+          options: [
+            { text: "매우 낮다", score: 1 },
+            { text: "낮은 편이다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "높은 편이다", score: 4 },
+            { text: "매우 높다", score: 5 }
+          ]
+        }
+      ],
+      results: [
+        {
+          range: [10, 20],
+          title: "내향적 관찰자",
+          description: "당신은 사회적 상호작용보다 혼자만의 시간을 더 선호하는 내향적 관찰자입니다. 사회적 상황에서 불편함을 느끼고, 대화를 시작하거나 유지하는 것이 어려울 수 있습니다. 하지만 이것은 단점이 아니라 당신만의 특성입니다. 깊이 있는 사고와 관찰력이 뛰어나며, 소수의 깊은 관계를 형성하는 경향이 있습니다. 사회성을 향상시키고 싶다면 작은 모임부터 시작하고, 관심 있는 주제에 대한 대화로 시작해보세요."
+        },
+        {
+          range: [21, 30],
+          title: "선택적 사교가",
+          description: "당신은 사회적 상호작용을 완전히 피하지는 않지만, 선택적으로 참여하는 선택적 사교가입니다. 친숙한 환경에서는 편안함을 느끼지만, 새로운 사람들을 만나거나 대규모 모임에서는 약간의 불편함을 느낄 수 있습니다. 당신은 균형 잡힌 사회생활을 추구하며, 혼자만의 시간과 사회적 활동 사이에서 적절한 균형을 찾으려고 노력합니다. 사회성을 더 발전시키고 싶다면 점진적으로 편안함의 영역을 넓혀가는 것이 좋습니다."
+        },
+        {
+          range: [31, 40],
+          title: "균형 잡힌 사교가",
+          description: "당신은 사회적 상호작용과 개인적 시간 사이에서 좋은 균형을 유지하는 균형 잡힌 사교가입니다. 대부분의 사회적 상황에서 편안함을 느끼며, 대화를 시작하고 유지하는 데 어려움이 없습니다. 다른 사람의 감정을 이해하고 공감하는 능력이 있으며, 갈등 상황에서도 대체로 잘 대처합니다. 당신은 다양한 사회적 환경에 적응할 수 있는 유연성을 가지고 있으며, 필요에 따라 리더 역할을 맡을 수도 있습니다."
+        },
+        {
+          range: [41, 45],
+          title: "활발한 사교가",
+          description: "당신은 사회적 상호작용을 즐기고 적극적으로 참여하는 활발한 사교가입니다. 새로운 사람들을 만나는 것을 좋아하며, 대화를 시작하고 유지하는 데 능숙합니다. 다른 사람의 감정을 잘 이해하고 공감하는 능력이 뛰어나며, 갈등 상황에서도 효과적으로 대처할 수 있습니다. 당신은 그룹 활동에서 주도적인 역할을 맡는 경향이 있으며, 다양한 사회적 네트워크를 형성하고 유지하는 데 능숙합니다."
+        },
+        {
+          range: [46, 50],
+          title: "사교적 리더",
+          description: "당신은 뛰어난 사회적 기술과 카리스마를 가진 사교적 리더입니다. 모든 사회적 상황에서 높은 자신감을 가지고 있으며, 새로운 사람들과 쉽게 연결되고 깊은 관계를 형성할 수 있습니다. 다른 사람의 감정과 필요를 직관적으로 이해하고, 갈등 상황에서도 효과적으로 중재할 수 있습니다. 당신은 자연스럽게 리더십을 발휘하며, 다른 사람들에게 영감을 주고 동기를 부여하는 능력이 있습니다. 이러한 뛰어난 사회성은 개인적, 직업적 성공에 큰 자산이 됩니다."
+        }
+      ]
+    };
+    
+    // 변수 초기화
+    let currentQuestion = 0;
+    const answers = [];
+    
+    // DOM 요소
+    const questionContainer = document.getElementById('question-container');
+    const progressBar = document.getElementById('progress-bar');
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+    const resultContainer = document.getElementById('result-container');
+    const resultTitle = document.getElementById('result-title');
+    const resultDescription = document.getElementById('result-description');
+    const restartButton = document.getElementById('restart-button');
+    
+    // 질문 표시 함수
+    function showQuestion(questionIndex) {
+      // 현재 질문 가져오기
+      const question = socialityTest.questions[questionIndex];
+      
+      // 질문 컨테이너 비우기
+      questionContainer.innerHTML = '';
+      
+      // 질문 텍스트 추가
+      const questionElement = document.createElement('div');
+      questionElement.className = 'question';
+      questionElement.textContent = `${questionIndex + 1}. ${question.question}`;
+      questionContainer.appendChild(questionElement);
+      
+      // 선택지 컨테이너 추가
+      const optionsElement = document.createElement('div');
+      optionsElement.className = 'options';
+      
+      // 각 선택지 추가
+      question.options.forEach((option, index) => {
+        const optionElement = document.createElement('div');
+        optionElement.className = 'option';
+        if (answers[questionIndex] !== undefined && answers[questionIndex] === index) {
+          optionElement.classList.add('selected');
+        }
+        
+        const radioElement = document.createElement('div');
+        radioElement.className = 'option-radio';
+        
+        const textElement = document.createElement('div');
+        textElement.className = 'option-text';
+        textElement.textContent = option.text;
+        
+        optionElement.appendChild(radioElement);
+        optionElement.appendChild(textElement);
+        
+        // 선택지 클릭 이벤트
+        optionElement.addEventListener('click', () => {
+          // 이전 선택 제거
+          const selectedOptions = optionsElement.querySelectorAll('.option.selected');
+          selectedOptions.forEach(selected => {
+            selected.classList.remove('selected');
+          });
+          
+          // 현재 선택 추가
+          optionElement.classList.add('selected');
+          
+          // 답변 저장
+          answers[questionIndex] = index;
+          
+          // 다음 버튼 활성화
+          nextButton.disabled = false;
+        });
+        
+        optionsElement.appendChild(optionElement);
+      });
+      
+      questionContainer.appendChild(optionsElement);
+      
+      // 진행 상태 업데이트
+      updateProgress();
+      
+      // 버튼 상태 업데이트
+      updateButtons();
+    }
+    
+    // 진행 상태 업데이트 함수
+    function updateProgress() {
+      const progress = ((currentQuestion + 1) / socialityTest.questions.length) * 100;
+      progressBar.style.width = `${progress}%`;
+    }
+    
+    // 버튼 상태 업데이트 함수
+    function updateButtons() {
+      // 이전 버튼 상태
+      if (currentQuestion === 0) {
+        prevButton.style.visibility = 'hidden';
+      } else {
+        prevButton.style.visibility = 'visible';
+      }
+      
+      // 다음 버튼 상태
+      if (currentQuestion === socialityTest.questions.length - 1) {
+        nextButton.textContent = '결과 보기';
+      } else {
+        nextButton.textContent = '다음';
+      }
+      
+      // 다음 버튼 활성화 여부
+      nextButton.disabled = answers[currentQuestion] === undefined;
+    }
+    
+    // 결과 계산 함수
+    function calculateResult() {
+      let totalScore = 0;
+      
+      // 각 질문의 점수 합산
+      answers.forEach((answerIndex, questionIndex) => {
+        const question = socialityTest.questions[questionIndex];
+        totalScore += question.options[answerIndex].score;
+      });
+      
+      // 결과 찾기
+      for (const result of socialityTest.results) {
+        if (totalScore >= result.range[0] && totalScore <= result.range[1]) {
+          return {
+            title: result.title,
+            description: result.description,
+            score: totalScore
+          };
+        }
+      }
+    }
+    
+    // 결과 표시 함수
+    function showResult() {
+      const result = calculateResult();
+      
+      resultTitle.textContent = result.title;
+      resultDescription.textContent = result.description;
+      
+      // 테스트 컨테이너 숨기기
+      document.querySelector('.test-container').style.display = 'none';
+      
+      // 결과 컨테이너 표시
+      resultContainer.style.display = 'block';
+    }
+    
+    // 결과 공유 함수
+    function shareResult() {
+      const result = calculateResult();
+      const shareText = `[RAMI TEACHER] 사회성 테스트 결과: ${result.title}\n\n테스트 해보기: ${window.location.href}`;
+      
+      if (navigator.share) {
+        navigator.share({
+          title: '사회성 테스트 결과',
+          text: shareText,
+          url: window.location.href
+        });
+      } else {
+        // 클립보드에 복사
+        navigator.clipboard.writeText(shareText)
+          .then(() => {
+            alert('결과가 클립보드에 복사되었습니다.');
+          })
+          .catch(err => {
+            console.error('클립보드 복사 실패:', err);
+            alert('결과 복사에 실패했습니다.');
+          });
+      }
+    }
+    
+    // 테스트 다시 시작 함수
+    function restartTest() {
+      // 변수 초기화
+      currentQuestion = 0;
+      answers.length = 0;
+      
+      // 테스트 컨테이너 표시
+      document.querySelector('.test-container').style.display = 'block';
+      
+      // 결과 컨테이너 숨기기
+      resultContainer.style.display = 'none';
+      
+      // 첫 번째 질문 표시
+      showQuestion(currentQuestion);
+    }
+    
+    // 이벤트 리스너
+    prevButton.addEventListener('click', () => {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        showQuestion(currentQuestion);
+      }
+    });
+    
+    nextButton.addEventListener('click', () => {
+      if (currentQuestion < socialityTest.questions.length - 1) {
+        currentQuestion++;
+        showQuestion(currentQuestion);
+      } else {
+        showResult();
+      }
+    });
+    
+    restartButton.addEventListener('click', restartTest);
+    
+    // 첫 번째 질문 표시
+    showQuestion(currentQuestion);
+  </script>
+</body>
+</html>

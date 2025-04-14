@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>직업 적성 테스트 - RAMI TEACHER</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #5e72e4;
+      --primary-gradient: linear-gradient(135deg, #5e72e4 0%, #825ee4 100%);
+      --secondary-color: #fd5d93;
+      --accent-color: #11cdef;
+      --text-color: #525f7f;
+      --light-gray: #f8f9fe;
+      --white: #ffffff;
+      --shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+      --hover-shadow: 0 14px 26px rgba(50, 50, 93, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background: var(--light-gray);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .logo-container {
+      margin: 20px 0 40px;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .logo {
+      max-width: 120px;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+    
+    .logo:hover {
+      transform: scale(1.05);
+    }
+    
+    .test-container {
+      background: var(--white);
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+      margin-bottom: 30px;
+      text-align: left;
+    }
+    
+    .test-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .test-header h1 {
+      color: var(--primary-color);
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    
+    .test-header .icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+    
+    .test-header p {
+      color: var(--text-color);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .progress-container {
+      width: 100%;
+      height: 8px;
+      background: var(--light-gray);
+      border-radius: 4px;
+      margin: 20px 0 30px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: var(--primary-gradient);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    .question-container {
+      margin-bottom: 30px;
+    }
+    
+    .question {
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      color: #32325d;
+    }
+    
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .option {
+      padding: 15px 20px;
+      background: var(--white);
+      border: 1px solid #e9ecef;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+    
+    .option:hover {
+      background: #f6f9fc;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    .option.selected {
+      background: rgba(94, 114, 228, 0.1);
+      border-color: var(--primary-color);
+      box-shadow: var(--shadow);
+    }
+    
+    .option-radio {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #cbd5e0;
+      border-radius: 50%;
+      margin-right: 15px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    
+    .option.selected .option-radio {
+      border-color: var(--primary-color);
+    }
+    
+    .option.selected .option-radio::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .option-text {
+      font-size: 1rem;
+    }
+    
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    
+    .nav-button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .prev-button {
+      background: #e9ecef;
+      color: var(--text-color);
+    }
+    
+    .prev-button:hover {
+      background: #dee2e6;
+    }
+    
+    .next-button {
+      background: var(--primary-gradient);
+      color: var(--white);
+    }
+    
+    .next-button:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+    
+    .next-button:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .result-container {
+      display: none;
+      text-align: center;
+    }
+    
+    .result-header {
+      margin-bottom: 30px;
+    }
+    
+    .result-header h2 {
+      color: var(--primary-color);
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    
+    .result-content {
+      margin-bottom: 30px;
+    }
+    
+    .result-description {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 30px;
+      text-align: left;
+    }
+    
+    .share-container {
+      margin-top: 30px;
+    }
+    
+    .share-button {
+      padding: 10px 20px;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .share-button:hover {
+      background: #e9ecef;
+    }
+    
+    .restart-button {
+      padding: 12px 24px;
+      background: var(--primary-gradient);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 20px;
+    }
+    
+    .restart-button:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+    
+    .home-button {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #e9ecef;
+      color: var(--text-color);
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 20px;
+      transition: all 0.2s ease;
+    }
+    
+    .home-button:hover {
+      background: #dee2e6;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 15px;
+      }
+      
+      .test-header h1 {
+        font-size: 1.7rem;
+      }
+      
+      .question {
+        font-size: 1.1rem;
+      }
+      
+      .option {
+        padding: 12px 15px;
+      }
+      
+      .option-text {
+        font-size: 0.95rem;
+      }
+      
+      .nav-button {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-container">
+      <a href="/">
+        <img src="/assets/images/meee.png" alt="RAMI TEACHER" class="logo">
+      </a>
+    </div>
+    
+    <div class="test-container">
+      <div class="test-header">
+        <div class="icon">💼</div>
+        <h1>직업 적성 테스트</h1>
+        <p>나에게 맞는 직업은 무엇일까? 10개의 질문에 답하고 자신의 직업 적성을 알아보세요.</p>
+      </div>
+      
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+      </div>
+      
+      <div id="question-container" class="question-container">
+        <!-- 질문과 선택지는 JavaScript로 동적 생성됩니다 -->
+      </div>
+      
+      <div class="button-container">
+        <button id="prev-button" class="nav-button prev-button" style="visibility: hidden;">이전</button>
+        <button id="next-button" class="nav-button next-button" disabled>다음</button>
+      </div>
+    </div>
+    
+    <div id="result-container" class="result-container">
+      <div class="test-header">
+        <div class="icon">💼</div>
+        <h1>직업 적성 테스트 결과</h1>
+      </div>
+      
+      <div class="test-container">
+        <div class="result-header">
+          <h2 id="result-title"></h2>
+        </div>
+        
+        <div class="result-content">
+          <p id="result-description" class="result-description"></p>
+        </div>
+        
+        <div class="share-container">
+          <button class="share-button" onclick="shareResult()">결과 공유하기</button>
+        </div>
+        
+        <div style="margin-top: 30px;">
+          <button id="restart-button" class="restart-button">테스트 다시하기</button>
+          <br>
+          <a href="/" class="home-button">홈으로 돌아가기</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 테스트 데이터
+    const careerAptitudeTest = {
+      title: "직업 적성 테스트",
+      description: "나에게 맞는 직업은 무엇일까?",
+      icon: "💼",
+      questions: [
+        {
+          question: "문제 해결 시 당신이 선호하는 방식은?",
+          options: [
+            { text: "논리적으로 분석하고 체계적으로 접근한다", score: "분석형" },
+            { text: "창의적인 아이디어로 새로운 해결책을 찾는다", score: "창의형" },
+            { text: "다른 사람들과 협력하여 함께 해결한다", score: "사회형" },
+            { text: "실용적이고 현실적인 방법으로 해결한다", score: "실용형" },
+            { text: "조직적으로 계획을 세우고 단계별로 접근한다", score: "관리형" }
+          ]
+        },
+        {
+          question: "스트레스를 받을 때 가장 효과적인 해소 방법은?",
+          options: [
+            { text: "혼자 생각을 정리하며 문제의 원인을 분석한다", score: "분석형" },
+            { text: "예술 활동이나 창작을 통해 감정을 표현한다", score: "창의형" },
+            { text: "친구들과 대화하거나 사람들과 어울린다", score: "사회형" },
+            { text: "운동이나 실외 활동을 통해 에너지를 발산한다", score: "실용형" },
+            { text: "할 일 목록을 작성하고 체계적으로 해결한다", score: "관리형" }
+          ]
+        },
+        {
+          question: "팀 프로젝트에서 당신이 자연스럽게 맡게 되는 역할은?",
+          options: [
+            { text: "정보를 수집하고 분석하는 역할", score: "분석형" },
+            { text: "새로운 아이디어를 제안하는 역할", score: "창의형" },
+            { text: "팀원들을 격려하고 조율하는 역할", score: "사회형" },
+            { text: "실질적인 작업을 수행하는 역할", score: "실용형" },
+            { text: "일정과 자원을 관리하는 역할", score: "관리형" }
+          ]
+        },
+        {
+          question: "학창 시절 가장 좋아했던 과목은?",
+          options: [
+            { text: "수학, 과학, 논리학", score: "분석형" },
+            { text: "미술, 음악, 문학", score: "창의형" },
+            { text: "사회, 심리학, 언어", score: "사회형" },
+            { text: "체육, 기술, 실과", score: "실용형" },
+            { text: "경제, 경영, 행정", score: "관리형" }
+          ]
+        },
+        {
+          question: "여가 시간에 주로 무엇을 하는 것을 즐기나요?",
+          options: [
+            { text: "책 읽기, 퍼즐 풀기, 지식 탐구", score: "분석형" },
+            { text: "그림 그리기, 음악 만들기, 창작 활동", score: "창의형" },
+            { text: "친구 만나기, 봉사 활동, 소통하기", score: "사회형" },
+            { text: "운동, DIY, 실외 활동", score: "실용형" },
+            { text: "계획 세우기, 정리하기, 투자 관리", score: "관리형" }
+          ]
+        },
+        {
+          question: "당신이 가장 중요하게 생각하는 직업 가치는?",
+          options: [
+            { text: "지적 도전과 전문성", score: "분석형" },
+            { text: "자기표현과 창의성", score: "창의형" },
+            { text: "사회 기여와 인간관계", score: "사회형" },
+            { text: "실용성과 독립성", score: "실용형" },
+            { text: "안정성과 성취감", score: "관리형" }
+          ]
+        },
+        {
+          question: "새로운 기술이나 지식을 배울 때 선호하는 방식은?",
+          options: [
+            { text: "개념을 깊이 이해하고 원리를 파악한다", score: "분석형" },
+            { text: "자유롭게 탐색하고 실험해본다", score: "창의형" },
+            { text: "다른 사람들과 함께 배우고 토론한다", score: "사회형" },
+            { text: "직접 해보면서 실습 위주로 배운다", score: "실용형" },
+            { text: "체계적인 커리큘럼을 따라 단계별로 배운다", score: "관리형" }
+          ]
+        },
+        {
+          question: "직장 환경으로 선호하는 것은?",
+          options: [
+            { text: "조용하고 독립적으로 일할 수 있는 환경", score: "분석형" },
+            { text: "자유롭고 창의적인 분위기의 환경", score: "창의형" },
+            { text: "활발하고 협력적인 팀 중심 환경", score: "사회형" },
+            { text: "실용적이고 결과 지향적인 환경", score: "실용형" },
+            { text: "체계적이고 안정적인 조직 환경", score: "관리형" }
+          ]
+        },
+        {
+          question: "당신의 의사결정 방식은?",
+          options: [
+            { text: "객관적인 데이터와 논리적 분석을 기반으로 결정한다", score: "분석형" },
+            { text: "직관과 독창적인 관점을 중요시한다", score: "창의형" },
+            { text: "다른 사람들의 의견과 감정을 고려한다", score: "사회형" },
+            { text: "실용성과 효율성을 중심으로 판단한다", score: "실용형" },
+            { text: "체계적으로 장단점을 분석하고 계획적으로 결정한다", score: "관리형" }
+          ]
+        },
+        {
+          question: "성공적인 하루를 보냈다고 느끼는 때는?",
+          options: [
+            { text: "새로운 지식을 습득하거나 복잡한 문제를 해결했을 때", score: "분석형" },
+            { text: "창의적인 아이디어를 실현하거나 영감을 얻었을 때", score: "창의형" },
+            { text: "다른 사람들과 의미 있는 교류를 했을 때", score: "사회형" },
+            { text: "실질적인 결과물을 만들어냈을 때", score: "실용형" },
+            { text: "계획한 일을 모두 완수하고 효율적으로 시간을 관리했을 때", score: "관리형" }
+          ]
+        }
+      ],
+      results: {
+        "분석형": {
+          title: "분석형 (Analytical)",
+          description: "당신은 논리적이고 분석적인 사고를 가진 분석형입니다. 복잡한 문제를 해결하고 데이터를 분석하는 능력이 뛰어나며, 객관적이고 체계적인 접근 방식을 선호합니다. 지적 호기심이 강하고 독립적으로 일하는 것을 좋아합니다.\n\n추천 직업 분야: 연구원, 데이터 분석가, 프로그래머, 엔지니어, 과학자, 의사, 법률 전문가, 금융 분석가, 통계학자, 시스템 설계자 등\n\n직업 환경 팁: 독립적으로 일할 수 있고 지적 도전이 있는 환경에서 가장 능력을 발휘할 수 있습니다. 복잡한 문제를 해결하고 전문 지식을 깊이 있게 탐구할 수 있는 기회가 많은 직장을 찾아보세요."
+        },
+        "창의형": {
+          title: "창의형 (Creative)",
+          description: "당신은 독창적이고 혁신적인 사고를 가진 창의형입니다. 새로운 아이디어를 생각해내고 예술적 표현을 하는 능력이 뛰어나며, 자유롭고 유연한 환경에서 일하는 것을 선호합니다. 상상력이 풍부하고 관습에 얽매이지 않는 성향을 가지고 있습니다.\n\n추천 직업 분야: 디자이너, 작가, 예술가, 음악가, 마케팅 크리에이티브 디렉터, UX/UI 디자이너, 건축가, 광고 기획자, 영화 제작자, 게임 개발자 등\n\n직업 환경 팁: 자유롭게 아이디어를 표현하고 창의성을 발휘할 수 있는 환경에서 가장 능력을 발휘할 수 있습니다. 혁신을 장려하고 다양성을 존중하는 조직문화를 가진 직장을 찾아보세요."
+        },
+        "사회형": {
+          title: "사회형 (Social)",
+          description: "당신은 대인관계 능력이 뛰어나고 협력적인 사회형입니다. 다른 사람들을 돕고, 가르치고, 설득하는 능력이 뛰어나며, 팀 환경에서 일하는 것을 선호합니다. 공감 능력이 높고 사회적 상호작용에서 에너지를 얻는 성향을 가지고 있습니다.\n\n추천 직업 분야: 교사, 상담사, 사회복지사, 인사 관리자, 의료 서비스 제공자, 고객 서비스 관리자, 영업 담당자, 코치, 홍보 전문가, 이벤트 기획자 등\n\n직업 환경 팁: 사람들과 직접 소통하고 협력할 수 있는 환경에서 가장 능력을 발휘할 수 있습니다. 팀워크를 중시하고 사회적 가치를 추구하는 조직에서 만족도가 높을 것입니다."
+        },
+        "실용형": {
+          title: "실용형 (Practical)",
+          description: "당신은 실용적이고 현실적인 사고를 가진 실용형입니다. 손으로 직접 만들고, 조작하고, 건설하는 능력이 뛰어나며, 구체적인 결과물을 만들어내는 일을 선호합니다. 실제적인 문제 해결에 능숙하고 신체적 활동을 통해 에너지를 얻는 성향을 가지고 있습니다.\n\n추천 직업 분야: 기술자, 장인, 요리사, 농부, 건설 관리자, 운동선수, 물리치료사, 소방관, 경찰관, 파일럿, 기계 조작원 등\n\n직업 환경 팁: 실질적인 결과물을 만들어내고 신체적 활동이 포함된 환경에서 가장 능력을 발휘할 수 있습니다. 이론보다는 실습 중심의 업무가 많은 직장에서 만족도가 높을 것입니다."
+        },
+        "관리형": {
+          title: "관리형 (Organizational)",
+          description: "당신은 체계적이고 조직적인 사고를 가진 관리형입니다. 계획을 세우고, 조직하고, 관리하는 능력이 뛰어나며, 구조화된 환경에서 일하는 것을 선호합니다. 세부 사항에 주의를 기울이고 효율성을 중시하는 성향을 가지고 있습니다.\n\n추천 직업 분야: 프로젝트 관리자, 행정 관리자, 회계사, 금융 관리자, 물류 전문가, 품질 관리자, 비서, 부동산 중개인, 보험 전문가, 세무사 등\n\n직업 환경 팁: 체계적이고 안정적인 환경에서 가장 능력을 발휘할 수 있습니다. 명확한 규칙과 절차가 있고 효율성을 중시하는 조직에서 만족도가 높을 것입니다."
+        }
+      }
+    };
+    
+    // 변수 초기화
+    let currentQuestion = 0;
+    const answers = [];
+    
+    // DOM 요소
+    const questionContainer = document.getElementById('question-container');
+    const progressBar = document.getElementById('progress-bar');
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+    const resultContainer = document.getElementById('result-container');
+    const resultTitle = document.getElementById('result-title');
+    const resultDescription = document.getElementById('result-description');
+    const restartButton = document.getElementById('restart-button');
+    
+    // 질문 표시 함수
+    function showQuestion(questionIndex) {
+      // 현재 질문 가져오기
+      const question = careerAptitudeTest.questions[questionIndex];
+      
+      // 질문 컨테이너 비우기
+      questionContainer.innerHTML = '';
+      
+      // 질문 텍스트 추가
+      const questionElement = document.createElement('div');
+      questionElement.className = 'question';
+      questionElement.textContent = `${questionIndex + 1}. ${question.question}`;
+      questionContainer.appendChild(questionElement);
+      
+      // 선택지 컨테이너 추가
+      const optionsElement = document.createElement('div');
+      optionsElement.className = 'options';
+      
+      // 각 선택지 추가
+      question.options.forEach((option, index) => {
+        const optionElement = document.createElement('div');
+        optionElement.className = 'option';
+        if (answers[questionIndex] !== undefined && answers[questionIndex] === index) {
+          optionElement.classList.add('selected');
+        }
+        
+        const radioElement = document.createElement('div');
+        radioElement.className = 'option-radio';
+        
+        const textElement = document.createElement('div');
+        textElement.className = 'option-text';
+        textElement.textContent = option.text;
+        
+        optionElement.appendChild(radioElement);
+        optionElement.appendChild(textElement);
+        
+        // 선택지 클릭 이벤트
+        optionElement.addEventListener('click', () => {
+          // 이전 선택 제거
+          const selectedOptions = optionsElement.querySelectorAll('.option.selected');
+          selectedOptions.forEach(selected => {
+            selected.classList.remove('selected');
+          });
+          
+          // 현재 선택 추가
+          optionElement.classList.add('selected');
+          
+          // 답변 저장
+          answers[questionIndex] = index;
+          
+          // 다음 버튼 활성화
+          nextButton.disabled = false;
+        });
+        
+        optionsElement.appendChild(optionElement);
+      });
+      
+      questionContainer.appendChild(optionsElement);
+      
+      // 진행 상태 업데이트
+      updateProgress();
+      
+      // 버튼 상태 업데이트
+      updateButtons();
+    }
+    
+    // 진행 상태 업데이트 함수
+    function updateProgress() {
+      const progress = ((currentQuestion + 1) / careerAptitudeTest.questions.length) * 100;
+      progressBar.style.width = `${progress}%`;
+    }
+    
+    // 버튼 상태 업데이트 함수
+    function updateButtons() {
+      // 이전 버튼 상태
+      if (currentQuestion === 0) {
+        prevButton.style.visibility = 'hidden';
+      } else {
+        prevButton.style.visibility = 'visible';
+      }
+      
+      // 다음 버튼 상태
+      if (currentQuestion === careerAptitudeTest.questions.length - 1) {
+        nextButton.textContent = '결과 보기';
+      } else {
+        nextButton.textContent = '다음';
+      }
+      
+      // 다음 버튼 활성화 여부
+      nextButton.disabled = answers[currentQuestion] === undefined;
+    }
+    
+    // 결과 계산 함수
+    function calculateResult() {
+      const scores = {
+        "분석형": 0,
+        "창의형": 0,
+        "사회형": 0,
+        "실용형": 0,
+        "관리형": 0
+      };
+      
+      // 각 질문의 점수 합산
+      answers.forEach((answerIndex, questionIndex) => {
+        const question = careerAptitudeTest.questions[questionIndex];
+        const score = question.options[answerIndex].score;
+        scores[score]++;
+      });
+      
+      // 최고 점수 찾기
+      let maxScore = 0;
+      let result = "";
+      
+      for (const type in scores) {
+        if (scores[type] > maxScore) {
+          maxScore = scores[type];
+          result = type;
+        }
+      }
+      
+      return result;
+    }
+    
+    // 결과 표시 함수
+    function showResult() {
+      const result = calculateResult();
+      const resultData = careerAptitudeTest.results[result];
+      
+      resultTitle.textContent = resultData.title;
+      resultDescription.textContent = resultData.description;
+      
+      // 테스트 컨테이너 숨기기
+      document.querySelector('.test-container').style.display = 'none';
+      
+      // 결과 컨테이너 표시
+      resultContainer.style.display = 'block';
+    }
+    
+    // 결과 공유 함수
+    function shareResult() {
+      const result = calculateResult();
+      const resultData = careerAptitudeTest.results[result];
+      const shareText = `[RAMI TEACHER] 직업 적성 테스트 결과: ${resultData.title}\n\n테스트 해보기: ${window.location.href}`;
+      
+      if (navigator.share) {
+        navigator.share({
+          title: '직업 적성 테스트 결과',
+          text: shareText,
+          url: window.location.href
+        });
+      } else {
+        // 클립보드에 복사
+        navigator.clipboard.writeText(shareText)
+          .then(() => {
+            alert('결과가 클립보드에 복사되었습니다.');
+          })
+          .catch(err => {
+            console.error('클립보드 복사 실패:', err);
+            alert('결과 복사에 실패했습니다.');
+          });
+      }
+    }
+    
+    // 테스트 다시 시작 함수
+    function restartTest() {
+      // 변수 초기화
+      currentQuestion = 0;
+      answers.length = 0;
+      
+      // 테스트 컨테이너 표시
+      document.querySelector('.test-container').style.display = 'block';
+      
+      // 결과 컨테이너 숨기기
+      resultContainer.style.display = 'none';
+      
+      // 첫 번째 질문 표시
+      showQuestion(currentQuestion);
+    }
+    
+    // 이벤트 리스너
+    prevButton.addEventListener('click', () => {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        showQuestion(currentQuestion);
+      }
+    });
+    
+    nextButton.addEventListener('click', () => {
+      if (currentQuestion < careerAptitudeTest.questions.length - 1) {
+        currentQuestion++;
+        showQuestion(currentQuestion);
+      } else {
+        showResult();
+      }
+    });
+    
+    restartButton.addEventListener('click', restartTest);
+    
+    // 첫 번째 질문 표시
+    showQuestion(currentQuestion);
+  </script>
+</body>
+</html>

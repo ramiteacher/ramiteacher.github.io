@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>연애 성향 테스트 - RAMI TEACHER</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #5e72e4;
+      --primary-gradient: linear-gradient(135deg, #5e72e4 0%, #825ee4 100%);
+      --secondary-color: #fd5d93;
+      --accent-color: #11cdef;
+      --text-color: #525f7f;
+      --light-gray: #f8f9fe;
+      --white: #ffffff;
+      --shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+      --hover-shadow: 0 14px 26px rgba(50, 50, 93, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background: var(--light-gray);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .logo-container {
+      margin: 20px 0 40px;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .logo {
+      max-width: 120px;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+    
+    .logo:hover {
+      transform: scale(1.05);
+    }
+    
+    .test-container {
+      background: var(--white);
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+      margin-bottom: 30px;
+      text-align: left;
+    }
+    
+    .test-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .test-header h1 {
+      color: var(--primary-color);
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    
+    .test-header .icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+    
+    .test-header p {
+      color: var(--text-color);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .progress-container {
+      width: 100%;
+      height: 8px;
+      background: var(--light-gray);
+      border-radius: 4px;
+      margin: 20px 0 30px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: var(--primary-gradient);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    .question-container {
+      margin-bottom: 30px;
+    }
+    
+    .question {
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      color: #32325d;
+    }
+    
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .option {
+      padding: 15px 20px;
+      background: var(--white);
+      border: 1px solid #e9ecef;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+    
+    .option:hover {
+      background: #f6f9fc;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    .option.selected {
+      background: rgba(94, 114, 228, 0.1);
+      border-color: var(--primary-color);
+      box-shadow: var(--shadow);
+    }
+    
+    .option-radio {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #cbd5e0;
+      border-radius: 50%;
+      margin-right: 15px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    
+    .option.selected .option-radio {
+      border-color: var(--primary-color);
+    }
+    
+    .option.selected .option-radio::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .option-text {
+      font-size: 1rem;
+    }
+    
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    
+    .nav-button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .prev-button {
+      background: #e9ecef;
+      color: var(--text-color);
+    }
+    
+    .prev-button:hover {
+      background: #dee2e6;
+    }
+    
+    .next-button {
+      background: var(--primary-gradient);
+      color: var(--white);
+    }
+    
+    .next-button:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+    
+    .next-button:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .result-container {
+      display: none;
+      text-align: center;
+    }
+    
+    .result-header {
+      margin-bottom: 30px;
+    }
+    
+    .result-header h2 {
+      color: var(--primary-color);
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    
+    .result-content {
+      margin-bottom: 30px;
+    }
+    
+    .result-description {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 30px;
+      text-align: left;
+    }
+    
+    .share-container {
+      margin-top: 30px;
+    }
+    
+    .share-button {
+      padding: 10px 20px;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .share-button:hover {
+      background: #e9ecef;
+    }
+    
+    .restart-button {
+      padding: 12px 24px;
+      background: var(--primary-gradient);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 20px;
+    }
+    
+    .restart-button:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+    
+    .home-button {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #e9ecef;
+      color: var(--text-color);
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 20px;
+      transition: all 0.2s ease;
+    }
+    
+    .home-button:hover {
+      background: #dee2e6;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 15px;
+      }
+      
+      .test-header h1 {
+        font-size: 1.7rem;
+      }
+      
+      .question {
+        font-size: 1.1rem;
+      }
+      
+      .option {
+        padding: 12px 15px;
+      }
+      
+      .option-text {
+        font-size: 0.95rem;
+      }
+      
+      .nav-button {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-container">
+      <a href="/">
+        <img src="/assets/images/meee.png" alt="RAMI TEACHER" class="logo">
+      </a>
+    </div>
+    
+    <div class="test-container">
+      <div class="test-header">
+        <div class="icon">💘</div>
+        <h1>연애 성향 테스트</h1>
+        <p>당신의 연애 스타일 알아보기. 10개의 질문에 답하고 자신의 연애 성향을 알아보세요.</p>
+      </div>
+      
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+      </div>
+      
+      <div id="question-container" class="question-container">
+        <!-- 질문과 선택지는 JavaScript로 동적 생성됩니다 -->
+      </div>
+      
+      <div class="button-container">
+        <button id="prev-button" class="nav-button prev-button" style="visibility: hidden;">이전</button>
+        <button id="next-button" class="nav-button next-button" disabled>다음</button>
+      </div>
+    </div>
+    
+    <div id="result-container" class="result-container">
+      <div class="test-header">
+        <div class="icon">💘</div>
+        <h1>연애 성향 테스트 결과</h1>
+      </div>
+      
+      <div class="test-container">
+        <div class="result-header">
+          <h2 id="result-title"></h2>
+        </div>
+        
+        <div class="result-content">
+          <p id="result-description" class="result-description"></p>
+        </div>
+        
+        <div class="share-container">
+          <button class="share-button" onclick="shareResult()">결과 공유하기</button>
+        </div>
+        
+        <div style="margin-top: 30px;">
+          <button id="restart-button" class="restart-button">테스트 다시하기</button>
+          <br>
+          <a href="/" class="home-button">홈으로 돌아가기</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 테스트 데이터
+    const loveStyleTest = {
+      title: "연애 성향 테스트",
+      description: "당신의 연애 스타일 알아보기",
+      icon: "💘",
+      questions: [
+        {
+          question: "연인과의 관계에서 당신에게 가장 중요한 것은?",
+          options: [
+            { text: "깊은 정서적 교감과 이해", score: "애정형" },
+            { text: "열정과 흥미로운 경험", score: "열정형" },
+            { text: "안정감과 신뢰", score: "헌신형" },
+            { text: "개인의 자유와 독립성", score: "자유형" }
+          ]
+        },
+        {
+          question: "연애 초기에 당신은 주로?",
+          options: [
+            { text: "상대방의 마음을 헤아리고 공감하려 노력한다", score: "애정형" },
+            { text: "적극적으로 데이트를 계획하고 표현한다", score: "열정형" },
+            { text: "신중하게 상대를 알아가며 관계를 발전시킨다", score: "헌신형" },
+            { text: "자연스럽게 흘러가도록 두고 압박하지 않는다", score: "자유형" }
+          ]
+        },
+        {
+          question: "연인과 다툼이 생겼을 때 당신의 반응은?",
+          options: [
+            { text: "감정을 솔직히 표현하고 대화로 해결하려 한다", score: "애정형" },
+            { text: "감정적으로 반응하지만 빨리 화해하려 한다", score: "열정형" },
+            { text: "문제의 원인을 분석하고 해결책을 찾는다", score: "헌신형" },
+            { text: "시간과 공간을 두고 생각한 후 대화한다", score: "자유형" }
+          ]
+        },
+        {
+          question: "이상적인 데이트는?",
+          options: [
+            { text: "깊은 대화를 나눌 수 있는 조용한 장소", score: "애정형" },
+            { text: "새롭고 흥미로운 활동이나 장소", score: "열정형" },
+            { text: "편안하고 의미 있는 시간을 보낼 수 있는 곳", score: "헌신형" },
+            { text: "각자의 취향을 존중하며 함께할 수 있는 활동", score: "자유형" }
+          ]
+        },
+        {
+          question: "연인에게 사랑을 표현하는 주된 방식은?",
+          options: [
+            { text: "진심 어린 대화와 정서적 지지", score: "애정형" },
+            { text: "스킨십과 언어적 표현", score: "열정형" },
+            { text: "실질적인 도움과 헌신", score: "헌신형" },
+            { text: "개인 공간을 존중하면서 필요할 때 지지", score: "자유형" }
+          ]
+        },
+        {
+          question: "연인과의 미래 계획에 대해 어떻게 생각하나요?",
+          options: [
+            { text: "함께 성장하고 발전하는 관계를 꿈꾼다", score: "애정형" },
+            { text: "현재의 행복과 열정을 중요시한다", score: "열정형" },
+            { text: "안정적이고 구체적인 미래를 계획한다", score: "헌신형" },
+            { text: "자연스럽게 흘러가는 대로 두고 싶다", score: "자유형" }
+          ]
+        },
+        {
+          question: "연인의 어떤 면을 가장 중요하게 생각하나요?",
+          options: [
+            { text: "감성적 깊이와 공감 능력", score: "애정형" },
+            { text: "매력과 열정", score: "열정형" },
+            { text: "신뢰성과 책임감", score: "헌신형" },
+            { text: "독립성과 자기 주관", score: "자유형" }
+          ]
+        },
+        {
+          question: "연인과 함께하는 시간과 개인 시간의 균형에 대해 어떻게 생각하나요?",
+          options: [
+            { text: "가능한 많은 시간을 함께 보내고 싶다", score: "애정형" },
+            { text: "함께하는 시간은 열정적이고 특별했으면 한다", score: "열정형" },
+            { text: "규칙적이고 안정적인 시간 공유가 중요하다", score: "헌신형" },
+            { text: "개인 시간과 함께하는 시간의 균형이 매우 중요하다", score: "자유형" }
+          ]
+        },
+        {
+          question: "연인 관계에서 가장 어려워하는 부분은?",
+          options: [
+            { text: "감정적 거리감이나 소통 부족", score: "애정형" },
+            { text: "일상의 반복과 설렘의 감소", score: "열정형" },
+            { text: "신뢰 구축과 안정감 형성", score: "헌신형" },
+            { text: "개인 공간 침해와 자유 제한", score: "자유형" }
+          ]
+        },
+        {
+          question: "이별 후 당신의 대처 방식은?",
+          options: [
+            { text: "깊은 감정적 아픔을 느끼고 회복에 시간이 필요하다", score: "애정형" },
+            { text: "강한 감정적 반응 후 새로운 관계로 빠르게 나아간다", score: "열정형" },
+            { text: "이별의 원인을 분석하고 교훈을 얻으려 한다", score: "헌신형" },
+            { text: "자신의 독립성을 재확립하고 개인적 성장에 집중한다", score: "자유형" }
+          ]
+        }
+      ],
+      results: {
+        "애정형": {
+          title: "애정형 연애가",
+          description: "당신은 깊은 정서적 연결과 진정한 이해를 중요시하는 애정형 연애가입니다. 연인과의 관계에서 진심 어린 대화와 감정적 교감을 추구하며, 상대방의 감정을 세심하게 헤아리는 능력이 뛰어납니다. 사랑에 있어 안정적이고 따뜻한 관계를 형성하는 경향이 있으며, 연인에게 헌신적이고 지지적입니다. 때로는 감정에 너무 깊이 빠져 객관성을 잃거나 상대의 감정에 과도하게 영향을 받을 수 있지만, 당신의 공감 능력과 정서적 지지는 관계를 풍요롭게 만드는 큰 강점입니다."
+        },
+        "열정형": {
+          title: "열정형 연애가",
+          description: "당신은 흥미진진한 경험과 강렬한 감정을 추구하는 열정형 연애가입니다. 연애에서 설렘과 열정을 중요시하며, 적극적으로 감정을 표현하고 로맨틱한 순간을 만들어내는 데 능숙합니다. 새로운 경험에 대한 개방성과 자발성이 높아 연인과의 관계를 활기차게 유지합니다. 때로는 초기의 열정이 식으면 흥미를 잃거나 지루함을 느낄 수 있지만, 당신의 열정과 에너지는 관계에 생동감을 불어넣고 특별한 추억을 만드는 원동력이 됩니다."
+        },
+        "헌신형": {
+          title: "헌신형 연애가",
+          description: "당신은 신뢰와 안정을 중요시하는 헌신형 연애가입니다. 연인과의 관계에서 책임감과 일관성을 보여주며, 장기적인 관점에서 관계를 발전시키는 경향이 있습니다. 실질적인 지원과 안정적인 존재감으로 파트너에게 신뢰를 주며, 어려운 시기에도 흔들림 없이 곁을 지킵니다. 때로는 변화를 두려워하거나 지나치게 계획적인 모습을 보일 수 있지만, 당신의 신뢰성과 헌신은 견고하고 지속 가능한 관계의 기반이 됩니다."
+        },
+        "자유형": {
+          title: "자유형 연애가",
+          description: "당신은 개인의 독립성과 자유를 중요시하는 자유형 연애가입니다. 연인과의 관계에서도 각자의 공간과 자율성을 존중하며, 상대방에게 과도한 기대나 압박을 주지 않으려 합니다. 유연하고 개방적인 태도로 관계에 접근하며, 파트너의 독립성도 동등하게 중요하게 여깁니다. 때로는 정서적 거리감을 줄 수 있거나 헌신을 두려워하는 모습을 보일 수 있지만, 당신의 자유로운 정신과 개인 존중의 태도는 건강하고 균형 잡힌 관계를 형성하는 데 도움이 됩니다."
+        }
+      }
+    };
+    
+    // 변수 초기화
+    let currentQuestion = 0;
+    const answers = [];
+    
+    // DOM 요소
+    const questionContainer = document.getElementById('question-container');
+    const progressBar = document.getElementById('progress-bar');
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+    const resultContainer = document.getElementById('result-container');
+    const resultTitle = document.getElementById('result-title');
+    const resultDescription = document.getElementById('result-description');
+    const restartButton = document.getElementById('restart-button');
+    
+    // 질문 표시 함수
+    function showQuestion(questionIndex) {
+      // 현재 질문 가져오기
+      const question = loveStyleTest.questions[questionIndex];
+      
+      // 질문 컨테이너 비우기
+      questionContainer.innerHTML = '';
+      
+      // 질문 텍스트 추가
+      const questionElement = document.createElement('div');
+      questionElement.className = 'question';
+      questionElement.textContent = `${questionIndex + 1}. ${question.question}`;
+      questionContainer.appendChild(questionElement);
+      
+      // 선택지 컨테이너 추가
+      const optionsElement = document.createElement('div');
+      optionsElement.className = 'options';
+      
+      // 각 선택지 추가
+      question.options.forEach((option, index) => {
+        const optionElement = document.createElement('div');
+        optionElement.className = 'option';
+        if (answers[questionIndex] !== undefined && answers[questionIndex] === index) {
+          optionElement.classList.add('selected');
+        }
+        
+        const radioElement = document.createElement('div');
+        radioElement.className = 'option-radio';
+        
+        const textElement = document.createElement('div');
+        textElement.className = 'option-text';
+        textElement.textContent = option.text;
+        
+        optionElement.appendChild(radioElement);
+        optionElement.appendChild(textElement);
+        
+        // 선택지 클릭 이벤트
+        optionElement.addEventListener('click', () => {
+          // 이전 선택 제거
+          const selectedOptions = optionsElement.querySelectorAll('.option.selected');
+          selectedOptions.forEach(selected => {
+            selected.classList.remove('selected');
+          });
+          
+          // 현재 선택 추가
+          optionElement.classList.add('selected');
+          
+          // 답변 저장
+          answers[questionIndex] = index;
+          
+          // 다음 버튼 활성화
+          nextButton.disabled = false;
+        });
+        
+        optionsElement.appendChild(optionElement);
+      });
+      
+      questionContainer.appendChild(optionsElement);
+      
+      // 진행 상태 업데이트
+      updateProgress();
+      
+      // 버튼 상태 업데이트
+      updateButtons();
+    }
+    
+    // 진행 상태 업데이트 함수
+    function updateProgress() {
+      const progress = ((currentQuestion + 1) / loveStyleTest.questions.length) * 100;
+      progressBar.style.width = `${progress}%`;
+    }
+    
+    // 버튼 상태 업데이트 함수
+    function updateButtons() {
+      // 이전 버튼 상태
+      if (currentQuestion === 0) {
+        prevButton.style.visibility = 'hidden';
+      } else {
+        prevButton.style.visibility = 'visible';
+      }
+      
+      // 다음 버튼 상태
+      if (currentQuestion === loveStyleTest.questions.length - 1) {
+        nextButton.textContent = '결과 보기';
+      } else {
+        nextButton.textContent = '다음';
+      }
+      
+      // 다음 버튼 활성화 여부
+      nextButton.disabled = answers[currentQuestion] === undefined;
+    }
+    
+    // 결과 계산 함수
+    function calculateResult() {
+      const scores = {
+        "애정형": 0,
+        "열정형": 0,
+        "헌신형": 0,
+        "자유형": 0
+      };
+      
+      // 각 질문의 점수 합산
+      answers.forEach((answerIndex, questionIndex) => {
+        const question = loveStyleTest.questions[questionIndex];
+        const score = question.options[answerIndex].score;
+        scores[score]++;
+      });
+      
+      // 최고 점수 찾기
+      let maxScore = 0;
+      let result = "";
+      
+      for (const type in scores) {
+        if (scores[type] > maxScore) {
+          maxScore = scores[type];
+          result = type;
+        }
+      }
+      
+      return result;
+    }
+    
+    // 결과 표시 함수
+    function showResult() {
+      const result = calculateResult();
+      const resultData = loveStyleTest.results[result];
+      
+      resultTitle.textContent = resultData.title;
+      resultDescription.textContent = resultData.description;
+      
+      // 테스트 컨테이너 숨기기
+      document.querySelector('.test-container').style.display = 'none';
+      
+      // 결과 컨테이너 표시
+      resultContainer.style.display = 'block';
+    }
+    
+    // 결과 공유 함수
+    function shareResult() {
+      const result = calculateResult();
+      const resultData = loveStyleTest.results[result];
+      const shareText = `[RAMI TEACHER] 연애 성향 테스트 결과: ${resultData.title}\n\n테스트 해보기: ${window.location.href}`;
+      
+      if (navigator.share) {
+        navigator.share({
+          title: '연애 성향 테스트 결과',
+          text: shareText,
+          url: window.location.href
+        });
+      } else {
+        // 클립보드에 복사
+        navigator.clipboard.writeText(shareText)
+          .then(() => {
+            alert('결과가 클립보드에 복사되었습니다.');
+          })
+          .catch(err => {
+            console.error('클립보드 복사 실패:', err);
+            alert('결과 복사에 실패했습니다.');
+          });
+      }
+    }
+    
+    // 테스트 다시 시작 함수
+    function restartTest() {
+      // 변수 초기화
+      currentQuestion = 0;
+      answers.length = 0;
+      
+      // 테스트 컨테이너 표시
+      document.querySelector('.test-container').style.display = 'block';
+      
+      // 결과 컨테이너 숨기기
+      resultContainer.style.display = 'none';
+      
+      // 첫 번째 질문 표시
+      showQuestion(currentQuestion);
+    }
+    
+    // 이벤트 리스너
+    prevButton.addEventListener('click', () => {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        showQuestion(currentQuestion);
+      }
+    });
+    
+    nextButton.addEventListener('click', () => {
+      if (currentQuestion < loveStyleTest.questions.length - 1) {
+        currentQuestion++;
+        showQuestion(currentQuestion);
+      } else {
+        showResult();
+      }
+    });
+    
+    restartButton.addEventListener('click', restartTest);
+    
+    // 첫 번째 질문 표시
+    showQuestion(currentQuestion);
+  </script>
+</body>
+</html>

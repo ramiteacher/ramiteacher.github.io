@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>성격 유형 테스트 - RAMI TEACHER</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #5e72e4;
+      --primary-gradient: linear-gradient(135deg, #5e72e4 0%, #825ee4 100%);
+      --secondary-color: #fd5d93;
+      --accent-color: #11cdef;
+      --text-color: #525f7f;
+      --light-gray: #f8f9fe;
+      --white: #ffffff;
+      --shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+      --hover-shadow: 0 14px 26px rgba(50, 50, 93, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background: var(--light-gray);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .logo-container {
+      margin: 20px 0 40px;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .logo {
+      max-width: 120px;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+    
+    .logo:hover {
+      transform: scale(1.05);
+    }
+    
+    .test-container {
+      background: var(--white);
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+      margin-bottom: 30px;
+      text-align: left;
+    }
+    
+    .test-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .test-header h1 {
+      color: var(--primary-color);
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    
+    .test-header .icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+    
+    .test-header p {
+      color: var(--text-color);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .progress-container {
+      width: 100%;
+      height: 8px;
+      background: var(--light-gray);
+      border-radius: 4px;
+      margin: 20px 0 30px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: var(--primary-gradient);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    .question-container {
+      margin-bottom: 30px;
+    }
+    
+    .question {
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      color: #32325d;
+    }
+    
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .option {
+      padding: 15px 20px;
+      background: var(--white);
+      border: 1px solid #e9ecef;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+    
+    .option:hover {
+      background: #f6f9fc;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    .option.selected {
+      background: rgba(94, 114, 228, 0.1);
+      border-color: var(--primary-color);
+      box-shadow: var(--shadow);
+    }
+    
+    .option-radio {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #cbd5e0;
+      border-radius: 50%;
+      margin-right: 15px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    
+    .option.selected .option-radio {
+      border-color: var(--primary-color);
+    }
+    
+    .option.selected .option-radio::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .option-text {
+      font-size: 1rem;
+    }
+    
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    
+    .nav-button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .prev-button {
+      background: #e9ecef;
+      color: var(--text-color);
+    }
+    
+    .prev-button:hover {
+      background: #dee2e6;
+    }
+    
+    .next-button {
+      background: var(--primary-gradient);
+      color: var(--white);
+    }
+    
+    .next-button:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+    
+    .next-button:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .result-container {
+      display: none;
+      text-align: center;
+    }
+    
+    .result-header {
+      margin-bottom: 30px;
+    }
+    
+    .result-header h2 {
+      color: var(--primary-color);
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    
+    .result-content {
+      margin-bottom: 30px;
+    }
+    
+    .result-description {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 30px;
+      text-align: left;
+    }
+    
+    .share-container {
+      margin-top: 30px;
+    }
+    
+    .share-button {
+      padding: 10px 20px;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .share-button:hover {
+      background: #e9ecef;
+    }
+    
+    .restart-button {
+      padding: 12px 24px;
+      background: var(--primary-gradient);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 20px;
+    }
+    
+    .restart-button:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+    
+    .home-button {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #e9ecef;
+      color: var(--text-color);
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 20px;
+      transition: all 0.2s ease;
+    }
+    
+    .home-button:hover {
+      background: #dee2e6;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 15px;
+      }
+      
+      .test-header h1 {
+        font-size: 1.7rem;
+      }
+      
+      .question {
+        font-size: 1.1rem;
+      }
+      
+      .option {
+        padding: 12px 15px;
+      }
+      
+      .option-text {
+        font-size: 0.95rem;
+      }
+      
+      .nav-button {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-container">
+      <a href="/">
+        <img src="/assets/images/meee.png" alt="RAMI TEACHER" class="logo">
+      </a>
+    </div>
+    
+    <div class="test-container">
+      <div class="test-header">
+        <div class="icon">🎭</div>
+        <h1>성격 유형 테스트</h1>
+        <p>당신은 어떤 성격 유형인가요? 8개의 질문에 답하고 자신의 성격 유형을 알아보세요.</p>
+      </div>
+      
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+      </div>
+      
+      <div id="question-container" class="question-container">
+        <!-- 질문과 선택지는 JavaScript로 동적 생성됩니다 -->
+      </div>
+      
+      <div class="button-container">
+        <button id="prev-button" class="nav-button prev-button" style="visibility: hidden;">이전</button>
+        <button id="next-button" class="nav-button next-button" disabled>다음</button>
+      </div>
+    </div>
+    
+    <div id="result-container" class="result-container">
+      <div class="test-header">
+        <div class="icon">🎭</div>
+        <h1>성격 유형 테스트 결과</h1>
+      </div>
+      
+      <div class="test-container">
+        <div class="result-header">
+          <h2 id="result-title"></h2>
+        </div>
+        
+        <div class="result-content">
+          <p id="result-description" class="result-description"></p>
+        </div>
+        
+        <div class="share-container">
+          <button class="share-button" onclick="shareResult()">결과 공유하기</button>
+        </div>
+        
+        <div style="margin-top: 30px;">
+          <button id="restart-button" class="restart-button">테스트 다시하기</button>
+          <br>
+          <a href="/" class="home-button">홈으로 돌아가기</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 테스트 데이터
+    const personalityTest = {
+      title: "성격 유형 테스트",
+      description: "당신은 어떤 성격 유형인가요?",
+      icon: "🎭",
+      questions: [
+        {
+          question: "새로운 상황에서 당신은 어떻게 행동하나요?",
+          options: [
+            { text: "상황을 분석하고 관찰한다", score: "분석가" },
+            { text: "다른 사람들과 어울리려고 노력한다", score: "외교관" },
+            { text: "직관에 따라 행동한다", score: "탐험가" },
+            { text: "계획을 세우고 체계적으로 접근한다", score: "관리자" }
+          ]
+        },
+        {
+          question: "문제가 생겼을 때 당신의 접근 방식은?",
+          options: [
+            { text: "논리적으로 분석하고 해결책을 찾는다", score: "분석가" },
+            { text: "다른 사람들의 감정을 고려하며 해결책을 모색한다", score: "외교관" },
+            { text: "창의적인 방법으로 문제를 해결한다", score: "탐험가" },
+            { text: "체계적으로 단계별 해결책을 찾는다", score: "관리자" }
+          ]
+        },
+        {
+          question: "여가 시간에 당신은 주로 무엇을 하나요?",
+          options: [
+            { text: "새로운 지식을 습득하거나 깊이 생각한다", score: "분석가" },
+            { text: "친구들과 시간을 보내거나 사람들을 돕는다", score: "외교관" },
+            { text: "새로운 경험을 하거나 모험을 즐긴다", score: "탐험가" },
+            { text: "집안일을 정리하거나 미래를 계획한다", score: "관리자" }
+          ]
+        },
+        {
+          question: "당신이 가장 중요하게 생각하는 가치는?",
+          options: [
+            { text: "지식과 진실", score: "분석가" },
+            { text: "조화와 공감", score: "외교관" },
+            { text: "자유와 다양성", score: "탐험가" },
+            { text: "안정과 질서", score: "관리자" }
+          ]
+        },
+        {
+          question: "팀 프로젝트에서 당신의 역할은?",
+          options: [
+            { text: "아이디어를 제공하고 전략을 세운다", score: "분석가" },
+            { text: "팀원들을 격려하고 조화를 이룬다", score: "외교관" },
+            { text: "창의적인 해결책을 제시하고 적응한다", score: "탐험가" },
+            { text: "일정을 관리하고 목표를 달성한다", score: "관리자" }
+          ]
+        },
+        {
+          question: "의사결정을 할 때 당신은 주로?",
+          options: [
+            { text: "객관적인 사실과 데이터를 중시한다", score: "분석가" },
+            { text: "사람들에게 미치는 영향을 고려한다", score: "외교관" },
+            { text: "직관과 경험에 의존한다", score: "탐험가" },
+            { text: "규칙과 원칙에 따라 결정한다", score: "관리자" }
+          ]
+        },
+        {
+          question: "스트레스를 받을 때 당신은?",
+          options: [
+            { text: "혼자 있으면서 생각을 정리한다", score: "분석가" },
+            { text: "친한 사람들과 대화하며 감정을 나눈다", score: "외교관" },
+            { text: "활동적인 일을 하거나 환경을 바꾼다", score: "탐험가" },
+            { text: "문제를 목록화하고 하나씩 해결한다", score: "관리자" }
+          ]
+        },
+        {
+          question: "당신이 선호하는 업무 환경은?",
+          options: [
+            { text: "지적 도전이 있는 독립적인 환경", score: "분석가" },
+            { text: "협력적이고 조화로운 환경", score: "외교관" },
+            { text: "유연하고 창의적인 환경", score: "탐험가" },
+            { text: "구조화되고 안정적인 환경", score: "관리자" }
+          ]
+        }
+      ],
+      results: {
+        "분석가": {
+          title: "분석가형",
+          description: "당신은 논리적이고 전략적인 사고를 가진 분석가형입니다. 복잡한 문제를 해결하는 것을 좋아하며, 지식과 통찰력이 풍부합니다. 객관적인 판단을 중요시하고, 독립적으로 일하는 것을 선호합니다. 새로운 아이디어와 이론에 관심이 많으며, 깊이 있는 대화를 즐깁니다."
+        },
+        "외교관": {
+          title: "외교관형",
+          description: "당신은 공감 능력이 뛰어나고 사람들과의 관계를 중요시하는 외교관형입니다. 다른 사람의 감정을 잘 이해하고, 조화로운 환경을 만드는 데 탁월합니다. 이타적이고 협력적인 성향을 가지고 있으며, 사람들을 돕는 일에서 보람을 느낍니다. 진정성 있는 관계를 추구하고, 갈등 해결에 능숙합니다."
+        },
+        "탐험가": {
+          title: "탐험가형",
+          description: "당신은 자유롭고 창의적인 탐험가형입니다. 새로운 경험과 모험을 추구하며, 변화에 빠르게 적응합니다. 실용적이고 즉흥적인 문제 해결 능력이 뛰어나며, 현재에 충실하게 살아갑니다. 다양성을 존중하고, 유연한 사고방식을 가지고 있습니다. 호기심이 많고 예술적 감각이 뛰어납니다."
+        },
+        "관리자": {
+          title: "관리자형",
+          description: "당신은 책임감이 강하고 체계적인 관리자형입니다. 계획을 세우고 목표를 달성하는 데 탁월하며, 안정과 질서를 중요시합니다. 신뢰할 수 있고 성실한 성격으로, 맡은 일을 끝까지 해내는 강한 의지가 있습니다. 전통과 규칙을 존중하며, 실용적이고 현실적인 접근 방식을 선호합니다."
+        }
+      }
+    };
+    
+    // 변수 초기화
+    let currentQuestion = 0;
+    const answers = [];
+    
+    // DOM 요소
+    const questionContainer = document.getElementById('question-container');
+    const progressBar = document.getElementById('progress-bar');
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+    const resultContainer = document.getElementById('result-container');
+    const resultTitle = document.getElementById('result-title');
+    const resultDescription = document.getElementById('result-description');
+    const restartButton = document.getElementById('restart-button');
+    
+    // 질문 표시 함수
+    function showQuestion(questionIndex) {
+      // 현재 질문 가져오기
+      const question = personalityTest.questions[questionIndex];
+      
+      // 질문 컨테이너 비우기
+      questionContainer.innerHTML = '';
+      
+      // 질문 텍스트 추가
+      const questionElement = document.createElement('div');
+      questionElement.className = 'question';
+      questionElement.textContent = `${questionIndex + 1}. ${question.question}`;
+      questionContainer.appendChild(questionElement);
+      
+      // 선택지 컨테이너 추가
+      const optionsElement = document.createElement('div');
+      optionsElement.className = 'options';
+      
+      // 각 선택지 추가
+      question.options.forEach((option, index) => {
+        const optionElement = document.createElement('div');
+        optionElement.className = 'option';
+        if (answers[questionIndex] !== undefined && answers[questionIndex] === index) {
+          optionElement.classList.add('selected');
+        }
+        
+        const radioElement = document.createElement('div');
+        radioElement.className = 'option-radio';
+        
+        const textElement = document.createElement('div');
+        textElement.className = 'option-text';
+        textElement.textContent = option.text;
+        
+        optionElement.appendChild(radioElement);
+        optionElement.appendChild(textElement);
+        
+        // 선택지 클릭 이벤트
+        optionElement.addEventListener('click', () => {
+          // 이전 선택 제거
+          const selectedOptions = optionsElement.querySelectorAll('.option.selected');
+          selectedOptions.forEach(selected => {
+            selected.classList.remove('selected');
+          });
+          
+          // 현재 선택 추가
+          optionElement.classList.add('selected');
+          
+          // 답변 저장
+          answers[questionIndex] = index;
+          
+          // 다음 버튼 활성화
+          nextButton.disabled = false;
+        });
+        
+        optionsElement.appendChild(optionElement);
+      });
+      
+      questionContainer.appendChild(optionsElement);
+      
+      // 진행 상태 업데이트
+      updateProgress();
+      
+      // 버튼 상태 업데이트
+      updateButtons();
+    }
+    
+    // 진행 상태 업데이트 함수
+    function updateProgress() {
+      const progress = ((currentQuestion + 1) / personalityTest.questions.length) * 100;
+      progressBar.style.width = `${progress}%`;
+    }
+    
+    // 버튼 상태 업데이트 함수
+    function updateButtons() {
+      // 이전 버튼 상태
+      if (currentQuestion === 0) {
+        prevButton.style.visibility = 'hidden';
+      } else {
+        prevButton.style.visibility = 'visible';
+      }
+      
+      // 다음 버튼 상태
+      if (currentQuestion === personalityTest.questions.length - 1) {
+        nextButton.textContent = '결과 보기';
+      } else {
+        nextButton.textContent = '다음';
+      }
+      
+      // 다음 버튼 활성화 여부
+      nextButton.disabled = answers[currentQuestion] === undefined;
+    }
+    
+    // 결과 계산 함수
+    function calculateResult() {
+      const scores = {
+        "분석가": 0,
+        "외교관": 0,
+        "탐험가": 0,
+        "관리자": 0
+      };
+      
+      // 각 질문의 점수 합산
+      answers.forEach((answerIndex, questionIndex) => {
+        const question = personalityTest.questions[questionIndex];
+        const score = question.options[answerIndex].score;
+        scores[score]++;
+      });
+      
+      // 최고 점수 찾기
+      let maxScore = 0;
+      let result = "";
+      
+      for (const type in scores) {
+        if (scores[type] > maxScore) {
+          maxScore = scores[type];
+          result = type;
+        }
+      }
+      
+      return result;
+    }
+    
+    // 결과 표시 함수
+    function showResult() {
+      const result = calculateResult();
+      const resultData = personalityTest.results[result];
+      
+      resultTitle.textContent = resultData.title;
+      resultDescription.textContent = resultData.description;
+      
+      // 테스트 컨테이너 숨기기
+      document.querySelector('.test-container').style.display = 'none';
+      
+      // 결과 컨테이너 표시
+      resultContainer.style.display = 'block';
+    }
+    
+    // 결과 공유 함수
+    function shareResult() {
+      const result = calculateResult();
+      const resultData = personalityTest.results[result];
+      const shareText = `[RAMI TEACHER] 성격 유형 테스트 결과: ${resultData.title}\n\n테스트 해보기: ${window.location.href}`;
+      
+      if (navigator.share) {
+        navigator.share({
+          title: '성격 유형 테스트 결과',
+          text: shareText,
+          url: window.location.href
+        });
+      } else {
+        // 클립보드에 복사
+        navigator.clipboard.writeText(shareText)
+          .then(() => {
+            alert('결과가 클립보드에 복사되었습니다.');
+          })
+          .catch(err => {
+            console.error('클립보드 복사 실패:', err);
+            alert('결과 복사에 실패했습니다.');
+          });
+      }
+    }
+    
+    // 테스트 다시 시작 함수
+    function restartTest() {
+      // 변수 초기화
+      currentQuestion = 0;
+      answers.length = 0;
+      
+      // 테스트 컨테이너 표시
+      document.querySelector('.test-container').style.display = 'block';
+      
+      // 결과 컨테이너 숨기기
+      resultContainer.style.display = 'none';
+      
+      // 첫 번째 질문 표시
+      showQuestion(currentQuestion);
+    }
+    
+    // 이벤트 리스너
+    prevButton.addEventListener('click', () => {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        showQuestion(currentQuestion);
+      }
+    });
+    
+    nextButton.addEventListener('click', () => {
+      if (currentQuestion < personalityTest.questions.length - 1) {
+        currentQuestion++;
+        showQuestion(currentQuestion);
+      } else {
+        showResult();
+      }
+    });
+    
+    restartButton.addEventListener('click', restartTest);
+    
+    // 첫 번째 질문 표시
+    showQuestion(currentQuestion);
+  </script>
+</body>
+</html>

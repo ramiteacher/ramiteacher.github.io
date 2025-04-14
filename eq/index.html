@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>감정 지능 테스트 - RAMI TEACHER</title>
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #5e72e4;
+      --primary-gradient: linear-gradient(135deg, #5e72e4 0%, #825ee4 100%);
+      --secondary-color: #fd5d93;
+      --accent-color: #11cdef;
+      --text-color: #525f7f;
+      --light-gray: #f8f9fe;
+      --white: #ffffff;
+      --shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+      --hover-shadow: 0 14px 26px rgba(50, 50, 93, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background: var(--light-gray);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .logo-container {
+      margin: 20px 0 40px;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .logo {
+      max-width: 120px;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+    
+    .logo:hover {
+      transform: scale(1.05);
+    }
+    
+    .test-container {
+      background: var(--white);
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+      margin-bottom: 30px;
+      text-align: left;
+    }
+    
+    .test-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .test-header h1 {
+      color: var(--primary-color);
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    
+    .test-header .icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+    
+    .test-header p {
+      color: var(--text-color);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .progress-container {
+      width: 100%;
+      height: 8px;
+      background: var(--light-gray);
+      border-radius: 4px;
+      margin: 20px 0 30px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: var(--primary-gradient);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    
+    .question-container {
+      margin-bottom: 30px;
+    }
+    
+    .question {
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      color: #32325d;
+    }
+    
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .option {
+      padding: 15px 20px;
+      background: var(--white);
+      border: 1px solid #e9ecef;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+    
+    .option:hover {
+      background: #f6f9fc;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    .option.selected {
+      background: rgba(94, 114, 228, 0.1);
+      border-color: var(--primary-color);
+      box-shadow: var(--shadow);
+    }
+    
+    .option-radio {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #cbd5e0;
+      border-radius: 50%;
+      margin-right: 15px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    
+    .option.selected .option-radio {
+      border-color: var(--primary-color);
+    }
+    
+    .option.selected .option-radio::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .option-text {
+      font-size: 1rem;
+    }
+    
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    
+    .nav-button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .prev-button {
+      background: #e9ecef;
+      color: var(--text-color);
+    }
+    
+    .prev-button:hover {
+      background: #dee2e6;
+    }
+    
+    .next-button {
+      background: var(--primary-gradient);
+      color: var(--white);
+    }
+    
+    .next-button:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+    
+    .next-button:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .result-container {
+      display: none;
+      text-align: center;
+    }
+    
+    .result-header {
+      margin-bottom: 30px;
+    }
+    
+    .result-header h2 {
+      color: var(--primary-color);
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    
+    .result-content {
+      margin-bottom: 30px;
+    }
+    
+    .result-description {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 30px;
+      text-align: left;
+    }
+    
+    .share-container {
+      margin-top: 30px;
+    }
+    
+    .share-button {
+      padding: 10px 20px;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin: 0 5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .share-button:hover {
+      background: #e9ecef;
+    }
+    
+    .restart-button {
+      padding: 12px 24px;
+      background: var(--primary-gradient);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 20px;
+    }
+    
+    .restart-button:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+    }
+    
+    .home-button {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #e9ecef;
+      color: var(--text-color);
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 20px;
+      transition: all 0.2s ease;
+    }
+    
+    .home-button:hover {
+      background: #dee2e6;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 15px;
+      }
+      
+      .test-header h1 {
+        font-size: 1.7rem;
+      }
+      
+      .question {
+        font-size: 1.1rem;
+      }
+      
+      .option {
+        padding: 12px 15px;
+      }
+      
+      .option-text {
+        font-size: 0.95rem;
+      }
+      
+      .nav-button {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-container">
+      <a href="/">
+        <img src="/assets/images/meee.png" alt="RAMI TEACHER" class="logo">
+      </a>
+    </div>
+    
+    <div class="test-container">
+      <div class="test-header">
+        <div class="icon">🧐</div>
+        <h1>감정 지능 테스트</h1>
+        <p>당신의 감정 지능 수준은? 10개의 질문에 답하고 자신의 감정 지능을 알아보세요.</p>
+      </div>
+      
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+      </div>
+      
+      <div id="question-container" class="question-container">
+        <!-- 질문과 선택지는 JavaScript로 동적 생성됩니다 -->
+      </div>
+      
+      <div class="button-container">
+        <button id="prev-button" class="nav-button prev-button" style="visibility: hidden;">이전</button>
+        <button id="next-button" class="nav-button next-button" disabled>다음</button>
+      </div>
+    </div>
+    
+    <div id="result-container" class="result-container">
+      <div class="test-header">
+        <div class="icon">🧐</div>
+        <h1>감정 지능 테스트 결과</h1>
+      </div>
+      
+      <div class="test-container">
+        <div class="result-header">
+          <h2 id="result-title"></h2>
+        </div>
+        
+        <div class="result-content">
+          <p id="result-description" class="result-description"></p>
+        </div>
+        
+        <div class="share-container">
+          <button class="share-button" onclick="shareResult()">결과 공유하기</button>
+        </div>
+        
+        <div style="margin-top: 30px;">
+          <button id="restart-button" class="restart-button">테스트 다시하기</button>
+          <br>
+          <a href="/" class="home-button">홈으로 돌아가기</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 테스트 데이터
+    const emotionalIntelligenceTest = {
+      title: "감정 지능 테스트",
+      description: "당신의 감정 지능 수준은?",
+      icon: "🧐",
+      questions: [
+        {
+          question: "자신의 감정을 얼마나 잘 인식하나요?",
+          options: [
+            { text: "거의 인식하지 못한다", score: 1 },
+            { text: "가끔 인식한다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "대체로 잘 인식한다", score: 4 },
+            { text: "매우 잘 인식한다", score: 5 }
+          ]
+        },
+        {
+          question: "화가 났을 때 감정을 조절하는 능력은 어떤가요?",
+          options: [
+            { text: "매우 어렵다", score: 1 },
+            { text: "어려운 편이다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "잘하는 편이다", score: 4 },
+            { text: "매우 잘한다", score: 5 }
+          ]
+        },
+        {
+          question: "스트레스 상황에서도 목표에 집중할 수 있나요?",
+          options: [
+            { text: "거의 불가능하다", score: 1 },
+            { text: "어려운 편이다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "대체로 가능하다", score: 4 },
+            { text: "매우 잘 할 수 있다", score: 5 }
+          ]
+        },
+        {
+          question: "다른 사람의 감정을 얼마나 잘 이해하나요?",
+          options: [
+            { text: "거의 이해하지 못한다", score: 1 },
+            { text: "약간 이해한다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "잘 이해하는 편이다", score: 4 },
+            { text: "매우 잘 이해한다", score: 5 }
+          ]
+        },
+        {
+          question: "다른 사람의 관점에서 상황을 바라볼 수 있나요?",
+          options: [
+            { text: "매우 어렵다", score: 1 },
+            { text: "어려운 편이다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "잘하는 편이다", score: 4 },
+            { text: "매우 잘한다", score: 5 }
+          ]
+        },
+        {
+          question: "갈등 상황에서 다른 사람의 감정을 고려하나요?",
+          options: [
+            { text: "거의 고려하지 않는다", score: 1 },
+            { text: "가끔 고려한다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "자주 고려한다", score: 4 },
+            { text: "항상 고려한다", score: 5 }
+          ]
+        },
+        {
+          question: "대인관계에서 감정적 신호를 얼마나 잘 포착하나요?",
+          options: [
+            { text: "거의 포착하지 못한다", score: 1 },
+            { text: "가끔 포착한다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "잘 포착하는 편이다", score: 4 },
+            { text: "매우 잘 포착한다", score: 5 }
+          ]
+        },
+        {
+          question: "다른 사람에게 영향을 미치는 능력은 어떤가요?",
+          options: [
+            { text: "매우 약하다", score: 1 },
+            { text: "약한 편이다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "강한 편이다", score: 4 },
+            { text: "매우 강하다", score: 5 }
+          ]
+        },
+        {
+          question: "팀 내에서 협력과 조화를 이끌어내는 능력은 어떤가요?",
+          options: [
+            { text: "매우 부족하다", score: 1 },
+            { text: "부족한 편이다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "뛰어난 편이다", score: 4 },
+            { text: "매우 뛰어나다", score: 5 }
+          ]
+        },
+        {
+          question: "감정적 피드백을 받아들이고 성장하는 능력은 어떤가요?",
+          options: [
+            { text: "매우 어렵다", score: 1 },
+            { text: "어려운 편이다", score: 2 },
+            { text: "보통이다", score: 3 },
+            { text: "잘하는 편이다", score: 4 },
+            { text: "매우 잘한다", score: 5 }
+          ]
+        }
+      ],
+      results: [
+        {
+          range: [10, 20],
+          title: "감정 지능 개발 단계",
+          description: "당신의 감정 지능은 개발 단계에 있습니다. 자신과 타인의 감정을 인식하고 이해하는 데 어려움을 느낄 수 있으며, 감정 조절에 있어서도 개선의 여지가 있습니다. 감정 지능을 향상시키기 위해 자기 인식 연습, 감정 일기 쓰기, 적극적 경청 훈련 등을 시도해보세요. 또한 명상이나 마음챙김 연습이 감정 조절 능력을 향상시키는 데 도움이 될 수 있습니다."
+        },
+        {
+          range: [21, 30],
+          title: "감정 지능 성장 단계",
+          description: "당신의 감정 지능은 성장 단계에 있습니다. 기본적인 감정 인식과 이해 능력을 갖추고 있지만, 스트레스 상황이나 갈등 상황에서는 이러한 능력을 일관되게 발휘하기 어려울 수 있습니다. 감정 지능을 더욱 발전시키기 위해 다양한 상황에서의 감정 인식 연습, 공감 능력 향상을 위한 다양한 관점 취하기, 감정 조절 전략 개발 등에 집중해보세요."
+        },
+        {
+          range: [31, 40],
+          title: "균형 잡힌 감정 지능",
+          description: "당신은 균형 잡힌 감정 지능을 가지고 있습니다. 자신과 타인의 감정을 대체로 잘 인식하고 이해하며, 대부분의 상황에서 감정을 적절히 조절할 수 있습니다. 대인관계에서도 감정적 신호를 포착하고 공감하는 능력이 있습니다. 더 높은 수준의 감정 지능을 위해 복잡한 감정적 상황에서의 대처 능력을 향상시키고, 리더십 상황에서 감정 지능을 활용하는 방법을 연습해보세요."
+        },
+        {
+          range: [41, 45],
+          title: "발달된 감정 지능",
+          description: "당신은 발달된 감정 지능을 가지고 있습니다. 자신과 타인의 감정을 명확히 인식하고 깊이 이해하며, 다양한 상황에서 감정을 효과적으로 조절할 수 있습니다. 대인관계에서 뛰어난 공감 능력을 발휘하고, 갈등 상황에서도 감정적 균형을 유지할 수 있습니다. 이러한 능력을 더욱 발전시키기 위해 다양한 문화적 맥락에서의 감정 이해, 복잡한 조직 환경에서의 감정 지능 활용 등에 도전해보세요."
+        },
+        {
+          range: [46, 50],
+          title: "탁월한 감정 지능",
+          description: "당신은 탁월한 수준의 감정 지능을 가지고 있습니다. 자신과 타인의 감정을 매우 정확하게 인식하고 깊이 이해하며, 어떤 상황에서도 감정을 효과적으로 조절할 수 있습니다. 대인관계에서 뛰어난 공감 능력과 영향력을 발휘하고, 팀이나 조직 내에서 감정적 조화를 이끌어내는 능력이 탁월합니다. 이러한 능력을 활용하여 다른 사람들의 감정 지능 발달을 돕고, 조직이나 커뮤니티의 감정적 문화를 긍정적으로 변화시키는 역할을 할 수 있습니다."
+        }
+      ]
+    };
+    
+    // 변수 초기화
+    let currentQuestion = 0;
+    const answers = [];
+    
+    // DOM 요소
+    const questionContainer = document.getElementById('question-container');
+    const progressBar = document.getElementById('progress-bar');
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+    const resultContainer = document.getElementById('result-container');
+    const resultTitle = document.getElementById('result-title');
+    const resultDescription = document.getElementById('result-description');
+    const restartButton = document.getElementById('restart-button');
+    
+    // 질문 표시 함수
+    function showQuestion(questionIndex) {
+      // 현재 질문 가져오기
+      const question = emotionalIntelligenceTest.questions[questionIndex];
+      
+      // 질문 컨테이너 비우기
+      questionContainer.innerHTML = '';
+      
+      // 질문 텍스트 추가
+      const questionElement = document.createElement('div');
+      questionElement.className = 'question';
+      questionElement.textContent = `${questionIndex + 1}. ${question.question}`;
+      questionContainer.appendChild(questionElement);
+      
+      // 선택지 컨테이너 추가
+      const optionsElement = document.createElement('div');
+      optionsElement.className = 'options';
+      
+      // 각 선택지 추가
+      question.options.forEach((option, index) => {
+        const optionElement = document.createElement('div');
+        optionElement.className = 'option';
+        if (answers[questionIndex] !== undefined && answers[questionIndex] === index) {
+          optionElement.classList.add('selected');
+        }
+        
+        const radioElement = document.createElement('div');
+        radioElement.className = 'option-radio';
+        
+        const textElement = document.createElement('div');
+        textElement.className = 'option-text';
+        textElement.textContent = option.text;
+        
+        optionElement.appendChild(radioElement);
+        optionElement.appendChild(textElement);
+        
+        // 선택지 클릭 이벤트
+        optionElement.addEventListener('click', () => {
+          // 이전 선택 제거
+          const selectedOptions = optionsElement.querySelectorAll('.option.selected');
+          selectedOptions.forEach(selected => {
+            selected.classList.remove('selected');
+          });
+          
+          // 현재 선택 추가
+          optionElement.classList.add('selected');
+          
+          // 답변 저장
+          answers[questionIndex] = index;
+          
+          // 다음 버튼 활성화
+          nextButton.disabled = false;
+        });
+        
+        optionsElement.appendChild(optionElement);
+      });
+      
+      questionContainer.appendChild(optionsElement);
+      
+      // 진행 상태 업데이트
+      updateProgress();
+      
+      // 버튼 상태 업데이트
+      updateButtons();
+    }
+    
+    // 진행 상태 업데이트 함수
+    function updateProgress() {
+      const progress = ((currentQuestion + 1) / emotionalIntelligenceTest.questions.length) * 100;
+      progressBar.style.width = `${progress}%`;
+    }
+    
+    // 버튼 상태 업데이트 함수
+    function updateButtons() {
+      // 이전 버튼 상태
+      if (currentQuestion === 0) {
+        prevButton.style.visibility = 'hidden';
+      } else {
+        prevButton.style.visibility = 'visible';
+      }
+      
+      // 다음 버튼 상태
+      if (currentQuestion === emotionalIntelligenceTest.questions.length - 1) {
+        nextButton.textContent = '결과 보기';
+      } else {
+        nextButton.textContent = '다음';
+      }
+      
+      // 다음 버튼 활성화 여부
+      nextButton.disabled = answers[currentQuestion] === undefined;
+    }
+    
+    // 결과 계산 함수
+    function calculateResult() {
+      let totalScore = 0;
+      
+      // 각 질문의 점수 합산
+      answers.forEach((answerIndex, questionIndex) => {
+        const question = emotionalIntelligenceTest.questions[questionIndex];
+        totalScore += question.options[answerIndex].score;
+      });
+      
+      // 결과 찾기
+      for (const result of emotionalIntelligenceTest.results) {
+        if (totalScore >= result.range[0] && totalScore <= result.range[1]) {
+          return {
+            title: result.title,
+            description: result.description,
+            score: totalScore
+          };
+        }
+      }
+    }
+    
+    // 결과 표시 함수
+    function showResult() {
+      const result = calculateResult();
+      
+      resultTitle.textContent = result.title;
+      resultDescription.textContent = result.description;
+      
+      // 테스트 컨테이너 숨기기
+      document.querySelector('.test-container').style.display = 'none';
+      
+      // 결과 컨테이너 표시
+      resultContainer.style.display = 'block';
+    }
+    
+    // 결과 공유 함수
+    function shareResult() {
+      const result = calculateResult();
+      const shareText = `[RAMI TEACHER] 감정 지능 테스트 결과: ${result.title}\n\n테스트 해보기: ${window.location.href}`;
+      
+      if (navigator.share) {
+        navigator.share({
+          title: '감정 지능 테스트 결과',
+          text: shareText,
+          url: window.location.href
+        });
+      } else {
+        // 클립보드에 복사
+        navigator.clipboard.writeText(shareText)
+          .then(() => {
+            alert('결과가 클립보드에 복사되었습니다.');
+          })
+          .catch(err => {
+            console.error('클립보드 복사 실패:', err);
+            alert('결과 복사에 실패했습니다.');
+          });
+      }
+    }
+    
+    // 테스트 다시 시작 함수
+    function restartTest() {
+      // 변수 초기화
+      currentQuestion = 0;
+      answers.length = 0;
+      
+      // 테스트 컨테이너 표시
+      document.querySelector('.test-container').style.display = 'block';
+      
+      // 결과 컨테이너 숨기기
+      resultContainer.style.display = 'none';
+      
+      // 첫 번째 질문 표시
+      showQuestion(currentQuestion);
+    }
+    
+    // 이벤트 리스너
+    prevButton.addEventListener('click', () => {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        showQuestion(currentQuestion);
+      }
+    });
+    
+    nextButton.addEventListener('click', () => {
+      if (currentQuestion < emotionalIntelligenceTest.questions.length - 1) {
+        currentQuestion++;
+        showQuestion(currentQuestion);
+      } else {
+        showResult();
+      }
+    });
+    
+    restartButton.addEventListener('click', restartTest);
+    
+    // 첫 번째 질문 표시
+    showQuestion(currentQuestion);
+  </script>
+</body>
+</html>
