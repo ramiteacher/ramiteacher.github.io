@@ -90,4 +90,46 @@
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
+  <!-- 스트레스 지수 테스트 -->
+  <url>
+    <loc>https://ramiteacher.github.io/stress/</loc>
+    <lastmod>2025-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- 성격유형 테스트 -->
+  <url>
+    <loc>https://ramiteacher.github.io/personality/</loc>
+    <lastmod>2025-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- 연애성향 테스트 -->
+  <url>
+    <loc>https://ramiteacher.github.io/love/</loc>
+    <lastmod>2025-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- 직업 적성 테스트 -->
+  <url>
+    <loc>https://ramiteacher.github.io/career/</loc>
+    <lastmod>2025-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- 감정 지능 테스트 -->
+  <url>
+    <loc>https://ramiteacher.github.io/eq/</loc>
+    <lastmod>2025-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- 사회성 테스트 -->
+  <url>
+    <loc>https://ramiteacher.github.io/social/</loc>
+    <lastmod>2025-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
 </urlset>
