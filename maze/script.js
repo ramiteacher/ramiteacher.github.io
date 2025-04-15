@@ -96,7 +96,10 @@ function setupGameUI() {
     gameContainer.className = 'game-container';
     gameContainer.innerHTML = `
         <div class="game-header">
-            <h2 class="game-title">${pageTitle}</h2>
+            <div class="control-row">
+                <button class="btn btn-secondary round-btn" id="reset-maze" style="font-size: 24px;">🔄</button>
+                <a href="../" class="btn btn-secondary round-btn" style="font-size: 24px;">🏠</a>
+            </div>
             <div class="game-info">
                 <div class="info-item">
                     <span class="info-label">시간</span>
@@ -125,12 +128,25 @@ function setupGameUI() {
                 <button class="control-btn" data-direction="down">↓</button>
                 <button class="control-btn" data-direction="right">→</button>
             </div>
-            <div class="control-row" style="margin-top: 20px;">
-                <button class="btn btn-secondary" id="reset-maze">다시 시작</button>
-                <a href="../" class="btn btn-secondary">홈으로</a>
-            </div>
+            
         </div>
     `;
+
+    // Add CSS for round buttons
+    const style = document.createElement('style');
+    style.textContent = `
+        .round-btn {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            padding: 0;
+        }
+    `;
+    document.head.appendChild(style);
     
     document.body.appendChild(gameContainer);
     

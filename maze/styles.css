@@ -36,11 +36,11 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin: 30px 0 20px 0; /* 상단 마진 30px로 조정 */
+    margin: 50px 0 0 0; /* 상단 마진 30px로 조정 */
 }
 
 .logo {
-    max-height: 80px;
+    max-height: 140px;
     transition: transform 0.3s ease;
 }
 
@@ -88,7 +88,7 @@ nav li.active a {
 
 /* 메인 섹션 */
 main {
-    padding: 40px 0;
+    padding: 0 0;
 }
 
 .hero {
@@ -265,7 +265,11 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 0px;
+    padding: 2px;
+    background-color: rgba(94, 114, 228, 0.1); /* 푸르스름한 투명한 배경 */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .game-title {
@@ -350,15 +354,15 @@ footer {
     display: none; /* 기본적으로 숨김, 모바일에서만 표시 */
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 0px;
     gap: 15px;
     position: fixed;
-    bottom: 10px;
+    bottom: 17px;
     left: 0;
     right: 0;
     padding: 15px 10px;
-    background-color: rgba(255, 255, 255, 0.95); /* 배경색 밝게 변경 */
-    border-top: 2px solid #cbd5e0; /* 테두리 추가 */
+    background-color: rgba(255, 255, 255, 0); /* 배경색 밝게 변경 */
+
     border-radius: 15px 15px 0 0;
     z-index: 10;
     box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
@@ -375,7 +379,7 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #5e72e4; /* 버튼 색상 변경 */
+    background-color: #8395fd6f; /* 버튼 색상 변경 */
     border: none;
     border-radius: 15px;
     color: #ffffff; /* 흰색 텍스트로 변경 */
@@ -389,7 +393,7 @@ footer {
 }
 
 .control-btn:hover, .control-btn:active {
-    background-color: #4a5dd0; /* 호버 시 약간 어두운 색상 */
+    background-color: #7bccf156; /* 호버 시 약간 어두운 색상 */
     transform: translateY(-2px);
 }
 
@@ -464,7 +468,7 @@ footer {
     display: flex;
     justify-content: center;
     gap: 15px;
-    margin-top: 20px;
+    margin-top: 3px;
 }
 
 .btn {
@@ -548,7 +552,7 @@ footer {
 
     .controls {
         display: flex;
-        padding-bottom: 30px;
+        padding-bottom: 5px;
     }
     
     .game-container {
@@ -559,6 +563,7 @@ footer {
     .game-header {
         flex-direction: column;
         align-items: center;
+        margin-bottom: 0;
     }
     
     .game-info {
