@@ -113,7 +113,6 @@ function setupGameUI() {
                     <span class="info-label">연승</span>
                     <span class="info-value" id="streak">0</span>
                 </div>
-                
             </div>
         </div>
         
@@ -128,9 +127,29 @@ function setupGameUI() {
                 <button class="control-btn" data-direction="down">↓</button>
                 <button class="control-btn" data-direction="right">→</button>
             </div>
-            
         </div>
     `;
+    
+    if (!isMobile) {
+        const pcControlsInfo = document.createElement('div');
+        pcControlsInfo.className = 'pc-controls-info';
+        pcControlsInfo.textContent = '💻 조작법: 방향키를 사용하세요!';
+        pcControlsInfo.style.fontSize = '24px';
+        pcControlsInfo.style.fontWeight = 'bold';
+        pcControlsInfo.style.color = '#333';
+        pcControlsInfo.style.textAlign = 'center';
+        pcControlsInfo.style.marginTop = '20px';
+        pcControlsInfo.style.padding = '10px';
+        pcControlsInfo.style.border = '2px solid #555';
+        pcControlsInfo.style.borderRadius = '10px';
+        pcControlsInfo.style.backgroundColor = '#f9f9f9';
+        gameContainer.appendChild(pcControlsInfo);
+    } else {
+        const existingInfo = document.querySelector('.pc-controls-info');
+        if (existingInfo) {
+            existingInfo.remove();
+        }
+    }
 
     // Add CSS for round buttons
     const style = document.createElement('style');

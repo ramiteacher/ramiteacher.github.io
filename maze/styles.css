@@ -210,22 +210,22 @@ main {
 /* 스몰 - 작은 크기 사각형 */
 .option-button:nth-child(1):before {
     background: var(--primary);
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
 }
 
 /* 빅 - 중간 크기 사각형 */
 .option-button:nth-child(2):before {
     background: var(--primary);
-    width: 40px;
-    height: 40px;
+    width: 55px;
+    height: 55px;
 }
 
 /* 메가 - 큰 크기 사각형 */
 .option-button:nth-child(3):before {
     background: var(--primary);
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
 }
 
 .option-description {
@@ -338,8 +338,8 @@ footer {
 
 .player {
     position: absolute;
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background-color: #fb6340; /* 플레이어 색상 유지 */
     top: 50%;
@@ -549,7 +549,10 @@ footer {
         height: 75px;
         font-size: 36px;
     }
-
+    .pc-controls-info {
+        display: none; /* 모바일에서 숨김 */
+        
+    }
     .controls {
         display: flex;
         padding-bottom: 5px;
@@ -558,7 +561,11 @@ footer {
     .game-container {
         padding-bottom: 160px; /* 컨트롤 영역을 위한 하단 여백 추가 */
     }
-    
+    .player {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+    }
     /* 모바일에서 게임 헤더 조정 */
     .game-header {
         flex-direction: column;
