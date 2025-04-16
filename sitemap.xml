@@ -132,4 +132,11 @@
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
+  <!-- 미로게임 -->
+  <url>
+    <loc>https://ramiteacher.github.io/maze/</loc>
+    <lastmod>2025-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
 </urlset>
