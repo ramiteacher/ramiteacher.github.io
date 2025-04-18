@@ -1,0 +1,710 @@
+/* 전체 스타일 */
+:root {
+    --dark-bg: #121212;
+    --main-color: #4CAF50;
+    --sub-color: #FFD700;
+    --text-color: #ffffff;
+    --card-bg: #1e1e1e;
+    --header-height: 60px;
+    --footer-height: 50px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--dark-bg);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: rgba(33, 33, 33, 0.9);
+    color: rgba(255, 255, 255, 0.87);
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 200px;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.header2 {
+    display: none;
+}
+.logo {
+    color: var(--main-color);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+.logo::before {
+    content: '';
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background-color: var(--main-color);
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+}
+
+.separator {
+    margin: 0 8px;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.current-page, .current-difficulty {
+    color: var(--text-color);
+    display: none;
+}
+
+.memory-level {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+/* 두뇌 아이콘 스타일 */
+.brain-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.brain {
+    width: 40px;
+    height: 40px;
+    background-color: var(--main-color);
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+/* 메인 컨텐츠 스타일 */
+main {
+    flex: 1;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* 게임 그리드 스타일 (메인 페이지) */
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.game-section {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.game-section h2 {
+    color: var(--main-color);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.difficulty-container {
+    margin: 15px 0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+details {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+summary {
+    cursor: pointer;
+    padding: 5px;
+    font-weight: bold;
+}
+
+details ul {
+    list-style-type: none;
+    padding: 10px;
+}
+
+details li {
+    margin: 5px 0;
+    padding: 3px 0;
+}
+
+.difficulty-btn {
+    display: block;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.difficulty-btn.easy {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.difficulty-btn.mid {
+    background-color: #FF9800;
+    color: white;
+}
+
+.difficulty-btn.hard {
+    background-color: #F44336;
+    color: white;
+}
+
+.difficulty-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 게임 컨테이너 스타일 (게임 페이지) */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.game-info {
+    text-align: center;
+    margin-bottom: 30px;
+    max-width: 800px;
+}
+
+.game-description {
+    margin-top: 15px;
+    line-height: 1.6;
+}
+
+/* 클래식 메모리 게임 보드 */
+.classic-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+    max-width: 600px;
+    width: 100%;
+}
+
+.card {
+    aspect-ratio: 1;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    background-color: rgba(76, 175, 80, 0.2);
+}
+
+.card.flipped {
+    background-color: rgba(76, 175, 80, 0.3);
+}
+
+.card.matched {
+    background-color: rgba(76, 175, 80, 0.5);
+}
+
+.fruit-icon {
+    font-size: 2.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card.flipped .fruit-icon {
+    opacity: 1;
+}
+
+.card.matched .fruit-icon {
+    opacity: 1;
+}
+
+/* 플래시 메모리 게임 보드 */
+.flash-board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+.lives-container, .level-container {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.lives-label, .level-label {
+    margin-right: 10px;
+}
+
+.lives-hearts {
+    display: flex;
+}
+
+.heart {
+    width: 25px;
+    height: 25px;
+    background-color: #F44336;
+    clip-path: path('M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z');
+    margin: 0 3px;
+}
+
+.flash-display {
+    width: 100%;
+    height: 150px;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.flash-number {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.input-container {
+    width: 100%;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.number-input {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.5rem;
+    text-align: center;
+    background-color: var(--card-bg);
+    border: 2px solid var(--main-color);
+    border-radius: 8px;
+    color: var(--text-color);
+}
+
+.input-instruction {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+/* 메모리 미로 게임 보드 */
+.maze-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin: 20px 0;
+    max-width: 600px;
+    width: 100%;
+}
+
+.maze-cell {
+    aspect-ratio: 1;
+    background-color: #000;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.maze-cell.door {
+    background-color: var(--main-color);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>');
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.maze-cell.wall {
+    background-color: #333;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>');
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.maze-cell.fruit {
+    background-color: var(--sub-color);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>');
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.maze-cell.flag {
+    background-color: #F44336;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>');
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.maze-cell.path {
+    background-color: rgba(76, 175, 80, 0.3);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>');
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.maze-cell.player {
+    background-color: rgba(33, 150, 243, 0.7);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ffffff"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* 몽키 챌린지 게임 보드 */
+.monkey-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 20px auto;
+    max-width: 400px;
+    width: 200%;
+    min-width: 400px; /* ✅ 고정 최소 너비 지정 */
+    justify-content: center;
+    transform: translateX(-50%);
+    left: 50%;
+    position: relative;
+}
+
+.monkey-cell {
+    aspect-ratio: 1;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.monkey-cell.highlight {
+    background-color: rgba(76, 175, 80, 0.7);
+    transform: scale(1.05);
+}
+
+.monkey-cell:hover {
+    background-color: rgba(76, 175, 80, 0.2);
+}
+
+/* 게임 통계 스타일 */
+.game-stats {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    max-width: 600px;
+    margin: 20px 0;
+    background-color: var(--card-bg);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.stats-item {
+    text-align: center;
+}
+
+.stats-label {
+    display: block;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-bottom: 5px;
+}
+
+.stats-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* 게임 컨트롤 스타일 */
+.game-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.control-btn {
+    padding: 10px 20px;
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+    background-color: #3d8b40;
+    transform: translateY(-2px);
+}
+
+/* 모달 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+}
+
+.modal h2 {
+    color: var(--main-color);
+    margin-bottom: 20px;
+}
+
+.result-stats {
+    margin-bottom: 20px;
+}
+
+.result-stats p {
+    margin: 10px 0;
+}
+
+.achievements {
+    margin: 20px 0;
+}
+
+.achievements h3 {
+    margin-bottom: 10px;
+    color: var(--sub-color);
+}
+
+.achievements ul {
+    list-style-type: none;
+    text-align: left;
+    padding: 0 20px;
+}
+
+.achievements li {
+    margin: 5px 0;
+    padding: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.modal-btn {
+    padding: 10px 20px;
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.modal-btn:hover {
+    background-color: #3d8b40;
+}
+
+/* FAQ 페이지 스타일 */
+.faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-container h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--main-color);
+}
+
+.faq-item {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+}
+
+.question {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--sub-color);
+}
+
+.answer {
+    margin-bottom: 15px;
+}
+
+.affirmation {
+    font-style: italic;
+    opacity: 0.7;
+    text-align: center;
+    margin-top: 15px;
+    color: var(--main-color);
+}
+
+/* 푸터 스타일 */
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: var(--footer-height);
+    background-color: rgba(0, 0, 0, 0.3);
+    margin-top: auto;
+}
+
+.footer-link {
+    color: var(--text-color);
+    text-decoration: none;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: var(--main-color);
+}
+
+/* 토스트 메시지 스타일 */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--main-color);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.toast.show {
+    opacity: 1;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 992px) {
+    .game-grid {
+        grid-template-columns: 1fr;
+    }
+    header {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .classic-board {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .maze-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+    
+    .monkey-grid {
+        grid-template-columns: repeat(2, 1fr);
+        min-width: 300px;
+        max-width: 300px;
+        
+    }
+    
+
+}
+
+@media (max-width: 576px) {
+    .logo {
+        font-size: 1rem;
+    }
+
+    .memory-level {
+        font-size: 0.8rem;
+    }
+    
+    .classic-board {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .maze-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .game-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .control-btn {
+        width: 100%;
+    }
+    
+    .modal-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .modal-btn {
+        width: 100%;
+    }
+}

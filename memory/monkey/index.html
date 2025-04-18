@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>몽키 챌린지 - 메모리 게임</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <header2>
+        <span class="current-difficulty">쉬움</span>
+        
+        
+    </header2>
+
+    <main class="game-container">
+        <div class="game-info">
+            <h1>쉬움 몽키 챌린지</h1>
+            <p class="game-description">
+                순서대로 기억하세요!
+            </p>
+        </div>
+
+        <div class="game-board monkey-board">
+            <div class="lives-container">
+                <div class="lives-label">목숨</div>
+                <div class="lives-hearts">
+                    <div class="heart"></div>
+                    <div class="heart"></div>
+                    <div class="heart"></div>
+                </div>
+            </div>
+
+            <div class="level-container">
+                <div class="level-label">레벨</div>
+                <div class="level-value">1</div>
+            </div>
+
+            <div class="monkey-grid">
+                <!-- 그리드는 JavaScript에서 동적으로 생성됩니다 -->
+                <!-- 예시 구조 -->
+                <div class="monkey-cell" data-value="1">1</div>
+                <div class="monkey-cell" data-value="4">4</div>
+                <div class="monkey-cell" data-value="3">3</div>
+                <div class="monkey-cell" data-value="5">5</div>
+                <div class="monkey-cell" data-value="2">2</div>
+            </div>
+        </div>
+
+        <div class="game-stats">
+            <div class="stats-item">
+                <span class="stats-label">시간:</span>
+                <span class="stats-value" id="time">0</span>
+            </div>
+            <div class="stats-item">
+                <span class="stats-label">레벨:</span>
+                <span class="stats-value" id="level">1</span>
+            </div>
+            <div class="stats-item">
+                <span class="stats-label">최고 레벨:</span>
+                <span class="stats-value" id="best-level">0</span>
+            </div>
+        </div>
+
+        <div class="game-controls">
+            <button id="restart-btn" class="control-btn">다시 시작</button>
+            <button id="home-btn" class="control-btn">홈으로</button>
+        </div>
+
+        <!-- 결과 모달 -->
+        <div class="modal" id="result-modal">
+            <div class="modal-content">
+                <h2>게임 완료!</h2>
+                <div class="result-stats">
+                    <p>시간: <span id="result-time">0</span>초</p>
+                    <p>최고 레벨: <span id="result-level">0</span></p>
+                </div>
+                <div class="achievements">
+                    <h3>달성한 도전 과제:</h3>
+                    <ul id="achievements-list">
+                        <!-- 동적으로 추가됨 -->
+                    </ul>
+                </div>
+                <div class="modal-buttons">
+                    <button id="play-again-btn" class="modal-btn">다시 플레이</button>
+                    <button id="modal-home-btn" class="modal-btn">홈으로</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../script.js"></script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기억력 게임 - 라미선생님</title>
+    <link rel="icon" href="logo3.png" type="image/png">
+    <meta name="description" content="기억력 게임 - 라미선생님">
+    <meta name="keywords" content="기억력, 카드 메모리, 기억력 테스트, 플래시 메모리, 메모리게임, 라미선생님">
+    <meta name="author" content="라미선생님">
+    <meta name="theme-color" content="#ffffff">
+    <meta property="og:title" content="기억력 게임 - 라미선생님">
+    <meta property="og:description" content="카드 메모리, 기억력 테스트, 플래시 메모리, 몽키 챌린지 총 3종의 게임을 제공합니다.">
+    <meta property="og:image" content="logo3.png">
+    <meta property="og:url" content="https://ramiteacher.github.io/memory">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="기억력 게임 - 라미선생님">
+    <meta property="og:locale" content="ko_KR">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <img src="logo3.png" alt="memory Logo" style="width: 140px; height: auto; margin-bottom: 12px;" onclick="window.location.href='/'"> 
+    </header>
+
+
+    <main class="game-grid">
+        <section class="game-section">
+            <h2>🧠 클래식 메모리</h2>
+            <p>카드를 뒤집어 짝을 맞추세요.</p>
+            
+            <div class="difficulty-container">
+                <details>
+                    <summary>쉬움 [0%]</summary>
+                    <ul>
+                        <li>[50%] 완료</li>
+                        <li>[10%] 80% 정확도</li>
+                        <li>[10%] 90% 정확도</li>
+                        <li>[10%] 100% 정확도</li>
+                        <li>[10%] 완벽 이상</li>
+                        <li>[10%] 20초 이내</li>
+                    </ul>
+                </details>
+                <a href="classic/?difficulty=easy" class="difficulty-btn easy">쉬움</a>
+            </div>
+
+            <div class="difficulty-container">
+                <details>
+                    <summary>중간 [0%]</summary>
+                    <ul>
+                        <li>[50%] 완료</li>
+                        <li>[10%] 80% 정확도</li>
+                        <li>[10%] 90% 정확도</li>
+                        <li>[10%] 100% 정확도</li>
+                        <li>[10%] 완벽 이상</li>
+                        <li>[10%] 40초 이내</li>
+                    </ul>
+                </details>
+                <a href="classic/?difficulty=mid" class="difficulty-btn mid">중간</a>
+            </div>
+
+            <div class="difficulty-container">
+                <details>
+                    <summary>어려움 [0%]</summary>
+                    <ul>
+                        <li>[50%] 완료</li>
+                        <li>[10%] 80% 정확도</li>
+                        <li>[10%] 90% 정확도</li>
+                        <li>[10%] 100% 정확도</li>
+                        <li>[10%] 완벽 이상</li>
+                        <li>[10%] 70초 이내</li>
+                    </ul>
+                </details>
+                <a href="classic/?difficulty=hard" class="difficulty-btn hard">어려움</a>
+            </div>
+        </section>
+
+        <section class="game-section">
+            <h2>✨ 플래시 메모리</h2>
+            <p>숫자가 잠깐 나타났다가 사라집니다. 외우세요!</p>
+            
+            <div class="difficulty-container">
+                <details>
+                    <summary>쉬움 [0%]</summary>
+                    <ul>
+                        <li>[30%] 완료</li>
+                        <li>[20%] 완료 + 목숨 손실 없음</li>
+                        <li>[20%] 완료 + 모든 숫자 역순 입력</li>
+                        <li>[10%] 완료 + 백스페이스 사용 안함</li>
+                        <li>[10%] 45초 이내 완료</li>
+                        <li>[10%] 30초 이내 완료</li>
+                    </ul>
+                </details>
+                <a href="flash/?difficulty=easy" class="difficulty-btn easy">쉬움</a>
+            </div>
+
+            <div class="difficulty-container">
+                <details>
+                    <summary>중간 [0%]</summary>
+                    <ul>
+                        <li>[30%] 완료</li>
+                        <li>[20%] 완료 + 목숨 손실 없음</li>
+                        <li>[20%] 완료 + 모든 숫자 역순 입력</li>
+                        <li>[10%] 완료 + 백스페이스 사용 안함</li>
+                        <li>[10%] 45초 이내 완료</li>
+                        <li>[10%] 30초 이내 완료</li>
+                    </ul>
+                </details>
+                <a href="flash/?difficulty=mid" class="difficulty-btn mid">중간</a>
+            </div>
+
+            <div class="difficulty-container">
+                <details>
+                    <summary>어려움 [0%]</summary>
+                    <ul>
+                        <li>[30%] 완료</li>
+                        <li>[20%] 완료 + 목숨 손실 없음</li>
+                        <li>[20%] 완료 + 모든 숫자 역순 입력</li>
+                        <li>[10%] 완료 + 백스페이스 사용 안함</li>
+                        <li>[10%] 45초 이내 완료</li>
+                        <li>[10%] 30초 이내 완료</li>
+                    </ul>
+                </details>
+                <a href="flash/?difficulty=hard" class="difficulty-btn hard">어려움</a>
+            </div>
+        </section>
+
+        <section class="game-section">
+            <h2>🐵 몽키 챌린지</h2>
+            <p>당신의 기억력이 원숭이보다 나을까요?</p>
+            
+            <div class="difficulty-container">
+                <details>
+                    <summary>쉬움 [0%]</summary>
+                    <ul>
+                        <li>[20%] 레벨 4</li>
+                        <li>[20%] 레벨 5</li>
+                        <li>[20%] 레벨 6</li>
+                        <li>[20%] 레벨 8</li>
+                        <li>[10%] 레벨 5를 30초 이내에</li>
+                        <li>[10%] 레벨 9를 80초 이내에</li>
+                    </ul>
+                </details>
+                <a href="monkey/?difficulty=easy" class="difficulty-btn easy">쉬움</a>
+            </div>
+
+            <div class="difficulty-container">
+                <details>
+                    <summary>중간 [0%]</summary>
+                    <ul>
+                        <li>[20%] 레벨 5</li>
+                        <li>[20%] 레벨 7</li>
+                        <li>[20%] 레벨 9</li>
+                        <li>[20%] 레벨 11</li>
+                        <li>[10%] 레벨 7을 40초 이내에</li>
+                        <li>[10%] 레벨 12를 100초 이내에</li>
+                    </ul>
+                </details>
+                <a href="monkey/?difficulty=mid" class="difficulty-btn mid">중간</a>
+            </div>
+
+            <div class="difficulty-container">
+                <details>
+                    <summary>어려움 [0%]</summary>
+                    <ul>
+                        <li>[20%] 레벨 8</li>
+                        <li>[20%] 레벨 10</li>
+                        <li>[20%] 레벨 12</li>
+                        <li>[20%] 레벨 15</li>
+                        <li>[10%] 레벨 10을 60초 이내에</li>
+                        <li>[10%] 레벨 16을 120초 이내에</li>
+                    </ul>
+                </details>
+                <a href="monkey/?difficulty=hard" class="difficulty-btn hard">어려움</a>
+            </div>
+        </section>
+    </main>
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>
