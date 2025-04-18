@@ -17,14 +17,15 @@
     <style>
         /* Reset */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background: #f0f2f5; 
+        body {
+            background: #f0f7ff;
             font-family: 'Noto Sans KR', sans-serif;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 0 2%;
+            padding: 20px;
         }
 
         /* Logo */
@@ -99,6 +100,7 @@
             visibility: visible;
             position: relative;
         }
+        
         .question h2 {
             color: #2c3e50;
             margin-bottom: 6%;
@@ -542,30 +544,16 @@
         // 다시하기
         document.getElementById('retry').addEventListener('click', () => location.reload());
     </script>
+        <!-- 구글 애드센스 코드 -->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3238568174687829"
+        crossorigin="anonymous"></script>
+        
+        <ins class="kakao_ad_area" style="display:none;"
+        data-ad-unit="DAN-E69184EtL817iga6"
+        data-ad-width="250"
+        data-ad-height="250"></ins>
+        <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3238568174687829"
-    crossorigin="anonymous"></script>
-    <!-- ㄴ -->
-    <ins class="adsbygoogle"
-    style="display:block"
-    data-ad-client="ca-pub-3238568174687829"
-    data-ad-slot="7623849891"
-    data-ad-format="auto"
-    data-full-width-responsive="true"></ins>
-    <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-    <script>
-      fetch('/footer.html')
-        .then(res => res.text())
-        .then(data => {
-          document.getElementById('footer-placeholder').innerHTML = data;
-        });
-    </script>
-    <ins class="kakao_ad_area" style="display:none;"
-    data-ad-unit = "DAN-E69184EtL817iga6"
-    data-ad-width = "250"
-    data-ad-height = "250"></ins>
-    <script type="text/javascript" src="//t1.daumcdn.net/kas/static/ba.min.js" async></script>
+    
 </body>
 </html>
