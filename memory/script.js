@@ -254,7 +254,7 @@ function initClassicGame() {
     });
     
     document.getElementById('home-btn').addEventListener('click', () => {
-        window.location.href = '/';
+        window.location.href = '/memory/';
     });
 }
 
@@ -476,7 +476,7 @@ function endClassicGame(gameState) {
     });
     
     document.getElementById('modal-home-btn').addEventListener('click', () => {
-        window.location.href = '/';
+        window.location.href = '/memory/';
     });
 }
 
@@ -648,7 +648,7 @@ function initFlashGame() {
     });
     
     document.getElementById('home-btn').addEventListener('click', () => {
-        window.location.href = '/';
+        window.location.href = '/memory/';
     });
     
     // 게임 시작
@@ -826,7 +826,7 @@ function endFlashGame(gameState) {
     });
     
     document.getElementById('modal-home-btn').addEventListener('click', () => {
-        window.location.href = '/';
+        window.location.href = '/memory/';
     });
 }
 
@@ -984,7 +984,7 @@ function initMazeGame() {
     });
     
     document.getElementById('home-btn').addEventListener('click', () => {
-        window.location.href = '/';
+        window.location.href = '/memory/';
     });
     
     // 경로 표시 후 숨기기
@@ -1372,7 +1372,7 @@ function endMazeGame(gameState) {
     });
     
     document.getElementById('modal-home-btn').addEventListener('click', () => {
-        window.location.href = '/';
+        window.location.href = '/memory/';
     });
 }
 
@@ -1543,7 +1543,7 @@ function initMonkeyGame() {
     });
     
     document.getElementById('home-btn').addEventListener('click', () => {
-        window.location.href = '/';
+        window.location.href = '/memory/';
     });
     
     // 게임 시작
@@ -1828,7 +1828,7 @@ function endMonkeyGame(gameState) {
     });
     
     document.getElementById('modal-home-btn').addEventListener('click', () => {
-        window.location.href = '/';
+        window.location.href = '/memory/';
     });
 }
 
